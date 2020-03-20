@@ -62,6 +62,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # added by razinal
+                'giz.context_processors.resource_urls',
             ],
         },
     },
@@ -118,3 +120,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Local Settings
+try:
+    from .local_settings import *
+except ImportError:
+    pass
