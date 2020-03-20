@@ -57,3 +57,4 @@ coverage.xml
 
 # Visual Studio Code # 
 .vscode/* 
+backend/giz/local_settings.py
