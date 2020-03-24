@@ -63,8 +63,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # added by razinal
-                'giz.context_processors.resource_urls',
             ],
         },
     },

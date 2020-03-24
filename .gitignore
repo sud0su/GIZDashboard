@@ -5,6 +5,9 @@
 __pycache__
 db.sqlite3
 media
+backend/giz/local_settings.py
+frontend/staticfiles/
+
 
 # Python # 
 *.py[cod] 
@@ -57,4 +60,3 @@ coverage.xml
 
 # Visual Studio Code # 
 .vscode/* 
-backend/giz/local_settings.py
