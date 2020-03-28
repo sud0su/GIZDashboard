@@ -3,8 +3,13 @@
 *.pot
 *.pyc
 __pycache__
+# !**/**/migrations/__init__.py
+# **/**/migrations
+
 db.sqlite3
 media
+# migrations
+# !migrations/__init__.py
 backend/giz/local_settings.py
 frontend/staticfiles/
 

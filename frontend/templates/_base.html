@@ -23,6 +23,9 @@
     </div>
 
   {% block footer %}
+  {% include "_footer.html" %}
+  <script src="{% static 'js/jquery-3.2.1.slim.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
   {% endblock footer %}
   {% block extra_script %}{% endblock extra_script %}
