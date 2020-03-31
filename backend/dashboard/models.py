@@ -31,7 +31,7 @@ class Undss(models.Model):
     Shape = models.FileField(_("Shape"), upload_to=mediaPath, blank=True)
     Data_Entry_No = models.CharField(_("Data Entry No"), max_length=50)
     Date = models.DateTimeField(default=datetime.now, blank=True)
-    Time_of_Incident = models.CharField(max_length=255)
+    Time_of_Incident = models.TimeField(_("Time Of Incident"), auto_now=False, auto_now_add=False)
     Province = models.ForeignKey(Province, verbose_name=_("Province"), on_delete=models.CASCADE)
     District =models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE)
     City_Village = models.ForeignKey(CityVillage, verbose_name=_("City Village"), on_delete=models.CASCADE, null=True, blank=True)

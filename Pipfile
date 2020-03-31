@@ -11,6 +11,8 @@ django = "==2.2.10"
 django-allauth = "*"
 django-inlinecss = "*"
 django-widget-tweaks = "*"
+django-select2 = "*"
+django-bootstrap-datepicker-plus = "*"
 
 [requires]
 python_version = "3.7"

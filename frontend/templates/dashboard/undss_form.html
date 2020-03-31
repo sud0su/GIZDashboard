@@ -1,23 +1,111 @@
 {% extends "dashboard/dashboard_base.html" %}
 {% load widget_tweaks %}
 
+{% block extra_head %}
+  {{ form.media.css }}
+{% endblock extra_head %}
 {% block content %}
 
 <div class="container">
-    <div class="row justify-content-center">
-        <form method="post">
+    {% comment %} <div class="row justify-content-center"> {% endcomment %}
+    <div class="row">
+        <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-            {% for field in form %}
+        {% include 'dashboard/form_format.html' with form=form %}
+        {% comment %} {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+            {% for error in form.non_field_errors %}
+                {{ error }}
+            {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label>{{ form.Shape.label_tag }}</label> {% endcomment %}
+
+                {% comment %} {% if form.is_bound %}
+                    {% if form.Shape.errors %}
+                        {% render_field form.Shape class="form-control is-invalid" %}
+                        {% for error in form.Shape.errors %}
+                        <div class="invalid-feedback">
+                        {{ error }}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        {% render_field form.Shape class="form-control is-valid" %}
+                    {% endif %}
+                {% else %}
+                    {% render_field form.Shape class="form-control" %}
+                {% endif %}
+
+                {% if form.Shape.help_text %}
+                    <small class="form-text text-muted">{{ form.Shape.help_text }}</small>
+                {% endif %} {% endcomment %}
+
+
+                {% comment %} {{ form.Shape|add_class:"form-control" }}
+                {% if form.Shape.help_text %}
+                    <small class="form-text text-muted">{{ form.Shape.help_text }}</small>
+                {% endif %} {% endcomment %}
+            {% comment %} </div>
+        </div> {% endcomment %}
+
+        {% comment %} <div class="form-row">
+            <div class="form-group col-md-12">
+                <label>{{ form.Data_Entry_No.label_tag }}</label>
+                {{ form.Data_Entry_No|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>{{ form.Date.label_tag }}</label>
+                {{ form.Date|add_class:"form-control" }}
+            </div>
+            <div class="form-group col-md-6">
+                <label>{{ form.Time_of_Incident.label_tag }}</label>
+                {{ form.Time_of_Incident|add_class:"form-control" }}
+            </div>
+        </div>
+        <hr class="mb-4">
+
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>{{ form.Province.label_tag }}</label>
+                {{ form.Province|add_class:"form-control" }}
+            </div>
+            <div class="form-group col-md-6">
+                <label>{{ form.District.label_tag }}</label>
+                {{ form.District|add_class:"form-control" }}
+            </div>
+            <div class="form-group col-md-6">
+                <label>{{ form.City_Village.label_tag }}</label>
+                {{ form.City_Village|add_class:"form-control" }}
+            </div>
+            <div class="form-group col-md-6">
+                <label>{{ form.Area.label_tag }}</label>
+                {{ form.Area|add_class:"form-control" }}
+            </div>
+        </div> {% endcomment %}
+
+            {% comment %} {% for field in form %}
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">{{ field.label_tag }}</label>
                     <div class="col-sm-8">
                     {{ field|add_class:"form-control" }}
                     </div>
                 </div>
-            {% endfor %} 
-            <input type="submit" value="Submit Form"/>
+            {% endfor %} {% endcomment %}
+
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>
 
 {% endblock content %}
+
+{% block extra_script %}
+{{ form.media.js }}
+{% endblock extra_script %}

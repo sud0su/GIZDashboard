@@ -7,9 +7,22 @@ from .forms import UndssForm
 def InputDashboard(request):
     template = "dashboard/undss_form.html"
 
-    form = UndssForm(request.POST or None)
+    # form = UndssForm(request.POST or None)
+    # if form.is_valid():
+    #     form.save()
+
+
+    form = UndssForm(request.POST, request.FILES or None)
     if form.is_valid():
         form.save()
+    
+
+    # if request.method == 'POST':
+    #     form = UndssForm(request.POST, request.FILES)
+    #     if form.is_valid():
+    #         form.save()
+    # else:
+    #     form = UndssForm()
 
     context = { 'form': form }
     return render(request, template, context)
