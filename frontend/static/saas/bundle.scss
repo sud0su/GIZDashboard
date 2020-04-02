@@ -1,0 +1,58 @@
+/*-------------------------------------------------------------------
+  ===== Table of Contents =====
+
+-------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------*/
+/* === Import Bootstrap functions and variables === */
+@import "../node_modules/bootstrap-scss/functions";
+@import "../node_modules/bootstrap-scss/variables";
+
+/*-------------------------------------------------------------------*/
+/* === Import template variables === */
+@import "variables";
+
+/*-------------------------------------------------------------------*/
+/* === SCSS Compass Functions === */
+@import "../node_modules/compass-mixins/lib/compass";
+@import "../node_modules/compass-mixins/lib/animate";
+
+// @import "../node_modules/compass-sass-mixins/lib/compass";
+
+/*-------------------------------------------------------------------*/
+/* === Boostrap Main SCSS === */
+@import "../node_modules/bootstrap-scss/bootstrap";
+
+/*-------------------------------------------------------------------*/
+/* === Template mixins === */
+@import "mixins/misc";
+@import "mixins/animation";
+// @import "mixins/badges";
+@import "mixins/blockqoute";
+// @import "mixins/buttons";
+@import "mixins/cards";
+
+/*-------------------------------------------------------------------*/
+/* === Core Styles === */
+@import "reset";
+@import "typography";
+@import "misc";
+@import "footer";
+@import "utilities";
+@import "auth";
+@import "dashboard";
+
+/*-------------------------------------------------------------------*/
+/* === Components === */
+@import "components/dropdown";
+@import "components/cards";
+@import "components/forms";
+
+/*-------------------------------------------------------------------*/
+
+@import "horizontal-wrappers";
+
+@import "vertical-wrapper";
+@import "sidebar";
+@import "navbar";
+@import "layouts";

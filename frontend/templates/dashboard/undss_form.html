@@ -1,111 +1,73 @@
 {% extends "dashboard/dashboard_base.html" %}
+{% load i18n %}
+{% load static %}
 {% load widget_tweaks %}
 
 {% block extra_head %}
-  {{ form.media.css }}
+    {{ form.media.css }}
 {% endblock extra_head %}
-{% block content %}
 
-<div class="container">
-    {% comment %} <div class="row justify-content-center"> {% endcomment %}
+{% block content_dashboard %}
     <div class="row">
-        <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% include 'dashboard/form_format.html' with form=form %}
-        {% comment %} {% if form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}
-                {{ error }}
-            {% endfor %}
-            </div>
-        {% endif %}
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "Input UNDSS" %}</h4>
+                    <p class="card-description">
+                        Basic form elements
+                    </p>
+                    <form class="forms-sample was-validated" method="post" enctype="multipart/form-data" >
+                        {% csrf_token %}
+                        {% include 'dashboard/form_format.html' with form=form %}
 
-        <div class="form-row">
-            <div class="form-group col-md-12">
-                <label>{{ form.Shape.label_tag }}</label> {% endcomment %}
-
-                {% comment %} {% if form.is_bound %}
-                    {% if form.Shape.errors %}
-                        {% render_field form.Shape class="form-control is-invalid" %}
-                        {% for error in form.Shape.errors %}
-                        <div class="invalid-feedback">
-                        {{ error }}
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        {% render_field form.Shape class="form-control is-valid" %}
-                    {% endif %}
-                {% else %}
-                    {% render_field form.Shape class="form-control" %}
-                {% endif %}
-
-                {% if form.Shape.help_text %}
-                    <small class="form-text text-muted">{{ form.Shape.help_text }}</small>
-                {% endif %} {% endcomment %}
-
-
-                {% comment %} {{ form.Shape|add_class:"form-control" }}
-                {% if form.Shape.help_text %}
-                    <small class="form-text text-muted">{{ form.Shape.help_text }}</small>
-                {% endif %} {% endcomment %}
-            {% comment %} </div>
-        </div> {% endcomment %}
-
-        {% comment %} <div class="form-row">
-            <div class="form-group col-md-12">
-                <label>{{ form.Data_Entry_No.label_tag }}</label>
-                {{ form.Data_Entry_No|add_class:"form-control" }}
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label>{{ form.Date.label_tag }}</label>
-                {{ form.Date|add_class:"form-control" }}
-            </div>
-            <div class="form-group col-md-6">
-                <label>{{ form.Time_of_Incident.label_tag }}</label>
-                {{ form.Time_of_Incident|add_class:"form-control" }}
-            </div>
-        </div>
-        <hr class="mb-4">
-
-
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label>{{ form.Province.label_tag }}</label>
-                {{ form.Province|add_class:"form-control" }}
-            </div>
-            <div class="form-group col-md-6">
-                <label>{{ form.District.label_tag }}</label>
-                {{ form.District|add_class:"form-control" }}
-            </div>
-            <div class="form-group col-md-6">
-                <label>{{ form.City_Village.label_tag }}</label>
-                {{ form.City_Village|add_class:"form-control" }}
-            </div>
-            <div class="form-group col-md-6">
-                <label>{{ form.Area.label_tag }}</label>
-                {{ form.Area|add_class:"form-control" }}
-            </div>
-        </div> {% endcomment %}
-
-            {% comment %} {% for field in form %}
-                <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">{{ field.label_tag }}</label>
-                    <div class="col-sm-8">
-                    {{ field|add_class:"form-control" }}
-                    </div>
+                        {% comment %}
+                            <div class="form-group">
+                                <label for="exampleInputName1">Name</label>
+                                <input type="text" class="form-control" id="exampleInputName1" placeholder="Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail3">Email address</label>
+                                <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword4">Password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword4" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleSelectGender">Gender</label>
+                                <select class="form-control" id="exampleSelectGender">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>File upload</label>
+                                <input type="file" name="img[]" class="file-upload-default">
+                                <div class="input-group col-xs-12">
+                                    <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
+                                    <span class="input-group-append">
+                                        <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputCity1">City</label>
+                                <input type="text" class="form-control" id="exampleInputCity1" placeholder="Location">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleTextarea1">Textarea</label>
+                                <textarea class="form-control" id="exampleTextarea1" rows="4"></textarea>
+                            </div>
+                        {% endcomment %}
+                        <button type="submit" class="btn btn-primary mr-2">{% trans "Submit" %}</button>
+                        <button class="btn btn-light">{% trans "Cancel" %}</button>
+                    </form>
                 </div>
-            {% endfor %} {% endcomment %}
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+            </div>
+        </div>
     </div>
-</div>
+{% endblock content_dashboard %}
 
-{% endblock content %}
-
-{% block extra_script %}
-{{ form.media.js }}
-{% endblock extra_script %}
+{% block dashboard_script %}
+    <script src="{% static 'js/file-upload.js' %}"></script>
+{% endblock dashboard_script %}

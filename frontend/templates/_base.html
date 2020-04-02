@@ -8,26 +8,29 @@
     <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
     <!-- Bootstrap CSS -->
     {% block head %}
-      <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.0.45/css/materialdesignicons.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+      <!-- <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet"> -->
+      <!-- <link rel="stylesheet" href="{% static 'css/materialdesignicon-add.css' %}"> -->
+
+      <link rel="stylesheet" href="{% static 'css/bundle.css' %}">
       {% block extra_head %}
       {% endblock %}
     {% endblock  %}
   </head>
   <body>
-    {% block navbar %}
-        {% include "_navbar.html" %}
-    {% endblock navbar %}
-    <div class="container">
-        {% block content %}
-        {% endblock content %}
+    <div class="container-scroller">
+      {% block content %}
+      {% endblock content %}
     </div>
+    <!-- container-scroller -->
 
-  {% block footer %}
-  {% include "_footer.html" %}
-  <script src="{% static 'js/jquery-3.2.1.slim.min.js' %}"></script>
-  <script src="{% static 'js/popper.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  {% endblock footer %}
-  {% block extra_script %}{% endblock extra_script %}
+    <!-- <script src="{% static 'js/jquery-3.2.1.slim.min.js' %}"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- <script src="{% static 'js/bootstrap.min.js' %}"></script> -->
+    {% block extra_script %}{% endblock extra_script %}
   </body>
 </html>

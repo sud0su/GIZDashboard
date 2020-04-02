@@ -1,60 +1,106 @@
+
 {% extends "account/base.html" %}
 
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% block head_links %} 
-
-<title>Sign In</title>
-
 {% endblock %}
 
-{% block head_title %}{% trans "Sign In" %} {% endblock %}
-
 {% block content %}
-<div class="container-fluid">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-stretch auth auth-img-bg">
+            <div class="row flex-grow">
+                <div class="col-lg-6 d-flex align-items-center justify-content-center">
+                    <div class="auth-form-transparent text-left p-3">
+                        <div class="brand-logo">
+                            <img src="../../images/logo.svg" alt="logo">
+                        </div>
+                        <h4>{% trans "Sign In" %}</h4>
+                        <!-- <h6 class="font-weight-light">Happy to see you again!</h6> -->
+                        <form class="pt-3" id="login_form" method="POST" action="{% url 'account_login' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="id_login">{% trans "Username" %}</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend bg-transparent">
+                                        <span class="input-group-text bg-transparent border-right-0">
+                                            <i class="mdi mdi-account-outline text-primary"></i>
+                                        </span>
+                                    </div>
+                                    <!-- <input type="text" class="form-control form-control-lg border-left-0" id="exampleInputEmail" placeholder="Username"> -->
+                                    {{ form.login |attr:"class:form-control form-control-lg border-left-0" }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_password">{% trans "Password" %}</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend bg-transparent">
+                                        <span class="input-group-text bg-transparent border-right-0">
+                                            <i class="mdi mdi-lock-outline text-primary"></i>
+                                        </span>
+                                    </div>
+                                    <!-- <input type="password" class="form-control form-control-lg border-left-0" id="exampleInputPassword" placeholder="Password"> -->
+                                    {{ form.password |attr:"class:form-control form-control-lg border-left-0" }}
+                                </div>
+                            </div>
+                            <div class="my-2 d-flex justify-content-between align-items-center">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <!-- <input type="checkbox" class="form-check-input"> Keep me signed in -->
+                                        {{ form.remember |attr:"class:form-check-input" }} {% trans "Keep me signed in" %}
+                                    </label>
+                                </div>
+                                <a href="{% url 'account_reset_password' %}" class="auth-link text-black">{% trans "Forgot Password?" %}</a>
+                            </div>
+                            <div class="my-3">
+                                <!-- <a class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" href="../../index.html">{% trans "LOGIN" %}</a> -->
+                                <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" type="submit">{% trans "LOGIN" %}</button>
+                            </div>
+                            <div class="mb-2 d-flex">
+                                
+                            </div>
+                            <div class="text-center mt-4 font-weight-light">
+                                {% trans "Don't have an account?" %} <a href="{% url 'account_signup' %}" class="text-primary">{% trans "Create" %}</a>
+                            </div>
+                        </form>
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                    </div>
+                    {% load account socialaccount %}
 
- {% block messages %}
-    {% if messages %}
-    <div>
-        <ul>
-        {% for message in messages %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>{{message}}</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                    {% get_providers as socialaccount_providers %}
+                    <ul class="social_providers_list">
+                    {% for provider in socialaccount_providers %}
+                        <a title="{{provider.name}}" class="btn btn-outline-dark" 
+                        href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}"><i class="fa fa-{{provider.name}}" id="social_icon"></i>{{provider.name}}</a>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-lg-6 login-half-bg d-flex flex-row">
+                    <p class="text-white font-weight-medium text-center flex-grow align-self-end">{% trans "Copyright &copy; 2020 All rights reserved." %}</p>
+                </div>
+            </div>
+
+            {% block messages %}
+                {% if messages %}
+                <div>
+                    <ul>
+                        {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>{{message}}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            {% endblock %}
         </div>
-        {% endfor %}
-        </ul>
+        <!-- content-wrapper ends -->
     </div>
-    {% endif %}
-  {% endblock %}
-
-<h3 class="h3" id="head_banner">{% trans "Sign In" %}</h3>
-
-<form class="container-fluid text-center" id="login_form" method="POST" action="{% url 'account_login' %}">
-  {% csrf_token %}
-  
-  {{ form.as_p }}
-
-  {% if redirect_field_value %}
-  
-    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  
-  {% endif %}
-  
-  <button  class="btn btn-outline-primary " type="submit">{% trans "Sign In" %}</button>
-  <a  class="btn btn-outline-dark" href="{% url 'account_reset_password' %}">{% trans "Forgot Password ?" %}</a>  
-
-</form>
-    {% load account socialaccount %}
-
-    {% get_providers as socialaccount_providers %}
-    <ul class="social_providers_list">
-    {% for provider in socialaccount_providers %}
-        <a title="{{provider.name}}" class="btn btn-outline-dark" 
-         href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}"><i class="fa fa-{{provider.name}}" id="social_icon"></i>{{provider.name}}</a>
-    {% endfor %}
-    </ul>
-</div>
+    <!-- page-body-wrapper ends -->
 {% endblock %}
