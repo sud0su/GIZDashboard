@@ -11,7 +11,7 @@ class Province(models.Model):
 
 class District(models.Model):
     name = models.CharField(_("District"), max_length=50)
-    provice = models.ForeignKey(Province, verbose_name=_("Province_"), on_delete=models.CASCADE)
+    province = models.ForeignKey(Province, verbose_name=_("Province_"), on_delete=models.CASCADE)
     
     def __str__(self):
         return self.name
