@@ -25,15 +25,20 @@ class PathAndRename(object):
         return os.path.join(fullpath , filename)
 
 
+def default_start_time():
+    now = datetime.now()
+    start = now.replace(hour=22, minute=0, second=0, microsecond=0)
+    return start if start > now else start + timedelta(days=1)  
+
 # Create your models here.
 mediaPath = PathAndRename("shape/")
 class Undss(models.Model):
-    Shape = models.FileField(_("Shape"), upload_to=mediaPath, blank=True)
+    Shape = models.FileField(_("Shape"), upload_to=mediaPath, null=True, blank=True)
     Data_Entry_No = models.CharField(_("Data Entry No"), max_length=50)
     Date = models.DateTimeField(default=datetime.now, blank=True)
-    Time_of_Incident = models.TimeField(_("Time Of Incident"), auto_now=False, auto_now_add=False)
-    Province = models.ForeignKey(Province, verbose_name=_("Province"), on_delete=models.CASCADE)
-    District =models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE)
+    Time_of_Incident = models.TimeField(_("Time Of Incident"), default=default_start_time)
+    Province = models.ForeignKey(Province, verbose_name=_("Province"), on_delete=models.CASCADE, null=True, blank=True)
+    District =models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE, null=True, blank=True)
     City_Village = models.ForeignKey(CityVillage, verbose_name=_("City Village"), on_delete=models.CASCADE, null=True, blank=True)
     Area = models.ForeignKey(Area, verbose_name=_("Area"), on_delete=models.CASCADE, null=True, blank=True)
     Police_District = models.CharField(max_length=255, null=True, blank=True)

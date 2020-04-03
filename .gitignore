@@ -12,7 +12,7 @@ media
 # !migrations/__init__.py
 backend/giz/local_settings.py
 frontend/staticfiles/
-
+exceldata/
 
 # Python # 
 *.py[cod] 
