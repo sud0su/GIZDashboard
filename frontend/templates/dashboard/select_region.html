@@ -1,0 +1,31 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">Province</a></li>
+    <li class="breadcrumb-item"><a href="#">District</a></li>
+    <li class="breadcrumb-item active">City Village</li>
+    {% for idx, adm in adm_path.items %}
+        {% if not adm.code and 'print' in request.path %}
+        {% else %}
+            <li class="breadcrumb-item">
+                <select class="area-dropdown {{adm.type}}" data-placeholder="Select {{adm.type}}">
+                    {% if not adm.code %}
+                    <option></option>
+                    {% endif %}
+                    {% for sibling in adm.sibling %}
+                    <option value="{{sibling.code}}" {% if adm.code == sibling.code %}selected="selected"{% endif %}>{{sibling.name}}</option>
+                    {% endfor %}
+                </select>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ol>
+
+<script>
+    function select2_region(){
+        $('.area-dropdown').select2({
+            dropdownAutoWidth: true,
+        });
+        $('.area-dropdown').on('select2-selecting', function (e) {
+            jump_url(e.val);
+        });
+    }
+</script>
