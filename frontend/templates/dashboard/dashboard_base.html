@@ -55,7 +55,9 @@
     <!-- Highcharts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/7.1.0/highstock.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/7.1.0/highcharts-more.js"></script>
-
+    <script>
+      var jsondata = {% if jsondata %}{{ jsondata|safe }}{% else %}{}{% endif %};
+    </script>
     <script src="{% static 'js/dashboard.js' %}"></script>
     {% block dashboard_script %}{% endblock dashboard_script %}
 {% endblock extra_script %}

@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
+from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from .models import Undss
 from .forms import UndssForm
+from .json_serializable import Common
 
 @login_required
 def InputDashboard(request):
@@ -11,11 +12,9 @@ def InputDashboard(request):
     # if form.is_valid():
     #     form.save()
 
-
     form = UndssForm(request.POST, request.FILES or None)
     if form.is_valid():
         form.save()
-    
 
     # if request.method == 'POST':
     #     form = UndssForm(request.POST, request.FILES)
@@ -24,13 +23,12 @@ def InputDashboard(request):
     # else:
     #     form = UndssForm()
 
-    context = { 'form': form }
+    context = {'form': form }
     return render(request, template, context)
+
 
 @login_required
 def Dashboard(request):
-    title = 'Dashboard page'
-    data = 'Statistic Info'
+    response = Common(request)
     template = "dashboard/dashboard_base.html"
-    context = {"title": title, "data": data}
-    return render(request, template, context)
+    return render(request, template, response)
