@@ -24,7 +24,6 @@ class PathAndRename(object):
         fullpath = self.path+'{}'.format(time.strftime("%Y/%m/%d"))
         return os.path.join(fullpath , filename)
 
-
 def default_start_time():
     now = datetime.now()
     start = now.replace(hour=22, minute=0, second=0, microsecond=0)
@@ -35,7 +34,7 @@ mediaPath = PathAndRename("shape/")
 class Undss(models.Model):
     Shape = models.FileField(_("Shape"), upload_to=mediaPath, null=True, blank=True)
     Data_Entry_No = models.CharField(_("Data Entry No"), max_length=50)
-    Date = models.DateTimeField(default=datetime.now, blank=True)
+    Date = models.DateTimeField(_("Date"), auto_now=False, auto_now_add=False)
     Time_of_Incident = models.TimeField(_("Time Of Incident"), default=default_start_time)
     Province = models.ForeignKey(Province, verbose_name=_("Province"), on_delete=models.CASCADE, null=True, blank=True)
     District =models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE, null=True, blank=True)
@@ -72,8 +71,8 @@ class Undss(models.Model):
     PRMO = models.CharField(max_length=255, null=True, blank=True)
     UNDSS = models.CharField(max_length=255, null=True, blank=True)
     INSO = models.CharField(max_length=255, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     # def get_absolute_url(self):
     #     return reverse("model_detail", kwargs={"pk": self.pk})
