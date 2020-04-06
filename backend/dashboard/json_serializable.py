@@ -53,12 +53,14 @@ def dashboard(request):
             OrderId = 'Incident_Type_id'
             DbRelated = 'Incident_Type__name'
             response['chart']['polar_'+ct]['labels'] = incident_type_name
+            response['chart']['polar_'+ct]['labels_all'] = incident_type_name
             response['chart']['polar_'+ct]['key'] = "graph_of_incident_and_casualties_trend_by_incident_type"
         else:
             Title = 'Target Type'
             OrderId = 'Target_id'
             DbRelated = 'Target__code'
             response['chart']['polar_'+ct]['labels'] = target_type_name
+            response['chart']['polar_'+ct]['labels_all'] = target_type_name
             response['chart']['polar_'+ct]['key'] = "graph_of_incident_and_casualties_trend_by_target_type"
         response['chart']['polar_'+ct]['title'] = "Graph of Incident and Casualties Trend by "+ Title
         for pc in category:
