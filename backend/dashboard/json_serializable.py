@@ -51,7 +51,7 @@ def dashboard(request):
     response['chart']['spline']['key'] = "history_incident_and_casualties_trend_by_incident_type"
     for pc in category:
         incident_type_data = Undss.objects.values('Date').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Date')
-        total_result = [[total['Date'], total['total']] for total in incident_type_data]
+        total_result = [[total['Date'].timestamp() * 1000, total['total']] for total in incident_type_data]
         response['chart']['spline']['data_val'].append({'name':pc, 'data': total_result})
 
 
