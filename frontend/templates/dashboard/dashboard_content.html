@@ -1,7 +1,6 @@
 {% load i18n %}
-{% load  static %}
+{% load static %}
 {% load jsonify %}
-{#% load app_filters %}
 
 {% block content_dashboard %}
     <div>
@@ -50,7 +49,7 @@
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Graph of Incident and Casualties Trend by Incident Type" %}</h4>
                     <!-- <div id="chart_polar_graph_of_incident_and_casualties_trend_by_incident_type" class="ch-size polar-chart" data-color="colorSecurity" data-xaxis='["Armed Opposition Group", "Civilians", "Government", "Humanitarian Community", "Infrastructure", "International Humanitarian Community", "International Military", "Police / Military Government", "Unknown"]' data-val='[{"data": [845, 764, 695, 70, 15, 11, 18, 5311, 66], "type": "Incidents"}, {"data": [55, 929, 373, 97, 17, 7, 16, 4660, 7], "type": "Dead"}, {"data": [], "type": "Injured"}, {"data": [], "type": "Violent"}]'></div> -->
-                    <div id="{{ chart.polar_incident_type.key }}" class="ch-size polar-chart" data-color="colorSecurity" data-xaxis='{{ chart.polar_incident_type.labels | jsonify }}' data-val='{{ chart.polar_incident_type.data_val | jsonify }}'></div>
+                    {% comment %} <div id="{{ chart.polar_incident_type.key }}" class="ch-size polar-chart" data-color="colorSecurity" data-xaxis='{{ chart.polar_incident_type.labels | jsonify }}' data-val='{{ chart.polar_incident_type.data_val | jsonify }}'></div> {% endcomment %}
                 </div>
             </div>
         </div>
@@ -330,9 +329,9 @@
                             <tbody>
                                 {% for item in tables.list_of_latest_incidents %}
                                     <tr>
-                                        <td>{{ item.0 |date:'M j, Y' }}</td>
-                                        <td>{{ item.1 }}</td>
-                                        <td>{{ item.2 }}</td>
+                                        <td>{{ item.Date |date:'M j, Y' }}</td>
+                                        <td>{{ item.Time_of_Incident }}</td>
+                                        <td>{{ item.Description_of_Incident }}</td>
                                     </tr>
                                 {% endfor %}
                                 <tr>
