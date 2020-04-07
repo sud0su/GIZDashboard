@@ -5,23 +5,7 @@ from .models import Undss
 from reference.models import IncidentType, Province
 from organization.models import Organization
 from datetime import datetime
-
-
-class CustomEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if obj.__class__.__name__ in ["GeoValuesQuerySet","ValuesQuerySet","QuerySet"]:
-            return list(obj)
-        elif obj.__class__.__name__ == "date":
-            return obj.strftime("%Y-%m-%d")
-        elif obj.__class__.__name__ == "time":
-            return obj.strftime("%H-%M-%S")
-        elif obj.__class__.__name__ == "datetime":
-            return obj.strftime("%Y-%m-%d %H:%M:%S")
-        elif obj.__class__.__name__ == "Decimal":
-            return float(obj)
-        else:
-            print('not converted to json:', obj.__class__.__name__)
-            return 'not converted to json: %s' % (obj.__class__.__name__)
+from giz.utils import JSONEncoderCustom
 
 def dashboard(request):
     response = {}
@@ -132,7 +116,7 @@ def dashboard(request):
     countryDataChild = []
     for i in range(0, len(province_name)):
         tot = provinceData[0][i] + provinceData[1][i] + provinceData[2][i]
-        countryDataChild += [[province_name[i]] + [provinceData[0][i]] + [provinceData[1][i]] + [provinceData[2][i]] + [tot]]
+        countryDataChild = [province_name[i]] + [provinceData[0][i]] + [provinceData[1][i]] + [provinceData[2][i]] + [tot]
         response['tables']['number_of_incident_and_casualties_overview']['child'].append({'name':province_name[i].replace(" ", "_").lower(), 'value': countryDataChild})
     response['tables']['number_of_incident_and_casualties_overview']['key'] = "number_of_incident_and_casualties_overview"
     response['tables']['number_of_incident_and_casualties_overview']['title'] = "Number of Incident and Casualties Overview"
@@ -144,7 +128,7 @@ def Common(request):
 
     if 'page' not in request.GET:
         response = dashboard(request)
-    response['jsondata'] = json.dumps(response, cls=CustomEncoder)
+    response['jsondata'] = json.dumps(response, cls=JSONEncoderCustom)
 
     return response
 

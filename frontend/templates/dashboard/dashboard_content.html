@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load static %}
-{% load jsonify %}
+{% load giz_tags %}
 
 {% block content_dashboard %}
     <div>
@@ -48,8 +48,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Graph of Incident and Casualties Trend by Incident Type" %}</h4>
-                    <!-- <div id="chart_polar_graph_of_incident_and_casualties_trend_by_incident_type" class="ch-size polar-chart" data-color="colorSecurity" data-xaxis='["Armed Opposition Group", "Civilians", "Government", "Humanitarian Community", "Infrastructure", "International Humanitarian Community", "International Military", "Police / Military Government", "Unknown"]' data-val='[{"data": [845, 764, 695, 70, 15, 11, 18, 5311, 66], "type": "Incidents"}, {"data": [55, 929, 373, 97, 17, 7, 16, 4660, 7], "type": "Dead"}, {"data": [], "type": "Injured"}, {"data": [], "type": "Violent"}]'></div> -->
-                    {% comment %} <div id="{{ chart.polar_incident_type.key }}" class="ch-size polar-chart" data-color="colorSecurity" data-xaxis='{{ chart.polar_incident_type.labels | jsonify }}' data-val='{{ chart.polar_incident_type.data_val | jsonify }}'></div> {% endcomment %}
+                    <div id="{{ chart.polar_incident_type.key }}" class="ch-size polar-chart" data-color="colorSecurity" data-xaxis='{{ chart.polar_incident_type.labels | jsonify }}' data-val='{{ chart.polar_incident_type.data_val | jsonify }}'></div>
                 </div>
             </div>
         </div>
@@ -83,7 +82,6 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Historical Date of Incidents and Casualties by Incident Type" %}</h4>
-                    <!-- <div id="spline_{{ row.2.key }}" class="ch-size spline-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='' data-val='[{"data": [[1393682400000, 2684], [1388509200000, 920]], "name": "Dead"}, {"data": [[1483232400000, 2684], [1586228551979, 920]], "name": "Injured"}]' ></div> -->
                     <div id="spline_{{ chart.spline.key }}" class="ch-size spline-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='' data-val='{{ chart.spline.data_val | jsonify }}' ></div>
                 </div>
             </div>

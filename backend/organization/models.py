@@ -7,4 +7,6 @@ class Organization(models.Model):
     name = models.CharField(_("Organization Name"), max_length=50, null=True, blank=True)
     
     def __str__(self):
+        if self.name == 'Null':
+            return self.code
         return self.name
