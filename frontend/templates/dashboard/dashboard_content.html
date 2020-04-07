@@ -42,11 +42,46 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "Select Incident Type" %}</h4>
+                    <form>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="switch1">
+                            <label class="custom-control-label" for="switch1">{% trans "Select All" %}</label>
+                        </div>
+                        {% get_current_language_bidi as LANGUAGE_BIDI %}
+                        <div id="indicatorType" class="row no-margin child-checkbox">
+                            {% for item in row.0.labels_all %}
+                                <div class="col s12 {{ LANGUAGE_BIDI | yesno:'rtl, ltr' }}">
+                                    <label>
+                                        <input type="checkbox" id="{{ row.4 }}{{ forloop.counter0 }}" class="filled-in checkIncident" name="main_{{ row.4 }}_select[]" value="{{ item.name }}" {% if item.selected %}checked=true{% endif %}>
+                                        <span>{{ item.name }} ({{ item.count }} incidents)</span>
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div class="col-lg-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Graph of Incident and Casualties Trend by Incident Type" %}</h4>
                     <div id="chart_polar_graph_of_incident_and_casualties_trend_by_incident_type" class="ch-size polar-chart" data-color="colorSecurity" data-xaxis='["Armed Opposition Group", "Civilians", "Government", "Humanitarian Community", "Infrastructure", "International Humanitarian Community", "International Military", "Police / Military Government", "Unknown"]' data-val='[{"data": [845, 764, 695, 70, 15, 11, 18, 5311, 66], "type": "Incidents"}, {"data": [55, 929, 373, 97, 17, 7, 16, 4660, 7], "type": "Dead"}, {"data": [], "type": "Injured"}, {"data": [], "type": "Violent"}]'></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "Historical Date of Incidents and Casualties by Incident Type" %}</h4>
+                    <div id="spline_{{ row.2.key }}" class="ch-size spline-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='' data-val='[{"data": [[1393682400000, 2684], [1388509200000, 920]], "name": "Dead"}, {"data": [[1483232400000, 2684], [1391223600000, 920]], "name": "Injured"}]' ></div>
                 </div>
             </div>
         </div>
@@ -92,7 +127,7 @@
             </div>
         </div>
 
-        <div class="col-lg-12 grid-margin stretch-card">
+        <div class="col-lg-12 grid-margin stretch-card d-none">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Description Table Killed</h4>
@@ -136,7 +171,7 @@
             </div>
         </div>
 
-        <div class="col-lg-12 grid-margin stretch-card">
+        <div class="col-lg-12 grid-margin stretch-card d-none">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Description Table Injured</h4>
@@ -180,7 +215,7 @@
             </div>
         </div>
 
-        <div class="col-lg-12 grid-margin stretch-card">
+        <div class="col-lg-12 grid-margin stretch-card d-none">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Description Table Killed</h4>
@@ -241,125 +276,6 @@
                                     <td>Jacob</td>
                                     <td>Photoshop</td>
                                     <td>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta, quia. Recusandae, distinctio? Numquam, aliquam harum? Asperiores porro doloribus pariatur aspernatur quasi illo? Molestias commodi voluptatum ex doloribus tempore voluptas mollitia!</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Description Table</h4>
-                    <p class="card-description">
-                        Add description
-                    </p>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>{% trans "Date" %}</th>
-                                    <th>{% trans "Time of Incident" %}</th>
-                                    <th>{% trans "Police District" %}</th>
-                                    <th>{% trans "Incident Type" %}</th>
-                                    <th>{% trans "Description" %}</th>
-                                    <th>{% trans "HPA" %}</th>
-                                    <th>{% trans "Initiator" %}</th>
-                                    <th>{% trans "Target" %}</th>
-                                    <th>{% trans "Casualties" %}</th>
-                                    <th>{% trans "Killed" %}</th>
-                                    <th>{% trans "Injured" %}</th>
-                                    <th>{% trans "Abducted" %}</th>
-                                    <th>{% trans "Total" %}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Jacob</td>
-                                    <td>Photoshop</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Description Table</h4>
-                    <p class="card-description">
-                        Add description
-                    </p>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th rowspan="3">{% trans "Incident Type" %}</th>
-                                    <th rowspan="3">{% trans "Incident Sub Type" %}</th>
-                                    <th rowspan="3">{% trans "Police District" %}</th>
-                                    <th rowspan="3">{% trans "HPA" %}</th>
-                                    <th rowspan="3">{% trans "Initiator" %}</th>
-                                    <th rowspan="3">{% trans "Target" %}</th>
-                                    <th colspan="19">{% trans "Casualties" %}</th>
-                                    <th rowspan="3">{% trans "Total Incidents" %}</th>
-                                </tr>
-                                <tr>
-                                    <th colspan="7">{% trans "Killed" %}</th>
-                                    <th colspan="7">{% trans "Injured" %}</th>
-                                    <th colspan="5">{% trans "Abducted" %}</th>
-                                </tr>
-                                <tr>
-                                    <th>{% trans "Civilians" %}</th>
-                                    <th>{% trans "ANP" %}</th>
-                                    <th>{% trans "ANA/ANSF" %}</th>
-                                    <th>{% trans "IM" %}</th>
-                                    <th>{% trans "PGM/ALP" %}</th>
-                                    <th>{% trans "AOG" %}</th>
-                                    <th>{% trans "ISKP" %}</th>
-                                
-                                    <th>{% trans "Civilians" %}</th>
-                                    <th>{% trans "ANP" %}</th>
-                                    <th>{% trans "ANA/ANSF" %}</th>
-                                    <th>{% trans "IM" %}</th>
-                                    <th>{% trans "CDF/ATM/ALP" %}</th>
-                                    <th>{% trans "AOG" %}</th>
-                                    <th>{% trans "ISKP" %}</th>
-                                
-                                    <th>{% trans "Civilians" %}</th>
-                                    <th>{% trans "Field30" %}</th>
-                                    <th>{% trans "ANA/ANSF" %}</th>
-                                    <th>{% trans "Field32" %}</th>
-                                    <th>{% trans "PGM/ALP" %}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Jacob</td>
-                                    <td>Photoshop</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>
