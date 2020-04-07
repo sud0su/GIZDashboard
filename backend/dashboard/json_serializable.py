@@ -13,6 +13,8 @@ class CustomEncoder(json.JSONEncoder):
             return list(obj)
         elif obj.__class__.__name__ == "date":
             return obj.strftime("%Y-%m-%d")
+        elif obj.__class__.__name__ == "time":
+            return obj.strftime("%H-%M-%S")
         elif obj.__class__.__name__ == "datetime":
             return obj.strftime("%Y-%m-%d %H:%M:%S")
         elif obj.__class__.__name__ == "Decimal":
@@ -42,9 +44,19 @@ def dashboard(request):
         total_result = [total['total'] for total in incident_type_data]
         response['chart']['bar_chart']['data_val'].append({'name':pc, 'data': total_result})
 
+    ## Spline Chart
+    response['chart']['spline'] = {}
+    response['chart']['spline']['data_val'] = []
+    response['chart']['spline']['title'] = "Historical Date of Incidents and Casualties by Incident Type"
+    response['chart']['spline']['key'] = "history_incident_and_casualties_trend_by_incident_type"
+    for pc in category:
+        incident_type_data = Undss.objects.values('Date').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Date')
+        total_result = [[total['Date'], total['total']] for total in incident_type_data]
+        response['chart']['spline']['data_val'].append({'name':pc, 'data': total_result})
+
+
     ## Polar Chart
     chart_type = ['incident_type', 'target_type']
-
     for ct in chart_type:
         response['chart']['polar_'+ct] = {}
         response['chart']['polar_'+ct]['data_val'] = []
@@ -70,7 +82,7 @@ def dashboard(request):
 
     # Tables
     response['tables'] = {}
-    response['tables']['list_of_latest_incidents'] = Undss.objects.values('Date', 'Description_of_Incident').order_by('-Date')
+    response['tables']['list_of_latest_incidents'] = Undss.objects.values('Date', 'Time_of_Incident','Description_of_Incident').order_by('-Date')
     
     incidentTypeData = []
     for pc in category:
