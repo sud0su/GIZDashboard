@@ -13,26 +13,30 @@ function select_region(code){
 }
 
 function init_select2_region(){
-	$('.province-dropdown').select2({
-		placeholder: "Select Province"
-	});
-	$('.dist-dropdown').select2({
-		placeholder: "Select District"
-	});
+	// $('.province-dropdown').select2({
+	// 	placeholder: "Select Province"
+	// });
+	// $('.dist-dropdown').select2({
+	// 	placeholder: "Select District"
+	// });
 
-	$('.province-dropdown').on('change', function (e) {
-		jump_url(e.val);
-	});
+	// $('.province-dropdown').on('change', function (e) {
+	// 	jump_url(e.val);
+	// });
 
-	$('.dist-dropdown').on('change', function (e) {
-		jump_url(e.val);
-	});
+	// $('.dist-dropdown').on('change', function (e) {
+	// 	jump_url(e.val);
+	// });
 
-	var code_region = getParameterByName("code");
-	if (code_region == null) {
-		$(".dist-dropdown").hide();
-	}else {
-		select_region(code_region);
+	// var code_region = getParameterByName("code");
+	// if (code_region == null) {
+	// 	$(".dist-dropdown").hide();
+	// }else {
+	// 	select_region(code_region);
+	// }
+
+	if (typeof select2_region === "function") { 
+		select2_region();
 	}
 }
 
@@ -834,7 +838,7 @@ function init_chart2(){
 }
 
 $(document).ready(function(){
-	// init_select2_region();
+	init_select2_region();
 	init_datatable();
 	init_chart2();
 });

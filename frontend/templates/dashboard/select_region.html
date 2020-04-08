@@ -1,7 +1,7 @@
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Province</a></li>
-    <li class="breadcrumb-item"><a href="#">District</a></li>
-    <li class="breadcrumb-item active">City Village</li>
+<ol class="breadcrumb bg-transparent">
+    <li class="breadcrumb-item"><a href="#">Afghanistan</a></li>
+    <!-- <li class="breadcrumb-item"><a href="#">District</a></li>
+    <li class="breadcrumb-item active">City Village</li> -->
     {% for idx, adm in adm_path.items %}
         {% if not adm.code and 'print' in request.path %}
         {% else %}
@@ -17,6 +17,12 @@
             </li>
         {% endif %}
     {% endfor %}
+    <li class="breadcrumb-item">
+        <select class="area-dropdown province" data-placeholder="Select Province">
+            <!-- <option></option> -->
+            <option value="Kabul">Kabul</option>
+        </select>
+    </li>
 </ol>
 
 <script>
