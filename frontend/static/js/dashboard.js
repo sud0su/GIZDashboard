@@ -915,9 +915,7 @@ $(document).ready(function(){
 	init_select2_region();
 	init_datatable();
 	init_chart2();
-});
 
-document.addEventListener('DOMContentLoaded', function() {
 	$('button#pdf').on('click', function(event) {
 		var url = $(location).attr("href");
 		// $(".se-pre-con").fadeIn("slow");
