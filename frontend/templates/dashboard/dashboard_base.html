@@ -2,14 +2,6 @@
 {% load i18n %}
 {% load  static %}
 
-{% block extra_head %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2.min.css">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
-{% endblock %}
-
 {% block content %}
     {% block navbar %}
         {% include "_navbar.html" %}
@@ -23,7 +15,6 @@
         <div class="main-panel">
             <div class="content-wrapper">
                 {% block content_dashboard %}
-                    {% include 'dashboard/dashboard_content.html' %}
                 {% endblock content_dashboard %}
             </div>
             <!-- content-wrapper ends -->
@@ -45,37 +36,5 @@
     <script src="{% static 'js/template.js' %}"></script>
     <!-- endinject -->
 
-    <!-- Select2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-
-    <!-- Daterangepicker -->
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js"></script>
-    
-    <!-- DataTables -->
-    <!-- <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script> -->
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-    <!-- <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script> -->
-    <!-- <script src="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css"></script> -->
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
-
-    <!-- Highcharts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/7.1.0/highstock.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/7.1.0/highcharts-more.js"></script>
-    <script>
-      var jsondata = {% if jsondata %}{{ jsondata|safe }}{% else %}{}{% endif %};
-    </script>
-    <script src="{% static 'js/dashboard.js' %}"></script>
-    <script src="{% static 'js/security.js' %}"></script>
     {% block dashboard_script %}{% endblock dashboard_script %}
 {% endblock extra_script %}

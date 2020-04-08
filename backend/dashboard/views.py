@@ -30,5 +30,6 @@ def InputDashboard(request):
 @login_required
 def Dashboard(request):
     response = Common(request)
-    template = "dashboard/dashboard_base.html"
+    # template = "dashboard/dashboard_base.html"
+    template = "dashboard/dashboard_content.html"
     return render(request, template, response)
