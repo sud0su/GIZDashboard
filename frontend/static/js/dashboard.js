@@ -1,3 +1,77 @@
+function jump_url(code){
+	var url = window.location.href;
+
+	if (getParameterByName("code") == null){
+		url += '&code='+code;
+	} else {
+		url = updateUrlParameter(url, 'code', code)
+	}
+
+	if (code == 0){
+		url = removeParam('code', url)
+	}
+
+	window.document.location = url;
+
+}
+
+function getParameterByName(name, url) {
+	if (!url) url = window.location.href;
+	name = name.replace(/[\[\]]/g, "\\$&");
+	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+		results = regex.exec(url);
+	if (!results) return null;
+	if (!results[2]) return '';
+	return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function removeParam(key, sourceURL) {
+	var rtn = sourceURL.split("?")[0],
+		param,
+		params_arr = [],
+		queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+	if (queryString !== "") {
+		params_arr = queryString.split("&");
+		for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+			param = params_arr[i].split("=")[0];
+			if (param === key) {
+				params_arr.splice(i, 1);
+			}
+		}
+		rtn = rtn + "?" + params_arr.join("&");
+	}
+	return rtn;
+}
+
+function updateUrlParameter(url, param, value){
+	param = encodeURIComponent(param);
+	var r = "([&?]|&amp;)" + param + "\\b(?:=(?:[^&#]*))*";
+	var a = document.createElement('a');
+	var regex = new RegExp(r);
+	var str = param + (value ? "=" + encodeURIComponent(value) : ""); 
+	a.href = url;
+	var q = a.search.replace(regex, "$1"+str);
+	if (q === a.search) {
+		a.search += (a.search ? "&" : "") + str;
+	} else {
+		a.search = q;
+	}
+	return a.href;
+}
+
+var _checked = [];
+
+function removeA(arr) {
+	var what, a = arguments, L = a.length, ax;
+	while (L > 1 && arr.length) {
+		what = a[--L];
+		while ((ax= arr.indexOf(what)) !== -1) {
+			arr.splice(ax, 1);
+		}
+	}
+	return arr;
+}
+
 function select_region(code){
 	if (code <= 34) {
 		$(".province-dropdown").select2('val', code);
@@ -87,21 +161,21 @@ function init_datatable(){
 		buttons: [
 			{
 				extend: "copy",
-				className: "btn-flat waves-effect waves-light"
+				className: "btn btn-default btn-sm"
 			},
 			{
 				extend: "csv",
-				filename: 'ASDC Data',
-				className: "btn-flat waves-effect waves-light"
+				filename: 'GIZ Data',
+				className: "btn btn-default btn-sm"
 			},
 			{
 				extend: "excel",
-				filename: 'ASDC Data',
-				className: "btn-flat waves-effect waves-light"
+				filename: 'GIZ Data',
+				className: "btn btn-default btn-sm"
 			},
 			{
 				extend: "print",
-				filename: 'ASDC Data',
+				filename: 'GIZ Data',
 				// customize: 
 				// 	function ( win ) {
 	      //               $(win.document.body)
@@ -116,7 +190,7 @@ function init_datatable(){
 	      //                   .addClass( 'compact' )
 	      //                   .css( 'font-size', 'inherit' );
 	      //           },
-				className: "btn-flat waves-effect waves-light"
+				className: "btn btn-default btn-sm"
 			}
 			// {
 			//   extend: "colvis"
@@ -140,23 +214,23 @@ function init_datatable(){
 		buttons: [
 			{
 				extend: "copy",
-				className: "btn-flat waves-effect waves-light"
+				className: "btn btn-default btn-sm"
 			},
 			{
 				extend: "csv",
-				className: "btn-flat waves-effect waves-light"
+				className: "btn btn-default btn-sm"
 			},
 			{
 				extend: "excel",
-				className: "btn-flat waves-effect waves-light"
+				className: "btn btn-default btn-sm"
 			},
 			{
 				extend: "print",
-				className: "btn-flat waves-effect waves-light"
+				className: "btn btn-default btn-sm"
 			},
 			// {
 			//   extend: "colvis"
-			//   className: "btn-flat waves-effect waves-light"
+			//   className: "btn btn-default btn-sm"
 			// }
 		],
 
@@ -169,7 +243,7 @@ function init_datatable(){
 		}]
 	});
 
-	$("button").removeClass("dt-button");
+	// $("button").removeClass("dt-button");
 }
 
 function init_chart2(){
@@ -841,4 +915,13 @@ $(document).ready(function(){
 	init_select2_region();
 	init_datatable();
 	init_chart2();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+	$('button#pdf').on('click', function(event) {
+		var url = $(location).attr("href");
+		// $(".se-pre-con").fadeIn("slow");
+		window.document.location = url+'&pdf=true&_checked='+_checked;
+		// $(".se-pre-con").fadeOut("slow");
+	});
 });

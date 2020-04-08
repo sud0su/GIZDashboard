@@ -19432,6 +19432,83 @@ code {
   background: #001737;
 }
 
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 25px;
+}
+.toggle-switch .toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e9ecef;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 34px;
+  border: 1px solid #f1f6f8;
+}
+.toggle-switch .toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #ffffff;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+.toggle-switch input {
+  visibility: hidden;
+}
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #464dee;
+}
+.toggle-switch input:checked + .toggle-slider:before {
+  -webkit-transform: translateX(23px);
+  -ms-transform: translateX(23px);
+  transform: translateX(23px);
+}
+
+.toggle-switch.toggle-switch-primary input:checked + .toggle-slider {
+  background-color: #464dee;
+}
+
+.toggle-switch.toggle-switch-secondary input:checked + .toggle-slider {
+  background-color: #d8d8d8;
+}
+
+.toggle-switch.toggle-switch-success input:checked + .toggle-slider {
+  background-color: #0ddbb9;
+}
+
+.toggle-switch.toggle-switch-info input:checked + .toggle-slider {
+  background-color: #0ad7f7;
+}
+
+.toggle-switch.toggle-switch-warning input:checked + .toggle-slider {
+  background-color: #fcd53b;
+}
+
+.toggle-switch.toggle-switch-danger input:checked + .toggle-slider {
+  background-color: #ee5b5b;
+}
+
+.toggle-switch.toggle-switch-light input:checked + .toggle-slider {
+  background-color: #d8d8d8;
+}
+
+.toggle-switch.toggle-switch-dark input:checked + .toggle-slider {
+  background-color: #001737;
+}
+
+/* Rounded sliders */
 /* Forms */
 .form-group {
   margin-bottom: 1.5rem;

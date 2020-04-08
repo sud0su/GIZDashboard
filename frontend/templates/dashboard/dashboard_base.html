@@ -4,6 +4,10 @@
 
 {% block extra_head %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 {% endblock %}
 
 {% block content %}
@@ -42,14 +46,20 @@
     <!-- endinject -->
 
     <!-- Select2 -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+
+    <!-- Daterangepicker -->
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js"></script>
     
     <!-- DataTables -->
-    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css"></script>
+    <!-- <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script> -->
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <!-- <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script> -->
+    <!-- <script src="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css"></script> -->
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -64,90 +74,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/7.1.0/highcharts-more.js"></script>
     <script>
       var jsondata = {% if jsondata %}{{ jsondata|safe }}{% else %}{}{% endif %};
-    </script>
-    <script>
-        function jump_url(code){
-            var url = window.location.href;
-
-            if (getParameterByName("code") == null){
-                url += '&code='+code;
-            } else {
-                url = updateUrlParameter(url, 'code', code)
-            }
-
-            if (code == 0){
-                url = removeParam('code', url)
-            }
-
-            window.document.location = url;
-
-        }
-
-        function getParameterByName(name, url) {
-            if (!url) url = window.location.href;
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
-        }
-
-        function removeParam(key, sourceURL) {
-            var rtn = sourceURL.split("?")[0],
-                param,
-                params_arr = [],
-                queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
-            if (queryString !== "") {
-                params_arr = queryString.split("&");
-                for (var i = params_arr.length - 1; i >= 0; i -= 1) {
-                    param = params_arr[i].split("=")[0];
-                    if (param === key) {
-                        params_arr.splice(i, 1);
-                    }
-                }
-                rtn = rtn + "?" + params_arr.join("&");
-            }
-            return rtn;
-        }
-
-        function updateUrlParameter(url, param, value){
-            param = encodeURIComponent(param);
-            var r = "([&?]|&amp;)" + param + "\\b(?:=(?:[^&#]*))*";
-            var a = document.createElement('a');
-            var regex = new RegExp(r);
-            var str = param + (value ? "=" + encodeURIComponent(value) : ""); 
-            a.href = url;
-            var q = a.search.replace(regex, "$1"+str);
-            if (q === a.search) {
-                a.search += (a.search ? "&" : "") + str;
-            } else {
-                a.search = q;
-            }
-            return a.href;
-        }
-
-        var _checked = [];
-
-        function removeA(arr) {
-            var what, a = arguments, L = a.length, ax;
-            while (L > 1 && arr.length) {
-                what = a[--L];
-                while ((ax= arr.indexOf(what)) !== -1) {
-                    arr.splice(ax, 1);
-                }
-            }
-            return arr;
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            $('button#pdf').on('click', function(event) {
-                var url = $(location).attr("href");
-                // $(".se-pre-con").fadeIn("slow");
-                window.document.location = url+'&pdf=true&_checked='+_checked;
-                // $(".se-pre-con").fadeOut("slow");
-            });
-        });
     </script>
     <script src="{% static 'js/dashboard.js' %}"></script>
     <script src="{% static 'js/security.js' %}"></script>
