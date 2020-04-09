@@ -1,52 +1,81 @@
 {% extends "account/base.html" %}
 
 {% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 {% block head_links %} 
-
-<title>Signup</title>
-
+    <title>Signup</title>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-center auth px-0">
+            <div class="row w-100 mx-0">
+                <div class="col-lg-4 mx-auto">
+                    <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+                        <div class="brand-logo">
+                            <img src="{% static 'images/giz-logo.png' %}" alt="logo">
+                        </div>
+                        <h4>{% trans "Sign Up" %}</h4>
+                        <h6 class="font-weight-light">{% trans "Register your new account in one easy step" %}</h6>
+                        {% block messages %}
+                            {% if messages %}
+                            <div>
+                                <ul>
+                                {% for message in messages %}
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <strong>{{message}}</strong>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                </div>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                        {% endblock %}
+                        <form class="pt-3" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                            {% csrf_token %}
 
- {% block messages %}
-    {% if messages %}
-    <div>
-        <ul>
-        {% for message in messages %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>{{message}}</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                            <div class="form-row">
+                                <div class="form-group col-xl-6">
+                                    {{ form.first_name |attr:"class:form-control form-control-lg" |attr:"placeholder:First Name" }}
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    {{ form.last_name |attr:"class:form-control form-control-lg" |attr:"placeholder:Last Name" }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.username |attr:"class:form-control form-control-lg" }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.email |attr:"class:form-control form-control-lg" }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.password1 |attr:"class:form-control form-control-lg" }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.password2 |attr:"class:form-control form-control-lg" |attr:"placeholder:Re-type Password" }}
+                            </div>
+                            <div class="mb-4">
+                                
+                            </div>
+                            {% if redirect_field_value %}
+                                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                            {% endif %}
+                            <div class="mt-3">
+                                <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" type="submit">{% trans "SIGN UP" %}</button>
+                            </div>
+                            <div class="text-center mt-4 font-weight-light">
+                                {% blocktrans %}Already have an account? <a href="{{ login_url }}">Login</a>{% endblocktrans %}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endfor %}
-        </ul>
+        <!-- content-wrapper ends -->
     </div>
-    {% endif %}
-  {% endblock %}
-  
-
-<h3 class="h3" id="head_banner">{% trans "Sign Up" %}</h3>
-
-<p class="exist_account_info">{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
-
-<form class="container-fluid text-center" id="signup_form" method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-
-  {{ form.as_p }}
-
-  {% if redirect_field_value %}
-
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  
-  {% endif %}
-  
-  <button class="btn btn-outline-primary btn-lg" type="submit">{% trans "Sign Up" %}</button>
-</form>
-
-</div>
-{% endblock %}
+{% endblock content %}
