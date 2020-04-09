@@ -322,7 +322,7 @@
                                     </tr>
                                 {% endfor %}
                                 {% for child in tables.number_of_incident_and_casualties_overview.child %}
-                                    <tr class="selectable" onclick="jump_url('{{child.name}}');">
+                                    <tr class="selectable" onclick="jump_url('prov={{child.name}}');">
                                         {% for item in child.value %}
                                             <td>{{item}}</td>
                                         {% endfor %}

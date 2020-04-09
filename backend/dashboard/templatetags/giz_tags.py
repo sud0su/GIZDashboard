@@ -33,3 +33,8 @@ def createlist(object, listname):
 def listaddchild(object, listname):
 	object[listname] = []
 	return object[listname]
+
+@register.filter
+def replacetolower(value):
+	return value.replace(" ", "_").lower()
+

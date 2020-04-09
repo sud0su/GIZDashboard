@@ -1,28 +1,25 @@
+{% load giz_tags %}
+
 <ol class="breadcrumb bg-transparent">
-    <li class="breadcrumb-item"><a href="#">Afghanistan</a></li>
-    <!-- <li class="breadcrumb-item"><a href="#">District</a></li>
-    <li class="breadcrumb-item active">City Village</li> -->
-    {% for idx, adm in adm_path.items %}
-        {% if not adm.code and 'print' in request.path %}
-        {% else %}
-            <li class="breadcrumb-item">
-                <select class="area-dropdown {{adm.type}}" data-placeholder="Select {{adm.type}}">
-                    {% if not adm.code %}
-                    <option></option>
-                    {% endif %}
-                    {% for sibling in adm.sibling %}
-                    <option value="{{sibling.code}}" {% if adm.code == sibling.code %}selected="selected"{% endif %}>{{sibling.name}}</option>
-                    {% endfor %}
-                </select>
-            </li>
-        {% endif %}
+    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Afghanistan</a></li>
+    
+    {% for k,v in region.items %}
+    {% for i in v %}
+        {% comment %} {% if not i.code and 'print' in request.path %}
+        {% else %} {% endcomment %}
+        <li class="breadcrumb-item">
+            <select class="area-dropdown {{i.type}}" data-placeholder="Select {{i.type}}">
+                {% if not i.selected %}
+                <option></option>
+                {% endif %}
+                {% for value in i.data_val %}
+                    <option value="{{i.urlcode}}={{ value.name }}" {% if value.name == i.selected %}selected="selected"{% endif %}>{{  value.name }}</option>
+                {% endfor %}
+            </select>
+        </li>
+        {% comment %} {% endif %} {% endcomment %}
     {% endfor %}
-    <li class="breadcrumb-item">
-        <select class="area-dropdown province" data-placeholder="Select Province">
-            <!-- <option></option> -->
-            <option value="Kabul">Kabul</option>
-        </select>
-    </li>
+    {% endfor %}
 </ol>
 
 <script>

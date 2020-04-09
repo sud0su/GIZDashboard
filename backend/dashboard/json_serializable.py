@@ -1,88 +1,114 @@
 import json
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.db.models.functions import Coalesce
 from .models import Undss
-from reference.models import IncidentType, Province
+from reference.models import IncidentType, Province, District
 from organization.models import Organization
 from datetime import datetime
 from giz.utils import JSONEncoderCustom
 
-def dashboard(request):
-    response = {}
+def MainData(request):
+    main = {}
 
-    incident_type_name = IncidentType.objects.values_list('name', flat=True).order_by('-id')
-    target_type_name = Organization.objects.values_list('code', flat=True).order_by('-id')
-    province_name = Province.objects.values_list('name', flat=True).order_by('-id')
-    category = ['killed', 'Injured', 'Abducted']
+    main["incident_type_name"] = IncidentType.objects.values_list('name', flat=True).order_by('-id')
+    main["target_type_name"] = Organization.objects.values_list('code', flat=True).order_by('-id')
+    main["province_name"] = Province.objects.values_list('name', flat=True).order_by('-id')
+    main["category"] = ['killed', 'Injured', 'Abducted']
+    main["chart_type"] = ['incident_type', 'target_type']
 
-    # Chart
-    response['chart'] = {}
+    return main
+
+def Chart(request, code):
+    main = MainData(request)
+    chart = {}
+    
+    undssQueryset =  Undss.objects.all()
+    if code:
+        getCode = code.split('=')
+        if getCode[0] == 'prov':
+            undssQueryset = undssQueryset.filter(Q(Province__name=getCode[1]))
+        else:
+            undssQueryset = undssQueryset.filter(Q(District__name=getCode[1]))
 
     ## Bar Chart
-    response['chart']['bar_chart'] = {}
-    response['chart']['bar_chart']['data_val'] = []
-    response['chart']['bar_chart']['title'] = "Number of Casualties by Incident Type"
-    response['chart']['bar_chart']['key'] = "number_of_casualties_by_incident_type"
-    response['chart']['bar_chart']['labels'] = incident_type_name
-    for pc in category:
-        incident_type_data = Undss.objects.values('Incident_Type__name').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Incident_Type_id')
-        total_result = [total['total'] for total in incident_type_data]
-        response['chart']['bar_chart']['data_val'].append({'name':pc, 'data': total_result})
+    chart['bar_chart'] = {}
+    chart['bar_chart']['data_val'] = []
+    chart['bar_chart']['title'] = "Number of Casualties by Incident Type"
+    chart['bar_chart']['key'] = "number_of_casualties_by_incident_type"
+    chart['bar_chart']['labels'] = main["incident_type_name"]
+    for pc in main["category"]:
+        undssQueryset = undssQueryset.values('Incident_Type__name').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Incident_Type_id')
+        total_result = [total['total'] for total in undssQueryset]
+        chart['bar_chart']['data_val'].append({'name':pc, 'data': total_result})
 
     ## Spline Chart
-    response['chart']['spline'] = {}
-    response['chart']['spline']['data_val'] = []
-    response['chart']['spline']['title'] = "Historical Date of Incidents and Casualties by Incident Type"
-    response['chart']['spline']['key'] = "history_incident_and_casualties_trend_by_incident_type"
-    for pc in category:
-        incident_type_data = Undss.objects.values('Date').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Date')
-        total_result = [[total['Date'].timestamp() * 1000, total['total']] for total in incident_type_data]
-        response['chart']['spline']['data_val'].append({'name':pc, 'data': total_result})
+    chart['spline'] = {}
+    chart['spline']['data_val'] = []
+    chart['spline']['title'] = "Historical Date of Incidents and Casualties by Incident Type"
+    chart['spline']['key'] = "history_incident_and_casualties_trend_by_incident_type"
+    for pc in main["category"]:
+        undssQueryset = undssQueryset.values('Date').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Date')
+        total_result = [[total['Date'].timestamp() * 1000, total['total']] for total in undssQueryset]
+        chart['spline']['data_val'].append({'name':pc, 'data': total_result})
 
 
     ## Polar Chart
-    chart_type = ['incident_type', 'target_type']
-    for ct in chart_type:
-        response['chart']['polar_'+ct] = {}
-        response['chart']['polar_'+ct]['data_val'] = []
+    for ct in main["chart_type"]:
+        chart['polar_'+ct] = {}
+        chart['polar_'+ct]['data_val'] = []
         if ct == 'incident_type':
             Title = 'Incident Type'
             OrderId = 'Incident_Type_id'
             DbRelated = 'Incident_Type__name'
-            response['chart']['polar_'+ct]['labels'] = incident_type_name
-            response['chart']['polar_'+ct]['labels_all'] = incident_type_name
-            response['chart']['polar_'+ct]['key'] = "graph_of_incident_and_casualties_trend_by_incident_type"
+            chart['polar_'+ct]['labels'] = main["incident_type_name"]
+            chart['polar_'+ct]['labels_all'] = main["incident_type_name"]
+            chart['polar_'+ct]['key'] = "graph_of_incident_and_casualties_trend_by_incident_type"
         else:
             Title = 'Target Type'
             OrderId = 'Target_id'
             DbRelated = 'Target__code'
-            response['chart']['polar_'+ct]['labels'] = target_type_name
-            response['chart']['polar_'+ct]['labels_all'] = target_type_name
-            response['chart']['polar_'+ct]['key'] = "graph_of_incident_and_casualties_trend_by_target_type"
-        response['chart']['polar_'+ct]['title'] = "Graph of Incident and Casualties Trend by "+ Title
-        for pc in category:
-            type_data = Undss.objects.values(DbRelated).annotate(total = Coalesce(Sum(pc), 0)).order_by('-'+OrderId)
+            chart['polar_'+ct]['labels'] = main["target_type_name"]
+            chart['polar_'+ct]['labels_all'] = main["target_type_name"]
+            chart['polar_'+ct]['key'] = "graph_of_incident_and_casualties_trend_by_target_type"
+        chart['polar_'+ct]['title'] = "Graph of Incident and Casualties Trend by "+ Title
+        for pc in main["category"]:
+            type_data = undssQueryset.values(DbRelated).annotate(total = Coalesce(Sum(pc), 0)).order_by('-'+OrderId)
             total_result = [total['total'] for total in type_data]
-            response['chart']['polar_'+ct]['data_val'].append({'type':pc, 'data': total_result})
+            chart['polar_'+ct]['data_val'].append({'type':pc, 'data': total_result})
 
-    # Tables
-    response['tables'] = {}
+    return chart
+
+def Table(request, code):
+    table = {}
+    main = MainData(request)
+
+    undssQueryset =  Undss.objects.all()
+    if code:
+        getCode = code.split('=')
+        if getCode[0] == 'prov':
+            undssQueryset = undssQueryset.filter(Q(Province__name=getCode[1]))
+        else:
+            undssQueryset = undssQueryset.filter(Q(District__name=getCode[1]))
+
 
     # list_of_latest_incidents
-    response['tables']['list_of_latest_incidents'] = Undss.objects.values('Date', 'Time_of_Incident','Description_of_Incident').order_by('-Date')
+    table['list_of_latest_incidents'] = undssQueryset.values('Date', 'Time_of_Incident','Description_of_Incident').order_by('-Date')
     
     # total killed, injure, abducted group by incident type
     incidentTypeData = []
-    for pc in category:
-        incident_type_data = Undss.objects.values('Incident_Type__name').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Incident_Type_id')
+    incidentTypeName = []
+    for pc in main["category"]:
+        incident_type_data = undssQueryset.values('Incident_Type__name').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Incident_Type_id')
         total_result = [total['total'] for total in incident_type_data]
+        incident_name = [total['Incident_Type__name'] for total in incident_type_data]
         incidentTypeData += [total_result]
+        incidentTypeName += [incident_name]
 
     # incidents_and_casualties_by_incident_type
     table_incident_type_total = []
-    for i in range(0, len(incident_type_name)):
+    for i in range(0, len(incidentTypeName[0])):
         table_data = {
-            'incident_name': incident_type_name[i],
+            'incident_name': incidentTypeName[0][i],
             'killed': incidentTypeData[0][i],
             'injured': incidentTypeData[1][i],
             'abducted': incidentTypeData[2][i],
@@ -90,44 +116,90 @@ def dashboard(request):
         }
         table_incident_type_total.append(table_data)
     
-    response['tables']['incidents_and_casualties_by_incident_type'] = table_incident_type_total
+    table['incidents_and_casualties_by_incident_type'] = table_incident_type_total
 
     # total killed, injure, abducted group by province, and country
     countryData = []
-    for pc in category:
-        country_data = Undss.objects.values(pc).annotate(total = Coalesce(Sum(pc), 0)).order_by('-'+pc)
+    for pc in main["category"]:
+        country_data = undssQueryset.values(pc).annotate(total = Coalesce(Sum(pc), 0)).order_by('-'+pc)
         total_result = [int(total['total']) for total in country_data]
         countryData += [sum(total_result)]
 
     provinceData = []
-    for pc in category:
-        province_data = Undss.objects.values('Province__name').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Province_id')
+    provinceName = []
+    for pc in main["category"]:
+        province_data = undssQueryset.values('Province__name').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Province_id')
         total_result = [total['total'] for total in province_data]
+        province_name = [total['Province__name'] for total in province_data]
         provinceData += [total_result]
+        provinceName += [province_name]
 
 
     # number_of_incident_and_casualties_overview
     parentname = ['Afghanistan']
-    response['tables']['number_of_incident_and_casualties_overview'] = {}
+    table['number_of_incident_and_casualties_overview'] = {}
     countryDataParent = parentname + countryData + [sum(countryData)]
 
-    response['tables']['number_of_incident_and_casualties_overview']['parentdata'] = [countryDataParent]
-    response['tables']['number_of_incident_and_casualties_overview']['child'] = []
+    table['number_of_incident_and_casualties_overview']['parentdata'] = [countryDataParent]
+    table['number_of_incident_and_casualties_overview']['child'] = []
     countryDataChild = []
-    for i in range(0, len(province_name)):
+    for i in range(0, len(provinceName[0])):
         tot = provinceData[0][i] + provinceData[1][i] + provinceData[2][i]
-        countryDataChild = [province_name[i]] + [provinceData[0][i]] + [provinceData[1][i]] + [provinceData[2][i]] + [tot]
-        response['tables']['number_of_incident_and_casualties_overview']['child'].append({'name':province_name[i].replace(" ", "_").lower(), 'value': countryDataChild})
-    response['tables']['number_of_incident_and_casualties_overview']['key'] = "number_of_incident_and_casualties_overview"
-    response['tables']['number_of_incident_and_casualties_overview']['title'] = "Number of Incident and Casualties Overview"
+        countryDataChild = [provinceName[0][i]] + [provinceData[0][i]] + [provinceData[1][i]] + [provinceData[2][i]] + [tot]
+        # table['number_of_incident_and_casualties_overview']['child'].append({'name':provinceName[0][i].replace(" ", "_").lower(), 'value': countryDataChild})
+        table['number_of_incident_and_casualties_overview']['child'].append({'name':provinceName[0][i], 'value': countryDataChild})
+    table['number_of_incident_and_casualties_overview']['key'] = "number_of_incident_and_casualties_overview"
+    table['number_of_incident_and_casualties_overview']['title'] = "Number of Incident and Casualties Overview"
 
-    return response
+    return table
+
+def Region(request, code):
+    region = {}
+    provname = ""
+    distname = ""
+    
+    getProvince = Province.objects.values()
+    getDistrict = District.objects.all().values("id","name","province__name")
+    
+    if code:
+        getCode = code.split('=')
+        if getCode[0] == 'prov':
+            getDistrict = getDistrict.filter(Q(province__name=getCode[1]))
+        else:
+            getDistrict = getDistrict.filter(Q(name=getCode[1]))
+
+        getName = [[v["province__name"],v["name"]] for v in getDistrict]
+        provname = getName[0][0]
+        distname = getName[0][1]
+    else:
+        getDistrict = getDistrict.filter(Q(province__name=code))
+
+    region["province"] = []
+    region["province"].append({"data_val" : getProvince, "selected": provname, "type" : "Province", "urlcode": "prov"})
+    region["district"] = []
+    region["district"].append({"data_val" : getDistrict, "selected": distname, "type" : "District", "urlcode": "dist"})
+    return region
+    
+def DashboardResponse(request, code):
+    dashboardresponse = {}
+    chart = Chart(request, code)
+    table = Table(request, code)
+    region = Region(request, code)
+    dashboardresponse["chart"] = chart
+    dashboardresponse["tables"] = table
+    dashboardresponse["region"] = region
+    return dashboardresponse
 
 def Common(request):
     response = {}
+    code = None
+
+    if 'code' in request.GET:
+        code = request.GET['code']
 
     if 'page' not in request.GET:
-        response = dashboard(request)
+        response = DashboardResponse(request, code)
+        
     response['jsondata'] = json.dumps(response, cls=JSONEncoderCustom)
 
     return response
