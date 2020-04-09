@@ -2,7 +2,7 @@ function jump_url(code){
 	var url = window.location.href;
 
 	if (getParameterByName("code") == null){
-		url += '?code='+code;
+		url += '&code='+code;
 	} else {
 		url = updateUrlParameter(url, 'code', code)
 	}

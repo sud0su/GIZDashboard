@@ -28,16 +28,19 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3 d-flex grid-margin stretch-card">
-            <div class="card sale-diffrence-border">
-                <div class="card-body">
-                    <h2 class="text-dark mb-2 font-weight-bold">6475</h2>
-                    <h4 class="card-title mb-2">{% trans "Total Incidents" %}</h4>
-                    <small class="text-muted">APRIL 2020</small>
+        {% for i in total.total_data %}
+            {% for k, v  in i.items %}
+            <div class="col-lg-3 d-flex grid-margin stretch-card">
+                <div class="card sale-diffrence-border">
+                    <div class="card-body">
+                        <h2 class="text-dark mb-2 font-weight-bold">{{ v }}</h2>
+                        <h4 class="card-title mb-2">{% trans "Total" %} {{k}}</h4>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-3 d-flex grid-margin stretch-card">
+            {% endfor %}
+        {% endfor %}
+        {% comment %} <div class="col-lg-3 d-flex grid-margin stretch-card">
             <div class="card sale-visit-statistics-border">
                 <div class="card-body">
                     <h2 class="text-dark mb-2 font-weight-bold">3479</h2>
@@ -63,7 +66,7 @@
                     <small class="text-muted">APRIL 2020</small>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
 
         <div class="col-lg-6 grid-margin stretch-card">
             <div class="card">

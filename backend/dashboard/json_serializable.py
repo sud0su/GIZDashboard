@@ -18,10 +18,10 @@ def MainData(request):
 
     return main
 
-def Chart(request, code):
+def Chart(request, code, daterange):
     main = MainData(request)
     chart = {}
-    
+
     undssQueryset =  Undss.objects.all()
     if code:
         getCode = code.split('=')
@@ -29,6 +29,10 @@ def Chart(request, code):
             undssQueryset = undssQueryset.filter(Q(Province__name=getCode[1]))
         else:
             undssQueryset = undssQueryset.filter(Q(District__name=getCode[1]))
+
+    if daterange:
+        date = daterange.split(',')
+        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
 
     ## Bar Chart
     chart['bar_chart'] = {}
@@ -78,7 +82,7 @@ def Chart(request, code):
 
     return chart
 
-def Table(request, code):
+def Table(request, code, daterange):
     table = {}
     main = MainData(request)
 
@@ -90,6 +94,9 @@ def Table(request, code):
         else:
             undssQueryset = undssQueryset.filter(Q(District__name=getCode[1]))
 
+    if daterange:
+        date = daterange.split(',')
+        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
 
     # list_of_latest_incidents
     table['list_of_latest_incidents'] = undssQueryset.values('Date', 'Time_of_Incident','Description_of_Incident').order_by('-Date')
@@ -179,26 +186,90 @@ def Region(request, code):
     region["district"] = []
     region["district"].append({"data_val" : getDistrict, "selected": distname, "type" : "District", "urlcode": "dist"})
     return region
+
+def Total(request, code, daterange):
+    total = {}
+    main = MainData(request)
+
+    undssQueryset =  Undss.objects.all()
+    if code:
+        getCode = code.split('=')
+        if getCode[0] == 'prov':
+            undssQueryset = undssQueryset.filter(Q(Province__name=getCode[1]))
+        else:
+            undssQueryset = undssQueryset.filter(Q(District__name=getCode[1]))
+
+    if daterange:
+        date = daterange.split(',')
+        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
+
+    countryData = []
+    totalCountry = []
+    for pc in main["category"]:
+        country_data = undssQueryset.values(pc).annotate(total = Coalesce(Sum(pc), 0)).order_by('-'+pc)
+        total_result = [int(total['total']) for total in country_data]
+        totalCountry += [sum(total_result)]
+        countryData.append({pc: sum(total_result)})
+
+    provinceData = []
+    provinceName = []
+    for pc in main["category"]:
+        province_data = undssQueryset.values('Province__name').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Province_id')
+        total_result = [total['total'] for total in province_data]
+        province_name = [total['Province__name'] for total in province_data]
+        provinceData += [total_result]
+        provinceName += [province_name]
+
+    countryDataChild = []
+    for i in range(0, len(provinceName[0])):
+        tot = provinceData[0][i] + provinceData[1][i] + provinceData[2][i]
+        countryDataChild.append({
+            'killed': provinceData[0][i],
+            'injured': provinceData[1][i],
+            'abducted': provinceData[2][i],
+            'total' : tot
+        })
     
-def DashboardResponse(request, code):
+    countryData.append({'total': sum(totalCountry)})
+
+    if code:
+        total['total_data'] = countryDataChild
+    else:
+        total['total_data'] = countryData  
+
+    return total  
+
+def DashboardResponse(request, code, daterange):
     dashboardresponse = {}
-    chart = Chart(request, code)
-    table = Table(request, code)
+    chart = Chart(request, code, daterange)
+    table = Table(request, code, daterange)
+    total = Total(request, code, daterange)
     region = Region(request, code)
     dashboardresponse["chart"] = chart
     dashboardresponse["tables"] = table
     dashboardresponse["region"] = region
+    dashboardresponse["total"] = total
     return dashboardresponse
 
 def Common(request):
     response = {}
     code = None
+    daterange = None
 
     if 'code' in request.GET:
         code = request.GET['code']
 
+    if 'daterange' in request.GET:
+        daterange = request.GET['daterange']
+
     if 'page' not in request.GET:
-        response = DashboardResponse(request, code)
+        mutable = request.GET._mutable
+        request.GET._mutable = True
+        request.GET['page'] = 'dashboard'
+        request.GET._mutable = mutable
+
+    if request.GET['page'] == 'dashboard':
+        response = DashboardResponse(request, code, daterange)
         
     response['jsondata'] = json.dumps(response, cls=JSONEncoderCustom)
 

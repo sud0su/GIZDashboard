@@ -1,8 +1,10 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, redirect
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+
 from .forms import UndssForm
 from .json_serializable import Common
+from giz.utils import replace_query_param
 
 @login_required
 def InputDashboard(request):
@@ -29,6 +31,11 @@ def InputDashboard(request):
 
 @login_required
 def Dashboard(request):
+    
+    if not request.GET.get('page'):
+        currenturl = request.build_absolute_uri()
+        return redirect(replace_query_param(currenturl, 'page', 'dashboard'))
+
     response = Common(request)
     # template = "dashboard/dashboard_base.html"
     template = "dashboard/dashboard_content.html"
