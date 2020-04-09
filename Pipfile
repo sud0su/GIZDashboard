@@ -15,6 +15,7 @@ django-inlinecss = "*"
 django-widget-tweaks = "*"
 django-select2 = "*"
 django-bootstrap-datepicker-plus = "*"
+pdfkit = "*"
 
 [requires]
 python_version = "3.7"

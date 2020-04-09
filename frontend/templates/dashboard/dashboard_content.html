@@ -40,33 +40,6 @@
             </div>
             {% endfor %}
         {% endfor %}
-        {% comment %} <div class="col-lg-3 d-flex grid-margin stretch-card">
-            <div class="card sale-visit-statistics-border">
-                <div class="card-body">
-                    <h2 class="text-dark mb-2 font-weight-bold">3479</h2>
-                    <h4 class="card-title mb-2">{% trans "Total Killed" %}</h4>
-                    <small class="text-muted">APRIL 2020</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 d-flex grid-margin stretch-card">
-            <div class="card sale-diffrence-border">
-                <div class="card-body">
-                    <h2 class="text-dark mb-2 font-weight-bold">6475</h2>
-                    <h4 class="card-title mb-2">{% trans "Total Injured" %}</h4>
-                    <small class="text-muted">APRIL 2020</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 d-flex grid-margin stretch-card">
-            <div class="card sale-visit-statistics-border">
-                <div class="card-body">
-                    <h2 class="text-dark mb-2 font-weight-bold">3479</h2>
-                    <h4 class="card-title mb-2">{% trans "Total Abducted" %}</h4>
-                    <small class="text-muted">APRIL 2020</small>
-                </div>
-            </div>
-        </div> {% endcomment %}
 
         <div class="col-lg-6 grid-margin stretch-card">
             <div class="card">
@@ -85,7 +58,7 @@
                             <div class="col">
                                 <p class="mb-2 float-right">{% trans "Select All" %}</p>
                                 <label class="toggle-switch parents-checkbox">
-                                    <input type="checkbox" checked>
+                                    <input type="checkbox" {% if incident_type.checked == incident_type.name %}checked{% endif %}>
                                     <span class="toggle-slider round"></span>
                                 </label>
                             </div>
@@ -96,21 +69,10 @@
                         {% get_current_language_bidi as LANGUAGE_BIDI %}
                         <div id="indicatorType" class="child-checkbox {{ LANGUAGE_BIDI | yesno:'rtl, ltr' }}">
                             <div class="form-group">
-                                <!-- <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input checkIncident" id="default1" name="main_incident_select[]" value="default1" checked> Default
-                                    </label>
-                                </div>
+                                {% for item in incident_type.name %}
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input checkIncident" id="default2" name="main_incident_select[]" value="default2" checked> Default
-                                    </label>
-                                </div> -->
-                                {% for item in chart.polar_incident_type.labels_all %}
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item }}" {% if item.selected %}checked{% endif %}> {{ item }}
-                                        <!-- <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_{{ item.key }}_select[]" value="{{ item.name }}" {% if item.selected %}checked{% endif %}> {{ item.name }} ({{ item.count }} incidents) -->
+                                        <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item }}" {% if item in incident_type.checked %}checked{% endif %}> {{ item }}
                                     </label>
                                 </div>
                                 {% endfor %}
