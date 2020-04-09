@@ -78,42 +78,40 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Select Incident Type" %}</h4>
-                    <button type="button" name="" id="" class="btn btn-outline-primary btn-sm float-right ply-trget">{% trans "Apply" %}</button>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="switch1">
-                            <label class="custom-control-label" for="switch1">{% trans "Select All" %}</label>
-                        </div>
-                        <div class="form-group">
-                            <div class="">
-                                <p class="mb-2">Primary</p>
-                                <label class="toggle-switch">
+                        <div class="form-group row">
+                            <div class="col">
+                                <p class="mb-2 float-right">{% trans "Select All" %}</p>
+                                <label class="toggle-switch parents-checkbox">
                                     <input type="checkbox" checked>
                                     <span class="toggle-slider round"></span>
                                 </label>
-                                </div>
+                            </div>
+                            <div class="col">
+                                <button type="button" name="" id="" class="btn btn-outline-primary btn-sm float-right ply-trget">{% trans "Apply" %}</button>
+                            </div>
                         </div>
                         {% get_current_language_bidi as LANGUAGE_BIDI %}
-                        <div id="indicatorType" class="child-checkbox">
+                        <div id="indicatorType" class="child-checkbox {{ LANGUAGE_BIDI | yesno:'rtl, ltr' }}">
                             <div class="form-group">
-                                <div class="form-check">
+                                <!-- <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input checkIncident" id="default1" name="main_incident_select[]" value="default1"> Default
+                                        <input type="checkbox" class="form-check-input checkIncident" id="default1" name="main_incident_select[]" value="default1" checked> Default
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input checkIncident" id="default2" name="main_incident_select[]" value="default2"> Default
+                                        <input type="checkbox" class="form-check-input checkIncident" id="default2" name="main_incident_select[]" value="default2" checked> Default
+                                    </label>
+                                </div> -->
+                                {% for item in chart.polar_incident_type.labels_all %}
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item }}" {% if item.selected %}checked{% endif %}> {{ item }}
+                                        <!-- <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_{{ item.key }}_select[]" value="{{ item.name }}" {% if item.selected %}checked{% endif %}> {{ item.name }} ({{ item.count }} incidents) -->
                                     </label>
                                 </div>
+                                {% endfor %}
                             </div>
-                            {% for item in row.0.labels_all %}
-                                <div class="col s12 {{ LANGUAGE_BIDI | yesno:'rtl, ltr' }}">
-                                    <label>
-                                        <input type="checkbox" id="{{ row.4 }}{{ forloop.counter0 }}" class="filled-in checkIncident" name="main_{{ row.4 }}_select[]" value="{{ item.name }}" {% if item.selected %}checked=true{% endif %}>
-                                        <span>{{ item.name }} ({{ item.count }} incidents)</span>
-                                    </label>
-                                </div>
-                            {% endfor %}
                         </div>
                 </div>
             </div>
@@ -324,7 +322,7 @@
                                     </tr>
                                 {% endfor %}
                                 {% for child in tables.number_of_incident_and_casualties_overview.child %}
-                                    <tr class="selectable" onclick="jump_url({{data.code}});">
+                                    <tr class="selectable" onclick="jump_url('{{child.name}}');">
                                         {% for item in child.value %}
                                             <td>{{item}}</td>
                                         {% endfor %}
@@ -408,13 +406,13 @@
         document.addEventListener('DOMContentLoaded', function(){
 
             // Select All/None
-                $('.checkbox-group .parents-checkbox .panel-select-all :checkbox').change(function () {
-                    $(this).closest('.checkbox-group').find(':checkbox').not(this).prop('checked', this.checked).closest('label');
+                $('.parents-checkbox :checkbox').change(function () {
+                    $(this).closest('.card-body').find(':checkbox').not(this).prop('checked', this.checked);
                 });
 
                 $('.child-checkbox :checkbox').change(function () {
-                    var $group = $(this).closest('.checkbox-group');
-                    $group.find('.parents-checkbox .panel-select-all :checkbox').prop('checked', !$group.find('.child-checkbox :checkbox:not(:checked)').length);
+                    var $group = $(this).closest('.card-body');
+                    $group.find('.parents-checkbox :checkbox').prop('checked', !$group.find('.child-checkbox :checkbox:not(:checked)').length);
                 });
             // /Select All/None
 
@@ -462,19 +460,17 @@
             });
             // /DateRangePicker
 
-            $( "form.form-inline" ).submit(function( event ) {
-            event.preventDefault();
-            });
-
             $('button.ply-trget').on('click', function(event) {
                 var type_selected_param = '';
-                var target_selected_param = '';
+                // var target_selected_param = '';
 
-                var type_unselected = $("input[name='main_type_select[]']:checkbox:not(:checked)");
-                var type_selected = $("input[name='main_type_select[]']:checkbox:checked");
+                var type_unselected = $("input[name='main_incident_select[]']:checkbox:not(:checked)");
+                var type_selected = $("input[name='main_incident_select[]']:checkbox:checked");
 
-                var target_unselected = $("input[name='main_target_select[]']:checkbox:not(:checked)");
-                var target_selected = $("input[name='main_target_select[]']:checkbox:checked");
+                // var target_unselected = $("input[name='main_target_select[]']:checkbox:not(:checked)");
+                // var target_selected = $("input[name='main_target_select[]']:checkbox:checked");
+
+                console.log(type_selected);
 
                 if (type_unselected.length > 0) {
                     // var type_array = type_selected.val();
@@ -486,22 +482,22 @@
                 }
 
 
-                if (target_unselected.length > 0) {
-                    // var target_array = $('#incidentTarget-select').val();
-                    var target_array = [];
-                    target_selected.each( function () {
-                    target_array.push($(this).val());
-                    });
-                    target_selected_param += target_array
-                }
+                // if (target_unselected.length > 0) {
+                //     // var target_array = $('#incidentTarget-select').val();
+                //     var target_array = [];
+                //     target_selected.each( function () {
+                //     target_array.push($(this).val());
+                //     });
+                //     target_selected_param += target_array
+                // }
 
                 if (type_selected.length == 0) {
                     type_selected_param = 'noselection';
                 }
 
-                if (target_selected.length == 0) {
-                    target_selected_param = 'noselection';
-                }
+                // if (target_selected.length == 0) {
+                //     target_selected_param = 'noselection';
+                // }
 
                 var url = $(location).attr("href");
 
@@ -516,16 +512,16 @@
                     url = removeParam('incident_type', url);
                 }
 
-                if (target_selected_param != ''){
-                    if (getParameterByName("incident_target") == null){
-                        url += '&incident_target='+target_selected_param;
-                    } else {
-                        url = updateUrlParameter(url, 'incident_target', target_selected_param)
-                    }
+                // if (target_selected_param != ''){
+                //     if (getParameterByName("incident_target") == null){
+                //         url += '&incident_target='+target_selected_param;
+                //     } else {
+                //         url = updateUrlParameter(url, 'incident_target', target_selected_param)
+                //     }
 
-                } else {
-                    url = removeParam('incident_target', url);
-                }
+                // } else {
+                //     url = removeParam('incident_target', url);
+                // }
 
                 window.document.location = url;
             });
