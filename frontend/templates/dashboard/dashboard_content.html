@@ -31,7 +31,7 @@
         {% for i in total.total_data %}
             {% for k, v  in i.items %}
             <div class="col-lg-3 d-flex grid-margin stretch-card">
-                <div class="card sale-diffrence-border">
+                <div class="card {% if k == 'Injured' %}sale-visit-statistics-border{% elif k == 'Abducted' %}total-abducted-statistics-border{% elif k == 'incident' %}total-incident-statistics-border{% else %}sale-diffrence-border{% endif %}">
                     <div class="card-body">
                         <h2 class="text-dark mb-2 font-weight-bold">{{ v }}</h2>
                         <h4 class="card-title mb-2">{% trans "Total" %} {{k}}</h4>
@@ -56,7 +56,7 @@
                     <h4 class="card-title">{% trans "Select Incident Type" %}</h4>
                         <div class="form-group row">
                             <div class="col">
-                                <p class="mb-2 float-right">{% trans "Select All" %}</p>
+                                <p class="mb-2" style="position: absolute;left: 75px;">{% trans "Select All" %}</p>
                                 <label class="toggle-switch parents-checkbox">
                                     <input type="checkbox" {% if incident_type.checked == incident_type.name %}checked{% endif %}>
                                     <span class="toggle-slider round"></span>

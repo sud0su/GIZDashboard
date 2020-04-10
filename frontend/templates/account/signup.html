@@ -20,22 +20,6 @@
                         </div>
                         <h4>{% trans "Sign Up" %}</h4>
                         <h6 class="font-weight-light">{% trans "Register your new account in one easy step" %}</h6>
-                        {% block messages %}
-                            {% if messages %}
-                            <div>
-                                <ul>
-                                {% for message in messages %}
-                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                        <strong>{{message}}</strong>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                </div>
-                                {% endfor %}
-                                </ul>
-                            </div>
-                            {% endif %}
-                        {% endblock %}
                         <form class="pt-3" id="signup_form" method="post" action="{% url 'account_signup' %}">
                             {% csrf_token %}
 
@@ -79,3 +63,7 @@
         <!-- content-wrapper ends -->
     </div>
 {% endblock content %}
+
+{% block messages %}
+    {% include '_messages.html' with messages=messages %}
+{% endblock %}

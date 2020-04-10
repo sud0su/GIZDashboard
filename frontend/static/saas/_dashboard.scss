@@ -171,7 +171,31 @@
 		height: 5px;
 		width: 100%;
 		border-radius: 0 0 6px 6px;
-		background-color: theme-color(success);
+		background-color: theme-color(warning);
+		position: absolute;
+		left: 0;
+		bottom: 0;
+	}
+}
+.total-abducted-statistics-border {
+	&:after {
+		content: '';
+		height: 5px;
+		width: 100%;
+		border-radius: 0 0 6px 6px;
+		background-color: theme-color(secondary);
+		position: absolute;
+		left: 0;
+		bottom: 0;
+	}
+}
+.total-incident-statistics-border {
+	&:after {
+		content: '';
+		height: 5px;
+		width: 100%;
+		border-radius: 0 0 6px 6px;
+		background-color: theme-color(info);
 		position: absolute;
 		left: 0;
 		bottom: 0;
