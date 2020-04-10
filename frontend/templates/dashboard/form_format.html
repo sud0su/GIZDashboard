@@ -155,6 +155,7 @@
         {% endif %}
     </div>
 
+    {% comment %}
     <div class="form-row">
         <div class="form-group col">
             {{ form.killed.label_tag }}
@@ -309,6 +310,31 @@
             {{ form.Field33|add_class:"form-control" }}
             {% if form.Field33.help_text %}
                 <small class="form-text text-muted">{{ form.Field33.help_text }}</small>
+            {% endif %}
+        </div>
+    </div>
+    {% endcomment %}
+
+    <div class="form-row">
+        <div class="form-group col">
+            {{ form.killed.label_tag }}
+            {{ form.killed|add_class:"form-control" }}
+            {% if form.killed.help_text %}
+                <small class="form-text text-muted">{{ form.killed.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group col">
+            {{ form.Injured.label_tag }}
+            {{ form.Injured|add_class:"form-control" }}
+            {% if form.Injured.help_text %}
+                <small class="form-text text-muted">{{ form.Injured.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group col">
+            {{ form.Abducted.label_tag }}
+            {{ form.Abducted|add_class:"form-control" }}
+            {% if form.Abducted.help_text %}
+                <small class="form-text text-muted">{{ form.Abducted.help_text }}</small>
             {% endif %}
         </div>
     </div>

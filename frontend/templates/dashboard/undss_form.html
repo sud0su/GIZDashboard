@@ -4,7 +4,8 @@
 {% load widget_tweaks %}
 
 {% block extra_head %}
-    {{ form.media.css }}
+    <!-- {{ form.media.css }} -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
 {% endblock extra_head %}
 
 {% block content_dashboard %}
@@ -69,5 +70,8 @@
 {% endblock content_dashboard %}
 
 {% block dashboard_script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script src="{% static 'js/file-upload.js' %}"></script>
+    {{ form.media.js }}
 {% endblock dashboard_script %}
