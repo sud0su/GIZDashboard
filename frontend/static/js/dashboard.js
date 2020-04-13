@@ -72,19 +72,19 @@ function removeA(arr) {
 	return arr;
 }
 
-function select_region(code){
-	if (code <= 34) {
-		$(".province-dropdown").select2('val', code);
-	} else if (code > 34 && code < 1000) {
-		$(".dist-dropdown").select2('val', code);
-		prov_code = code.substring(0,1);
-		$(".province-dropdown").select2('val', prov_code);
-	}else{
-		$(".dist-dropdown").select2('val', code);
-		prov_code = code.substring(0,2);
-		$(".province-dropdown").select2('val', prov_code);
-	}
-}
+// function select_region(code){
+// 	if (code <= 34) {
+// 		$(".province-dropdown").select2('val', code);
+// 	} else if (code > 34 && code < 1000) {
+// 		$(".dist-dropdown").select2('val', code);
+// 		prov_code = code.substring(0,1);
+// 		$(".province-dropdown").select2('val', prov_code);
+// 	}else{
+// 		$(".dist-dropdown").select2('val', code);
+// 		prov_code = code.substring(0,2);
+// 		$(".province-dropdown").select2('val', prov_code);
+// 	}
+// }
 
 function init_select2_region(){
 	// $('.province-dropdown').select2({

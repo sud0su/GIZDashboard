@@ -13,18 +13,21 @@
 {% endblock %}
 
 {% block content_dashboard %}
-    <div>
-        <div class="float-right">
-            <button id="pdf" type="button" class="btn btn-primary">{% trans "Download" %}</button>
-        </div>
+    <div class="row">
         {% include "dashboard/select_region.html" %}
+        <div class="col-xl-5">
+            <div id="reportrange" class="float-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%"">
+                <i class="mdi mdi-calendar"></i>&nbsp; {% trans "Incident between" %} :
+                <span></span> <i class="mdi mdi-chevron-down hidden-print"></i>
+            </div>
+        </div>
+        <div class="col-xl-1">
+            <button id="pdf" type="button" class="btn btn-primary hidden-print">{% trans "PDF" %}</button>
+        </div>
     </div>
     <div class="row justify-content-end">
         <div class="col-lg-4 mb-3">
-            <div id="reportrange" class="float-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%"">
-              <i class="fa fa-calendar"></i>&nbsp; {% trans "Incident between" %} :
-              <span></span> <i class="fa fa-caret-down hidden-print"></i>
-            </div>
+            
         </div>
     </div>
     <div class="row">

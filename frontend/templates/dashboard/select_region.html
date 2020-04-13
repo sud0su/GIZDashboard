@@ -1,26 +1,28 @@
 {% load giz_tags %}
 
-<ol class="breadcrumb bg-transparent">
-    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Afghanistan</a></li>
-    
-    {% for k,v in region.items %}
-    {% for i in v %}
-        {% comment %} {% if not i.code and 'print' in request.path %}
-        {% else %} {% endcomment %}
-        <li class="breadcrumb-item">
-            <select class="area-dropdown {{i.type}}" data-placeholder="Select {{i.type}}">
-                {% if not i.selected %}
-                <option></option>
-                {% endif %}
-                {% for value in i.data_val %}
-                    <option value="{{i.urlcode}}={{ value.name }}" {% if value.name == i.selected %}selected="selected"{% endif %}>{{  value.name }}</option>
-                {% endfor %}
-            </select>
-        </li>
-        {% comment %} {% endif %} {% endcomment %}
-    {% endfor %}
-    {% endfor %}
-</ol>
+<div class="col">
+    <ol class="breadcrumb bg-transparent">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}" style="line-height: 28px;">Afghanistan</a></li>
+        
+        {% for k,v in region.items %}
+        {% for i in v %}
+            {% comment %} {% if not i.code and 'print' in request.path %}
+            {% else %} {% endcomment %}
+            <li class="breadcrumb-item">
+                <select class="area-dropdown {{i.type}}" data-placeholder="Select {{i.type}}">
+                    {% if not i.selected %}
+                    <option></option>
+                    {% endif %}
+                    {% for value in i.data_val %}
+                        <option value="{{i.urlcode}}={{ value.name }}" {% if value.name == i.selected %}selected="selected"{% endif %}>{{  value.name }}</option>
+                    {% endfor %}
+                </select>
+            </li>
+            {% comment %} {% endif %} {% endcomment %}
+        {% endfor %}
+        {% endfor %}
+    </ol>
+</div>
 
 <script>
     function select2_region(){

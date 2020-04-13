@@ -85,7 +85,6 @@
             </div>
 
             {% comment %}
-            {% block messages %}
                 {% if messages %}
                 <div>
                     <ul>
@@ -100,10 +99,13 @@
                     </ul>
                 </div>
                 {% endif %}
-            {% endblock %}
             {% endcomment %}
         </div>
         <!-- content-wrapper ends -->
     </div>
     <!-- page-body-wrapper ends -->
+{% endblock %}
+
+{% block messages %}
+    {% include '_messages.html' with messages=messages %}
 {% endblock %}
