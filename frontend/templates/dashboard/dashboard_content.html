@@ -11,34 +11,30 @@
 {% endblock %}
 
 {% block extra_head_custom %}
-    {% if 'print' in request.path %}
-        <link href="{% static 'css/print.css' %}?ver=130420" rel="stylesheet">
+    {% if 'print' in request.build_absolute_uri %}
+        <!-- <link href="{% static 'css/print.css' %}?ver=130420" rel="stylesheet"> -->
+        <link href="{% static 'css/giz_print.css' %}?ver=130420" rel="stylesheet">
 	{% endif %}
 {% endblock %}
 
 {% block content_dashboard %}
     <div class="row">
         {% include "dashboard/select_region.html" %}
-        <div class="col-xl-5">
+        <div class="col-sm-12 col-md-10 col-xl-5">
             <div id="reportrange" class="float-right">
                 <i class="mdi mdi-calendar"></i>&nbsp; {% trans "Incident between" %} :
                 <span></span> <i class="mdi mdi-chevron-down {% if 'print' in request.path %}d-none{% endif %}"></i>
             </div>
-            <div class="Coba"></div>
-        </div> 
-        <div class="col-xl-1 {% if 'print' in request.path %}d-none{% endif %}">
-            <button id="pdf" type="button" class="btn btn-primary">{% trans "PDF" %}</button>
+        </div>
+        <div class="col-sm-12 col-md-2 col-xl-1 {% if 'print' in request.path %}d-none{% endif %}">
+            <button id="pdf" type="button" class="btn btn-primary" style="margin-top: 9px;">{% trans "PDF" %}</button>
         </div>
     </div>
-    {% comment %} <div class="row justify-content-end">
-        <div class="col-lg-4 mb-3">
-            
-        </div>
-    </div> {% endcomment %}
+    
     <div class="row">
         {% for i in total.total_data %}
             {% for k, v  in i.items %}
-            <div class="col-lg-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-3{% endif %} d-flex grid-margin stretch-card">
+            <div class="col-sm-12 col-lg-6 {% if 'print' in request.path %}col-md-3{% else %}col-md-6{% endif %} col-xl-3 d-flex grid-margin stretch-card">
                 <div class="card {% if k == 'Injured' %}sale-visit-statistics-border{% elif k == 'Abducted' %}total-abducted-statistics-border{% elif k == 'incident' %}total-incident-statistics-border{% else %}sale-diffrence-border{% endif %}">
                     <div class="card-body">
                         <h2 class="text-dark mb-2 font-weight-bold">{{ v }}</h2>
@@ -49,16 +45,16 @@
             {% endfor %}
         {% endfor %}
 
-        {% comment %} <div class="col-lg-6 grid-margin stretch-card">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Graph of Incident and Casualties Trend by Incident Type" %}</h4>
                     <div id="{{ chart.polar_incident_type.key }}" class="ch-size polar-chart" data-color="colorPolar" data-xaxis='{{ chart.polar_incident_type.labels | jsonify | safe }}' data-val='{{ chart.polar_incident_type.data_val | jsonify | safe }}'></div>
                 </div>
             </div>
-        </div> {% endcomment %}
+        </div>
 
-        {% comment %} <div class="col-lg-6 grid-margin stretch-card">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Select Incident Type" %}</h4>
@@ -73,9 +69,9 @@
                             <div class="col">
                                 <button type="button" name="" id="" class="btn btn-outline-primary btn-sm float-right ply-trget">{% trans "Apply" %}</button>
                             </div>
-                        </div> {% endcomment %}
-                        {% comment %} {% get_current_language_bidi as LANGUAGE_BIDI %} {% endcomment %}
-                        {% comment %} <div id="indicatorType" class="child-checkbox">
+                        </div> 
+                        {% get_current_language_bidi as LANGUAGE_BIDI %}
+                        <div id="indicatorType" class="child-checkbox">
                             <div class="form-group">
                                 {% for item in incident_type.name %}
                                 <div class="form-check">
@@ -89,9 +85,9 @@
                         </div>
                 </div>
             </div>
-        </div> {% endcomment %}
+        </div>
 
-        <div class="col-lg-12 grid-margin stretch-card">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{{ chart.bar_chart.title }}</h4>
@@ -100,16 +96,16 @@
             </div>
         </div>
 
-        {% comment %} <div class="col-lg-12 grid-margin stretch-card">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Historical Date of Incidents and Casualties by Incident Type" %}</h4>
                     <div id="spline_{{ chart.spline.key }}" class="ch-size spline-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='' data-val='{{ chart.spline.data_val | jsonify | safe }}' ></div>
                 </div>
             </div>
-        </div> {% endcomment %}
+        </div>
 
-        <div class="col-lg-6 grid-margin stretch-card">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Incidents and Casualties by Incident Type" %}</h4>
@@ -144,6 +140,7 @@
             </div>
         </div>
 
+        {% comment %}
         <div class="col-lg-12 grid-margin stretch-card d-none">
             <div class="card">
                 <div class="card-body">
@@ -271,8 +268,9 @@
                 </div>
             </div>
         </div>
+        {% endcomment %}
 
-        <div class="col-lg-6 grid-margin stretch-card">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Number of Incident and Casualties Overview" %}</h4>
@@ -309,7 +307,7 @@
             </div>
         </div>
 
-        {% comment %} <div class="col-lg-12 grid-margin stretch-card">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "List of Incidents" %}</h4>
@@ -338,7 +336,7 @@
                     </div>
                 </div>
             </div>
-        </div> {% endcomment %}
+        </div> 
     </div>
 {% endblock content_dashboard %}
 

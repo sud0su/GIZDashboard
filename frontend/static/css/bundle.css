@@ -20138,6 +20138,7 @@ select.form-control.border-dark:focus {
   width: calc(70px - 30px );
   max-width: 100%;
   margin: auto;
+  height: auto;
 }
 .navbar .navbar-menu-wrapper {
   background: #ffffff;
