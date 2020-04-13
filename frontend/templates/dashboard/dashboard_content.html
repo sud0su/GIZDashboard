@@ -12,7 +12,7 @@
 
 {% block extra_head_custom %}
     {% if 'print' in request.path %}
-        <link href="{% static 'css/giz_print.css' %}?ver=130420" rel="stylesheet">
+        <link href="{% static 'css/print.css' %}?ver=130420" rel="stylesheet">
 	{% endif %}
 {% endblock %}
 
@@ -24,16 +24,17 @@
                 <i class="mdi mdi-calendar"></i>&nbsp; {% trans "Incident between" %} :
                 <span></span> <i class="mdi mdi-chevron-down {% if 'print' in request.path %}d-none{% endif %}"></i>
             </div>
-        </div>
+            <div class="Coba"></div>
+        </div> 
         <div class="col-xl-1 {% if 'print' in request.path %}d-none{% endif %}">
             <button id="pdf" type="button" class="btn btn-primary">{% trans "PDF" %}</button>
         </div>
     </div>
-    <div class="row justify-content-end">
+    {% comment %} <div class="row justify-content-end">
         <div class="col-lg-4 mb-3">
             
         </div>
-    </div>
+    </div> {% endcomment %}
     <div class="row">
         {% for i in total.total_data %}
             {% for k, v  in i.items %}
@@ -371,8 +372,10 @@
         var jsondata = {% if jsondata %}{{ jsondata|safe }}{% else %}{}{% endif %};
         {% if 'print' in request.path %}
             var animate= false;
+            $('.Coba').append('cobaocboabocaca')
         {% else %}
             var animate= true;
+            $(".Coba").hide().html('cobaocboabocaca').fadeIn('fast');
         {% endif %}
     </script>
     <script src="{% static 'js/dashboard.js' %}"></script>
