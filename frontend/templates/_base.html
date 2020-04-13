@@ -11,10 +11,11 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/4.9.95/css/materialdesignicons.min.css">
       <!-- <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet"> -->
-      <!-- <link rel="stylesheet" href="{% static 'css/materialdesignicon-add.css' %}"> -->
 
       {% block extra_head %}{% endblock %}
       <link rel="stylesheet" href="{% static 'css/bundle.css' %}">
+      {% block extra_head_custom %}{% endblock %}
+      
     {% endblock  %}
   </head>
   <body>

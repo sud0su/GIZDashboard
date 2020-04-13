@@ -10,17 +10,23 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 {% endblock %}
 
+{% block extra_head_custom %}
+    {% if 'print' in request.build_absolute_uri %}
+        <link href="{% static 'css/giz_print.css' %}?ver=130420" rel="stylesheet">
+	{% endif %}
+{% endblock %}
+
 {% block content_dashboard %}
     <div class="row">
         {% include "dashboard/select_region.html" %}
         <div class="col-xl-5">
-            <div id="reportrange" class="float-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%"">
+            <div id="reportrange" class="float-right">
                 <i class="mdi mdi-calendar"></i>&nbsp; {% trans "Incident between" %} :
-                <span></span> <i class="mdi mdi-chevron-down hidden-print"></i>
+                <span></span> <i class="mdi mdi-chevron-down {% if 'print' in request.path %}d-none{% endif %}"></i>
             </div>
         </div>
-        <div class="col-xl-1">
-            <button id="pdf" type="button" class="btn btn-primary hidden-print">{% trans "PDF" %}</button>
+        <div class="col-xl-1 {% if 'print' in request.path %}d-none{% endif %}">
+            <button id="pdf" type="button" class="btn btn-primary">{% trans "PDF" %}</button>
         </div>
     </div>
     <div class="row justify-content-end">
@@ -31,7 +37,7 @@
     <div class="row">
         {% for i in total.total_data %}
             {% for k, v  in i.items %}
-            <div class="col-lg-3 d-flex grid-margin stretch-card">
+            <div class="col-lg-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-3{% endif %} d-flex grid-margin stretch-card">
                 <div class="card {% if k == 'Injured' %}sale-visit-statistics-border{% elif k == 'Abducted' %}total-abducted-statistics-border{% elif k == 'incident' %}total-incident-statistics-border{% else %}sale-diffrence-border{% endif %}">
                     <div class="card-body">
                         <h2 class="text-dark mb-2 font-weight-bold">{{ v }}</h2>
@@ -104,7 +110,7 @@
         <div class="col-lg-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Description Table</h4>
+                    <h4 class="card-title">{% trans "Incidents and Casualties by Incident Type" %}</h4>
                     <p class="card-description d-none">
                         Add description
                     </p>

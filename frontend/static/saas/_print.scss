@@ -1,0 +1,44 @@
+.navbar,
+.sidebar {
+    display: none !important;
+}
+
+.page-body-wrapper{
+    padding-top: 0;
+}
+
+.main-panel {
+    width: 100%;
+    background-color: transparent;
+}
+
+.content-wrapper{
+    background: transparent !important;
+}
+
+/* Breadcrumb Select2 */
+.select2-container.area-dropdown{
+    border: none;
+}
+
+.select2-container.area-dropdown .select2-choice .select2-arrow,
+.select2-container.area-dropdown .select2-choice .select2-arrow b{
+    display: none;
+}
+
+.select2-container.area-dropdown .select2-choice{
+    padding: 0;
+}
+
+.select2-container.area-dropdown .select2-choice>.select2-chosen{
+    margin-right: 0;
+}
+
+.area-dropdown.unselected {
+    display: none;
+}
+
+/* Daterange */
+#reportrange{
+    border: none;
+}
