@@ -4,8 +4,8 @@
 {% load widget_tweaks %}
 
 {% block extra_head %}
-    <!-- {{ form.media.css }} -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+    {{ form.media.css }}
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"> -->
 {% endblock extra_head %}
 
 {% block content_dashboard %}
@@ -14,10 +14,10 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Input UNDSS" %}</h4>
-                    <p class="card-description">
+                    <p class="card-description d-none">
                         Basic form elements
                     </p>
-                    <form class="forms-sample was-validated" method="post" enctype="multipart/form-data" >
+                    <form class="forms-sample was-validated form-undss" method="post" enctype="multipart/form-data" >
                         {% csrf_token %}
                         {% include 'dashboard/form_format.html' with form=form %}
 

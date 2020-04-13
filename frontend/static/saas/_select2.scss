@@ -101,3 +101,18 @@
 .select2-container, .select2-focused, .select2-input {
     width: auto !important;
 }
+
+.form-undss{
+    .select2-container{
+        width: 100% !important;
+    }
+    .select2-container--default{
+        .select2-results__option--highlighted[aria-selected]{
+            background-color: theme-color(primary) !important;
+        }
+    }
+}
+
+.form-undss .select2-container--default .select2-results__option--highlighted[aria-selected]{
+    background-color: theme-color(primary) !important;
+}

@@ -18331,6 +18331,17 @@ h3 {
   width: auto !important;
 }
 
+.form-undss .select2-container {
+  width: 100% !important;
+}
+.form-undss .select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #b50d1c !important;
+}
+
+.form-undss .select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #b50d1c !important;
+}
+
 /*-------------------------------------------------------------------*/
 /* === Core Styles === */
 /* Reset Styles */
@@ -18463,7 +18474,7 @@ input:focus {
 
 /* Typography */
 body {
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-family: "Source Sans Pro", sans-serif;
   font-weight: initial;
   line-height: normal;
@@ -19204,7 +19215,7 @@ code {
   color: #4a4a4a;
   margin-bottom: 1.5rem;
   text-transform: uppercase;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: bold;
 }
 .card .card-subtitle {
@@ -19730,6 +19741,46 @@ select.form-control.border-dark:focus {
 }
 .form-group .file-upload-info {
   background: transparent;
+}
+
+/* Tables */
+.table {
+  margin-bottom: 0;
+}
+.table thead th {
+  border-top: 0;
+  border-bottom-width: 1px;
+}
+.table thead th i {
+  margin-left: 0.325rem;
+}
+.table th,
+.table td {
+  padding: 0.775rem 0.675rem;
+  vertical-align: middle;
+  line-height: 1;
+}
+.table td {
+  font-size: 0.875rem;
+}
+.table td img {
+  width: 36px;
+  height: 36px;
+  border-radius: 100%;
+}
+.table td .badge {
+  margin-bottom: 0;
+}
+.table.table-borderless {
+  border: none;
+}
+.table.table-borderless tr,
+.table.table-borderless td,
+.table.table-borderless th {
+  border: none;
+}
+.table.table-bordered {
+  border-top: 1px solid #f1f6f8;
 }
 
 /*-------------------------------------------------------------------*/
