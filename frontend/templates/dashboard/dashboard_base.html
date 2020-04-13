@@ -3,14 +3,19 @@
 {% load  static %}
 
 {% block content %}
-    {% block navbar %}
-        {% include "_navbar.html" %}
-    {% endblock navbar %}
+    {% if not 'print' in request.path %}
+        {% block navbar %}
+            {% include "_navbar.html" %}
+        {% endblock navbar %}
+    {% endif %}
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-        {% block sidebar %}
-            {% include "_sidebar.html" %}
-        {% endblock sidebar %}
+
+        {% if not 'print' in request.path %}
+            {% block sidebar %}
+                {% include "_sidebar.html" %}
+            {% endblock sidebar %}
+        {% endif %}
         <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper">

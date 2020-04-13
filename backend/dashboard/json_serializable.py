@@ -196,7 +196,8 @@ def Region(request, code):
 
         getName = [[v["province__name"],v["name"]] for v in getDistrict]
         provname = getName[0][0]
-        distname = getName[0][1]
+        if provname is not "" and getCode[0] == 'dist':
+            distname = getName[0][1]
     else:
         getDistrict = getDistrict.filter(Q(province__name=code))
 

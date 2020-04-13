@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block extra_head_custom %}
-    {% if 'print' in request.build_absolute_uri %}
+    {% if 'print' in request.path %}
         <link href="{% static 'css/giz_print.css' %}?ver=130420" rel="stylesheet">
 	{% endif %}
 {% endblock %}
@@ -48,16 +48,16 @@
             {% endfor %}
         {% endfor %}
 
-        <div class="col-lg-6 grid-margin stretch-card">
+        {% comment %} <div class="col-lg-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Graph of Incident and Casualties Trend by Incident Type" %}</h4>
-                    <div id="{{ chart.polar_incident_type.key }}" class="ch-size polar-chart" data-color="colorSecurity" data-xaxis='{{ chart.polar_incident_type.labels | jsonify }}' data-val='{{ chart.polar_incident_type.data_val | jsonify }}'></div>
+                    <div id="{{ chart.polar_incident_type.key }}" class="ch-size polar-chart" data-color="colorPolar" data-xaxis='{{ chart.polar_incident_type.labels | jsonify | safe }}' data-val='{{ chart.polar_incident_type.data_val | jsonify | safe }}'></div>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
 
-        <div class="col-lg-6 grid-margin stretch-card">
+        {% comment %} <div class="col-lg-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Select Incident Type" %}</h4>
@@ -65,21 +65,22 @@
                             <div class="col">
                                 <p class="mb-2" style="position: absolute;left: 75px;">{% trans "Select All" %}</p>
                                 <label class="toggle-switch parents-checkbox">
-                                    <input type="checkbox" {% if incident_type.checked == incident_type.name %}checked{% endif %}>
+                                    <input type="checkbox" {% if incident_type.checked == incident_type.name %}checked=true{% endif %}>
                                     <span class="toggle-slider round"></span>
                                 </label>
                             </div>
                             <div class="col">
                                 <button type="button" name="" id="" class="btn btn-outline-primary btn-sm float-right ply-trget">{% trans "Apply" %}</button>
                             </div>
-                        </div>
-                        {% get_current_language_bidi as LANGUAGE_BIDI %}
-                        <div id="indicatorType" class="child-checkbox {{ LANGUAGE_BIDI | yesno:'rtl, ltr' }}">
+                        </div> {% endcomment %}
+                        {% comment %} {% get_current_language_bidi as LANGUAGE_BIDI %} {% endcomment %}
+                        {% comment %} <div id="indicatorType" class="child-checkbox">
                             <div class="form-group">
                                 {% for item in incident_type.name %}
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item }}" {% if item in incident_type.checked %}checked{% endif %}> {{ item }}
+                                        <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item }}" {% if item in incident_type.checked %}checked=true{% endif %}> 
+                                        {{ item }}
                                     </label>
                                 </div>
                                 {% endfor %}
@@ -87,7 +88,7 @@
                         </div>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
 
         <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
@@ -98,14 +99,14 @@
             </div>
         </div>
 
-        <div class="col-lg-12 grid-margin stretch-card">
+        {% comment %} <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Historical Date of Incidents and Casualties by Incident Type" %}</h4>
-                    <div id="spline_{{ chart.spline.key }}" class="ch-size spline-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='' data-val='{{ chart.spline.data_val | jsonify }}' ></div>
+                    <div id="spline_{{ chart.spline.key }}" class="ch-size spline-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='' data-val='{{ chart.spline.data_val | jsonify | safe }}' ></div>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
 
         <div class="col-lg-6 grid-margin stretch-card">
             <div class="card">
@@ -307,7 +308,7 @@
             </div>
         </div>
 
-        <div class="col-lg-12 grid-margin stretch-card">
+        {% comment %} <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "List of Incidents" %}</h4>
@@ -336,7 +337,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
     </div>
 {% endblock content_dashboard %}
 
@@ -367,7 +368,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/7.1.0/highstock.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/7.1.0/highcharts-more.js"></script>
     <script>
-      var jsondata = {% if jsondata %}{{ jsondata|safe }}{% else %}{}{% endif %};
+        var jsondata = {% if jsondata %}{{ jsondata|safe }}{% else %}{}{% endif %};
+        {% if 'print' in request.path %}
+            var animate= false;
+        {% else %}
+            var animate= true;
+        {% endif %}
     </script>
     <script src="{% static 'js/dashboard.js' %}"></script>
     <!-- <script src="{% static 'js/security.js' %}"></script> -->

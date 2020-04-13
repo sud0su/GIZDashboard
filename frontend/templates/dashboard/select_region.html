@@ -1,24 +1,36 @@
 {% load giz_tags %}
 
 <div class="col">
+       
     <ol class="breadcrumb bg-transparent">
-        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}" style="line-height: 28px;">Afghanistan</a></li>
-        
+        {% if not 'print' in request.path %}
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}" style="line-height: 28px;">Afghanistan</a></li>
+        {% else %}
+            <li class="breadcrumb-item">Afghanistan</li>
+        {% endif %}
+
         {% for k,v in region.items %}
         {% for i in v %}
-            {% comment %} {% if not i.code and 'print' in request.path %}
-            {% else %} {% endcomment %}
-            <li class="breadcrumb-item">
-                <select class="area-dropdown {{i.type}}" data-placeholder="Select {{i.type}}">
-                    {% if not i.selected %}
-                    <option></option>
+            {% if not 'print' in request.path %}
+                <li class="breadcrumb-item">
+                    <select class="area-dropdown {{i.type}}" data-placeholder="Select {{i.type}}">
+                        {% if not i.selected %}
+                        <option></option>
+                        {% endif %}
+                        {% for value in i.data_val %}
+                            <option value="{{i.urlcode}}={{ value.name }}" {% if value.name == i.selected %}selected="selected"{% endif %}>{{  value.name }}</option>
+                        {% endfor %}
+                    </select>
+                </li>
+            {% else %}
+                {% for value in i.data_val %}
+                    {% if value.name == i.selected %}
+                    <li class="breadcrumb-item">
+                        {{  value.name }}
+                    </li>
                     {% endif %}
-                    {% for value in i.data_val %}
-                        <option value="{{i.urlcode}}={{ value.name }}" {% if value.name == i.selected %}selected="selected"{% endif %}>{{  value.name }}</option>
-                    {% endfor %}
-                </select>
-            </li>
-            {% comment %} {% endif %} {% endcomment %}
+                {% endfor %}
+            {% endif %}
         {% endfor %}
         {% endfor %}
     </ol>

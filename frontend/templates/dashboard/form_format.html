@@ -1,15 +1,5 @@
 {% load widget_tweaks %}
 
-    {% comment %}
-    <div class="form-group">
-        {{ form.Shape.label_tag }}
-        {{ form.Shape|add_class:"form-control" }}
-        {% if form.Shape.help_text %}
-            <small class="form-text text-muted">{{ form.Shape.help_text }}</small>
-        {% endif %} 
-    </div>
-    {% endcomment %}
-
     <div class="custom-file">
         {{ form.Shape.label_tag }}
         {{ form.Shape|add_class:"custom-file-input" }}
@@ -19,32 +9,9 @@
     <div class="form-group">
         {{ form.Data_Entry_No.label_tag }}
         {{ form.Data_Entry_No|add_class:"form-control" }}
-
-        {{ form.Data_Entry_No.is_bound }}
-
-        {% comment %}
-            {% if form.Data_Entry_No.is_bound %}
-                {% if form.Data_Entry_No.errors %}
-                    {% render_field form.Data_Entry_No class="form-control is-invalid" %}
-                    {% for error in form.Data_Entry_No.errors %}
-                        <div class="invalid-feedback">
-                            {{ error }}
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    {% render_field form.Data_Entry_No class="form-control is-valid" %}
-                {% endif %}
-            {% else %}
-                {% render_field form.Data_Entry_No class="form-control" %}
-            {% endif %}
-        {% endcomment %}
-
         {% if form.Data_Entry_No.help_text %}
             <small class="form-text text-muted">{{ form.Data_Entry_No.help_text }}</small>
         {% endif %}
-        <!-- {% if form.Data_Entry_No.errors %}
-            <small class="form-text text-muted">{{ form.Data_Entry_No.errors }}</small>
-        {% endif %} -->
     </div>
 
     <div class="form-row">
@@ -130,7 +97,6 @@
         </div>
     </div>
 
-
     <div class="form-group">
         {{ form.HPA.label_tag }}
         {{ form.HPA|add_class:"form-control" }}
@@ -155,166 +121,7 @@
         {% endif %}
     </div>
 
-    {% comment %}
-    <div class="form-row">
-        <div class="form-group col">
-            {{ form.killed.label_tag }}
-            {{ form.killed|add_class:"form-control" }}
-            {% if form.killed.help_text %}
-                <small class="form-text text-muted">{{ form.killed.help_text }}</small>
-            {% endif %}
-        </div>
     
-        <div class="form-group col">
-            {{ form.Field16.label_tag }}
-            {{ form.Field16|add_class:"form-control" }}
-            {% if form.Field16.help_text %}
-                <small class="form-text text-muted">{{ form.Field16.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field17.label_tag }}
-            {{ form.Field17|add_class:"form-control" }}
-            {% if form.Field17.help_text %}
-                <small class="form-text text-muted">{{ form.Field17.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field18.label_tag }}
-            {{ form.Field18|add_class:"form-control" }}
-            {% if form.Field18.help_text %}
-                <small class="form-text text-muted">{{ form.Field18.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field19.label_tag }}
-            {{ form.Field19|add_class:"form-control" }}
-            {% if form.Field19.help_text %}
-                <small class="form-text text-muted">{{ form.Field19.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field20.label_tag }}
-            {{ form.Field20|add_class:"form-control" }}
-            {% if form.Field20.help_text %}
-                <small class="form-text text-muted">{{ form.Field20.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field21.label_tag }}
-            {{ form.Field21|add_class:"form-control" }}
-            {% if form.Field21.help_text %}
-                <small class="form-text text-muted">{{ form.Field21.help_text }}</small>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group col">
-            {{ form.Injured.label_tag }}
-            {{ form.Injured|add_class:"form-control" }}
-            {% if form.Injured.help_text %}
-                <small class="form-text text-muted">{{ form.Injured.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field23.label_tag }}
-            {{ form.Field23|add_class:"form-control" }}
-            {% if form.Field23.help_text %}
-                <small class="form-text text-muted">{{ form.Field23.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field24.label_tag }}
-            {{ form.Field24|add_class:"form-control" }}
-            {% if form.Field24.help_text %}
-                <small class="form-text text-muted">{{ form.Field24.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field25.label_tag }}
-            {{ form.Field25|add_class:"form-control" }}
-            {% if form.Field25.help_text %}
-                <small class="form-text text-muted">{{ form.Field25.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field26.label_tag }}
-            {{ form.Field26|add_class:"form-control" }}
-            {% if form.Field26.help_text %}
-                <small class="form-text text-muted">{{ form.Field26.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field27.label_tag }}
-            {{ form.Field27|add_class:"form-control" }}
-            {% if form.Field27.help_text %}
-                <small class="form-text text-muted">{{ form.Field27.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field28.label_tag }}
-            {{ form.Field28|add_class:"form-control" }}
-            {% if form.Field28.help_text %}
-                <small class="form-text text-muted">{{ form.Field28.help_text }}</small>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group col">
-            {{ form.Abducted.label_tag }}
-            {{ form.Abducted|add_class:"form-control" }}
-            {% if form.Abducted.help_text %}
-                <small class="form-text text-muted">{{ form.Abducted.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field30.label_tag }}
-            {{ form.Field30|add_class:"form-control" }}
-            {% if form.Field30.help_text %}
-                <small class="form-text text-muted">{{ form.Field30.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field31.label_tag }}
-            {{ form.Field31|add_class:"form-control" }}
-            {% if form.Field31.help_text %}
-                <small class="form-text text-muted">{{ form.Field31.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field32.label_tag }}
-            {{ form.Field32|add_class:"form-control" }}
-            {% if form.Field32.help_text %}
-                <small class="form-text text-muted">{{ form.Field32.help_text }}</small>
-            {% endif %}
-        </div>
-    
-        <div class="form-group col">
-            {{ form.Field33.label_tag }}
-            {{ form.Field33|add_class:"form-control" }}
-            {% if form.Field33.help_text %}
-                <small class="form-text text-muted">{{ form.Field33.help_text }}</small>
-            {% endif %}
-        </div>
-    </div>
-    {% endcomment %}
-
     <div class="form-row">
         <div class="form-group col">
             {{ form.killed.label_tag }}

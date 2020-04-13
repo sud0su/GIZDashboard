@@ -1,14 +1,16 @@
 import pdfkit
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-# from django.template import RequestContext
-from django.template.loader import get_template 
-# from django.template import Context
-
+from django.template import RequestContext
+from datetime import datetime, date
+from django.utils.formats import dateformat
 from django.contrib.auth.decorators import login_required
 
 from .forms import UndssForm
 from .json_serializable import Common
 from giz.utils import replace_query_param
+
+from urllib.parse import urlencode
 
 @login_required
 def InputDashboard(request):
@@ -33,38 +35,53 @@ def InputDashboard(request):
     return render(request, template, context)
 
 
-@login_required
+# @login_required
 def Dashboard(request):
+    bodyparam_dict = {}
+    bodyparam = urlencode(bodyparam_dict)
+
     if not request.GET.get('page'):
         currenturl = request.build_absolute_uri()
         return redirect(replace_query_param(currenturl, 'page', 'dashboard'))
 
-    response = Common(request)
-    template = "dashboard/dashboard_content.html"
-
     if 'pdf' in request.GET:
         options = {
-            'page-size': 'A4',
-            'margin-top': '0.75in',
-            'margin-right': '0.75in',
-            'margin-bottom': '0.75in',
-            'margin-left': '0.75in',
+			    'quiet': '',
+			    'page-size': 'A4',
+				'page-width': '2480px',
+				'page-height': '3508px',
+				'dpi':300,
+			    # 'margin-left': 10,
+			    # 'margin-right': 10,
+			    'margin-bottom':10,
+			    'margin-top':30,
+			    'viewport-size':'1240x800',
+                'header-html': 'http://'+request.META.get('HTTP_HOST')+'/static/print/header.html',
+                'encoding': "UTF-8",
+			    # 'lowquality':'-',
+			    # 'disable-smart-shrinking':'-',
+			    # 'print-media-type':'-',
+			    # 'no-stop-slow-scripts':'-',
+			    # 'enable-javascript':'-',
+			    # 'javascript-delay': 30000,
+                # 'load-error-handling': 'ignore',
+			    # 'window-status': 'ready',
         }
-        template = get_template(template)
-        # context = Context(response)  # data is the context data that is sent to the html file to render the output. 
-        html = template.render(response)  # Renders the template with the context data.
-        pdfkit.from_string(html, 'out.pdf')
-        pdf = open("out.pdf")
-        response = HttpResponse(pdf.read(), content_type='application/pdf')  # Generates the response as pdf response.
-        response['Content-Disposition'] = 'attachment; filename=output.pdf'
-        pdf.close()
-        os.remove("out.pdf")  # remove the locally created pdf file.
-        return response  # returns the response
 
+        date_string = dateformat.format(date.today(), "Y-m-d")
+        domainpath = request.META.get('HTTP_HOST')+request.META.get('PATH_INFO')
+        url = 'http://'+str(domainpath)+'print?'+request.META.get('QUERY_STRING')+'&user='+str(request.user.id)+'&'+bodyparam
+        pdf = pdfkit.from_url(url , False, options=options)
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response["Content-Disposition"] = 'attachment; filename="'+request.GET['page']+'_'+date_string+'.pdf"'
+        return response
+
+    else:
+        response = Common(request)
+        template = "dashboard/dashboard_content.html"
+        return render(request, template, response)
+
+def DashboardPrint(request):
+    template = 'dashboard/dashboard_content.html'
+    response = Common(request)
     return render(request, template, response)
-
-# @login_required
-# def DashboardPrint(request):
-#     response = Common(request)
-#     # template = ""
-#     pass
