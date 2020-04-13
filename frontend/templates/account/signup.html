@@ -13,7 +13,7 @@
     <div class="container-fluid page-body-wrapper full-page-wrapper">
         <div class="content-wrapper d-flex align-items-center auth px-0">
             <div class="row w-100 mx-0">
-                <div class="col-lg-4 mx-auto">
+                <div class="col-lg-8 col-xl-4 mx-auto">
                     <div class="auth-form-light text-left py-5 px-4 px-sm-5">
                         <div class="brand-logo">
                             <img src="{% static 'images/giz-logo.png' %}" alt="logo">
@@ -23,29 +23,79 @@
                         <form class="pt-3" id="signup_form" method="post" action="{% url 'account_signup' %}">
                             {% csrf_token %}
 
+                            {{ form.non_field_errors }}
+                            {% for hidden_field in form.hidden_fields %}
+                                {{ hidden_field.errors }}
+                                {{ hidden_field }}
+                            {% endfor %}
+
                             <div class="form-row">
                                 <div class="form-group col-xl-6">
                                     {{ form.first_name |attr:"class:form-control form-control-lg" |attr:"placeholder:First Name" }}
+                                    {% for error in form.first_name.errors %}
+                                        <small class="form-text text-muted">{{ error }}</small>
+                                    {% endfor %}
                                 </div>
                                 <div class="form-group col-xl-6">
                                     {{ form.last_name |attr:"class:form-control form-control-lg" |attr:"placeholder:Last Name" }}
+                                    {% for error in form.last_name.errors %}
+                                        <small class="form-text text-muted">{{ error }}</small>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="form-group">
                                 {{ form.username |attr:"class:form-control form-control-lg" }}
+                                {% for error in form.username.errors %}
+                                    <small class="form-text text-muted">{{ error }}</small>
+                                {% endfor %}
+                                {% if form.username.help_text %}
+                                    <small class="form-text text-muted">{{ form.username.help_text }}</small>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 {{ form.email |attr:"class:form-control form-control-lg" }}
+                                {% for error in form.email.errors %}
+                                    <small class="form-text text-muted">{{ error }}</small>
+                                {% endfor %}
                             </div>
                             <div class="form-group">
                                 {{ form.password1 |attr:"class:form-control form-control-lg" }}
+                                {% for error in form.password1.errors %}
+                                    <small class="form-text text-muted">{{ error }}</small>
+                                {% endfor %}
                             </div>
                             <div class="form-group">
                                 {{ form.password2 |attr:"class:form-control form-control-lg" |attr:"placeholder:Re-type Password" }}
+                                {% for error in form.password2.errors %}
+                                    <small class="form-text text-muted">{{ error }}</small>
+                                {% endfor %}
                             </div>
-                            <div class="mb-4">
-                                
-                            </div>
+
+                            {% comment %}
+                            {% for field in form.visible_fields %}
+                                <div class="form-group {% if field.name == 'first_name' %}col-xl-6{% endif %}">
+                                    {% if form.is_bound %}
+                                        {% if field.errors %}
+                                            {% render_field field class="form-control form-control-lg is-invalid" %}
+                                            {% for error in field.errors %}
+                                                <div class="invalid-feedback">
+                                                    {{ error }}
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% render_field field class="form-control form-control-lg is-valid" %}
+                                        {% endif %}
+                                    {% else %}
+                                        {% if field.name == 'password2' %}
+                                            pass2
+                                        {% else %}
+                                            {% render_field field class="form-control form-control-lg" %}
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            {% endcomment %}
+
                             {% if redirect_field_value %}
                                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                             {% endif %}

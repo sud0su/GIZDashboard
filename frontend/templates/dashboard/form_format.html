@@ -9,6 +9,9 @@
     <div class="form-group">
         {{ form.Data_Entry_No.label_tag }}
         {{ form.Data_Entry_No|add_class:"form-control" }}
+        {% for error in form.Data_Entry_No.errors %}
+            <small class="form-text text-muted">{{ error }}</small>
+        {% endfor %}
         {% if form.Data_Entry_No.help_text %}
             <small class="form-text text-muted">{{ form.Data_Entry_No.help_text }}</small>
         {% endif %}
@@ -18,6 +21,9 @@
         <div class="form-group col">
             {{ form.Date.label_tag }}
             {{ form.Date|add_class:"form-control" }}
+            {% for error in form.Date.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.Date.help_text %}
                 <small class="form-text text-muted">{{ form.Date.help_text }}</small>
             {% endif %}
@@ -26,6 +32,9 @@
         <div class="form-group col">
             {{ form.Time_of_Incident.label_tag }}
             {{ form.Time_of_Incident|add_class:"form-control" }}
+            {% for error in form.Time_of_Incident.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.Time_of_Incident.help_text %}
                 <small class="form-text text-muted">{{ form.Time_of_Incident.help_text }}</small>
             {% endif %}
@@ -36,6 +45,9 @@
         <div class="form-group col">
             {{ form.Province.label_tag }}
             {{ form.Province|add_class:"form-control" }}
+            {% for error in form.Province.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.Province.help_text %}
                 <small class="form-text text-muted">{{ form.Province.help_text }}</small>
             {% endif %}
@@ -43,6 +55,9 @@
         <div class="form-group col">
             {{ form.District.label_tag }}
             {{ form.District|add_class:"form-control" }}
+            {% for error in form.District.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.District.help_text %}
                 <small class="form-text text-muted">{{ form.District.help_text }}</small>
             {% endif %}
@@ -50,6 +65,9 @@
         <div class="form-group col">
             {{ form.City_Village.label_tag }}
             {{ form.City_Village|add_class:"form-control" }}
+            {% for error in form.City_Village.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.City_Village.help_text %}
                 <small class="form-text text-muted">{{ form.City_Village.help_text }}</small>
             {% endif %}
@@ -57,24 +75,33 @@
         <div class="form-group col">
             {{ form.Area.label_tag }}
             {{ form.Area|add_class:"form-control" }}
+            {% for error in form.Area.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.Area.help_text %}
                 <small class="form-text text-muted">{{ form.Area.help_text }}</small>
             {% endif %}
         </div>
+        <div class="form-group col">
+            {{ form.Police_District.label_tag }}
+            {{ form.Police_District|add_class:"form-control" }}
+            {% for error in form.Police_District.errors %}
+                    <small class="form-text text-muted">{{ error }}</small>
+                {% endfor %}
+            {% if form.Police_District.help_text %}
+                <small class="form-text text-muted">{{ form.Police_District.help_text }}</small>
+            {% endif %}
+        </div>
     </div>
 
-    <div class="form-group">
-        {{ form.Police_District.label_tag }}
-        {{ form.Police_District|add_class:"form-control" }}
-        {% if form.Police_District.help_text %}
-            <small class="form-text text-muted">{{ form.Police_District.help_text }}</small>
-        {% endif %}
-    </div>
 
     <div class="form-row">
         <div class="form-group col">
             {{ form.Incident_Type.label_tag }}
             {{ form.Incident_Type|add_class:"form-control" }}
+            {% for error in form.Incident_Type.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.Incident_Type.help_text %}
                 <small class="form-text text-muted">{{ form.Incident_Type.help_text }}</small>
             {% endif %}
@@ -83,49 +110,68 @@
         <div class="form-group col">
             {{ form.Incident_Subtype.label_tag }}
             {{ form.Incident_Subtype|add_class:"form-control" }}
+            {% for error in form.Incident_Subtype.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.Incident_Subtype.help_text %}
                 <small class="form-text text-muted">{{ form.Incident_Subtype.help_text }}</small>
             {% endif %}
         </div>
+    </div>
 
-        <div class="form-group">
-            {{ form.Description_of_Incident.label_tag }}
-            {{ form.Description_of_Incident|add_class:"form-control" }}
-            {% if form.Description_of_Incident.help_text %}
-                <small class="form-text text-muted">{{ form.Description_of_Incident.help_text }}</small>
-            {% endif %}
-        </div>
+    <div class="form-group">
+        {{ form.Description_of_Incident.label_tag }}
+        {{ form.Description_of_Incident|add_class:"form-control" }}
+        {% for error in form.Description_of_Incident.errors %}
+            <small class="form-text text-muted">{{ error }}</small>
+        {% endfor %}
+        {% if form.Description_of_Incident.help_text %}
+            <small class="form-text text-muted">{{ form.Description_of_Incident.help_text }}</small>
+        {% endif %}
     </div>
 
     <div class="form-group">
         {{ form.HPA.label_tag }}
         {{ form.HPA|add_class:"form-control" }}
+        {% for error in form.HPA.errors %}
+            <small class="form-text text-muted">{{ error }}</small>
+        {% endfor %}
         {% if form.HPA.help_text %}
             <small class="form-text text-muted">{{ form.HPA.help_text }}</small>
         {% endif %}
     </div>
 
-    <div class="form-group">
-        {{ form.Initiator.label_tag }}
-        {{ form.Initiator|add_class:"form-control" }}
-        {% if form.Initiator.help_text %}
-            <small class="form-text text-muted">{{ form.Initiator.help_text }}</small>
-        {% endif %}
-    </div>
-
-    <div class="form-group">
-        {{ form.Target.label_tag }}
-        {{ form.Target|add_class:"form-control" }}
-        {% if form.Target.help_text %}
-            <small class="form-text text-muted">{{ form.Target.help_text }}</small>
-        {% endif %}
-    </div>
-
+    <div class="form-row">
+        <div class="form-group col">
+            {{ form.Initiator.label_tag }}
+            {{ form.Initiator|add_class:"form-control" }}
+            {% for error in form.Initiator.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Initiator.help_text %}
+                <small class="form-text text-muted">{{ form.Initiator.help_text }}</small>
+            {% endif %}
+        </div>
     
+        <div class="form-group col">
+            {{ form.Target.label_tag }}
+            {{ form.Target|add_class:"form-control" }}
+            {% for error in form.Target.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Target.help_text %}
+                <small class="form-text text-muted">{{ form.Target.help_text }}</small>
+            {% endif %}
+        </div>
+    </div>
+
     <div class="form-row">
         <div class="form-group col">
             {{ form.killed.label_tag }}
             {{ form.killed|add_class:"form-control" }}
+            {% for error in form.killed.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.killed.help_text %}
                 <small class="form-text text-muted">{{ form.killed.help_text }}</small>
             {% endif %}
@@ -133,6 +179,9 @@
         <div class="form-group col">
             {{ form.Injured.label_tag }}
             {{ form.Injured|add_class:"form-control" }}
+            {% for error in form.Injured.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.Injured.help_text %}
                 <small class="form-text text-muted">{{ form.Injured.help_text }}</small>
             {% endif %}
@@ -140,6 +189,9 @@
         <div class="form-group col">
             {{ form.Abducted.label_tag }}
             {{ form.Abducted|add_class:"form-control" }}
+            {% for error in form.Abducted.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.Abducted.help_text %}
                 <small class="form-text text-muted">{{ form.Abducted.help_text }}</small>
             {% endif %}
@@ -150,6 +202,9 @@
         <div class="form-group col">
             {{ form.Latitude.label_tag }}
             {{ form.Latitude|add_class:"form-control" }}
+            {% for error in form.Latitude.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.Latitude.help_text %}
                 <small class="form-text text-muted">{{ form.Latitude.help_text }}</small>
             {% endif %}
@@ -158,6 +213,9 @@
         <div class="form-group col">
             {{ form.Longitude.label_tag }}
             {{ form.Longitude|add_class:"form-control" }}
+            {% for error in form.Longitude.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.Longitude.help_text %}
                 <small class="form-text text-muted">{{ form.Longitude.help_text }}</small>
             {% endif %}
@@ -168,6 +226,9 @@
         <div class="form-group col">
             {{ form.PRMO.label_tag }}
             {{ form.PRMO|add_class:"form-control" }}
+            {% for error in form.PRMO.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.PRMO.help_text %}
                 <small class="form-text text-muted">{{ form.PRMO.help_text }}</small>
             {% endif %}
@@ -176,6 +237,9 @@
         <div class="form-group col">
             {{ form.UNDSS.label_tag }}
             {{ form.UNDSS|add_class:"form-control" }}
+            {% for error in form.UNDSS.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.UNDSS.help_text %}
                 <small class="form-text text-muted">{{ form.UNDSS.help_text }}</small>
             {% endif %}
@@ -184,6 +248,9 @@
         <div class="form-group col">
             {{ form.INSO.label_tag }}
             {{ form.INSO|add_class:"form-control" }}
+            {% for error in form.INSO.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
             {% if form.INSO.help_text %}
                 <small class="form-text text-muted">{{ form.INSO.help_text }}</small>
             {% endif %}
