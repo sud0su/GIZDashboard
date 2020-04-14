@@ -72,7 +72,7 @@ def make_html_images_inline(url):
         img_url = urlparsed._replace(path=img_path)
         img_mimetype = mimetypes.guess_type(img_path)[0]
         img_data = http.request('GET', img_url.geturl()).data
-        img.attrib['src'] = "data:%s;base64,%s" % (img_mimetype, base64.b64encode(img_data))
+        img.attrib['src'] = "data:%s;base64,%s" % (img_mimetype, base64.b64encode(img_data).decode('utf-8'))
 
     htmlstring = etree.tostring(htmltree, pretty_print=False, with_tail=False).decode("utf-8")
     htmlstring_1line = re.sub(r"\r?\n|\r", '', htmlstring)
