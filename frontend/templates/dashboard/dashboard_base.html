@@ -34,6 +34,10 @@
     <!-- page-body-wrapper ends -->
 {% endblock content %}
 
+{% block messages %}
+    {% include '_messages.html' with messages=messages %}
+{% endblock %}
+
 {% block extra_script %}
     <!-- inject:js -->
     <script src="{% static 'js/off-canvas.js' %}"></script>
