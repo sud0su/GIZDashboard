@@ -289,13 +289,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for parent in tables.number_of_incident_and_casualties_overview.parentdata %}
-                                    <tr>
-                                        {% for parents in parent %}
-                                            <td class="boldRow">{{parents}}</td>
-                                        {% endfor %}
-                                    </tr>
-                                {% endfor %}
                                 {% for child in tables.number_of_incident_and_casualties_overview.child %}
                                     <tr class="selectable" onclick="jump_url('prov={{child.name}}');">
                                         {% for item in child.value %}
@@ -304,6 +297,15 @@
                                     </tr>
                                 {% endfor %}
                             </tbody>
+                            <tfoot>
+                                {% for parent in tables.number_of_incident_and_casualties_overview.parentdata %}
+                                    <tr>
+                                        {% for parents in parent %}
+                                            <th class="{% if forloop.counter0 == 0 %}{% else %}hum{% endif %} font-weight-bold">{{parents}}</th>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tfoot>
                         </table>
                     </div>
                 </div>

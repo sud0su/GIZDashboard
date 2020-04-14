@@ -116,7 +116,20 @@ function init_datatable(){
 				return data;
 			},
 			"targets": 'hum'
-		}]
+		}],
+
+		"initComplete": function(settings, json) {
+			var api = this.api();
+			var colLength = api.columns().count();
+
+			for (i = 1; i < colLength; i++) {
+				this_footer = $(api.column(i).footer());
+				dispData = humanizeFormatter(this_footer.html());
+				if(this_footer.attr('class') == 'hum'){
+					this_footer.html(dispData);
+				}
+			}
+		}
 	});
 
 	$('.online').DataTable({
@@ -164,11 +177,31 @@ function init_datatable(){
 
 		"columnDefs": [{
 			"render": function (data, type, row){
+				// console.log(type);
+				// console.log(data);
 				if (type == 'display') {return humanizeFormatter(data);}
 				return data;
 			},
+			"cellType": "th",
 			"targets": 'hum'
-		}]
+		}],
+
+		"initComplete": function(settings, json) {
+			var api = this.api();
+			var colLength = api.columns().count();
+
+			for (i = 1; i < colLength; i++) {
+				this_footer = $(api.column(i).footer());
+				dispData = humanizeFormatter(this_footer.html());
+				console.log(this_footer);
+				console.log(this_footer.attr('class'));
+				console.log(dispData);
+				if(this_footer.attr('class') == 'hum'){
+					console.log(this_footer);
+					this_footer.html(dispData);
+				}
+			}
+		}
 	});
 }
 
