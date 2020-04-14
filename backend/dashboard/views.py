@@ -15,7 +15,7 @@ from giz.utils import replace_query_param
 
 
 @login_required
-def InputDashboard(request):
+def FormDashboard(request):
 	template = "dashboard/undss_form.html"
 
 	# form = UndssForm(request.POST or None)
@@ -140,5 +140,6 @@ def get_incident_subtype(request, incidenttype_id):
     for ist in incidentsubtype:
         incidentsubtype_dict.append({'id' : ist.id, 'text' :ist.name})
     return HttpResponse(json.dumps(incidentsubtype_dict), 'application/json')
+
 
 
