@@ -9,11 +9,13 @@
                 <span class="menu-title">{% trans "Dashboard" %}</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'inputdashboard' %}">
-                <i class="mdi mdi-view-headline menu-icon"></i>
-                <span class="menu-title">{% trans "Input UNDSS" %}</span>
-            </a>
-        </li>
+        {% if user.is_staff %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'inputdashboard' %}">
+                    <i class="mdi mdi-view-headline menu-icon"></i>
+                    <span class="menu-title">{% trans "Input UNDSS" %}</span>
+                </a>
+            </li>
+        {% endif %}
     </ul>
 </nav>
