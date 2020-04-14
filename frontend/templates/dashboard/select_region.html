@@ -1,6 +1,5 @@
 {% load giz_tags %}
 
-<div class="col-sm-12 col-xl-6">
     <ol class="breadcrumb bg-transparent">
         {% if not 'print' in request.path %}
             <li class="breadcrumb-item"><a href="{% url 'dashboard' %}" style="line-height: 28px;">Afghanistan</a></li>
@@ -33,7 +32,6 @@
         {% endfor %}
         {% endfor %}
     </ol>
-</div>
 
 <script>
     function select2_region(){
