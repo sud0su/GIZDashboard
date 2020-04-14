@@ -158,22 +158,63 @@ def Table(request, code, daterange, incident_type):
         provinceIncident += [total_incident]
         provinceName += [province_name]
 
+    
+    districtData = []
+    districtName = []
+    districtIncident = []
+    for pc in main["category"]:
+        district_data = undssQueryset.values('District__name').annotate(count = Coalesce(Count("Incident_Type_id"), 0), total = Coalesce(Sum(pc), 0)).order_by('-District_id')
+        total_incident = [total['count'] for total in district_data] 
+        total_result = [total['total'] for total in district_data]
+        district_name = [total['District__name'] for total in district_data]
+        districtData += [total_result]
+        districtIncident += [total_incident]
+        districtName += [district_name]
+
     # number_of_incident_and_casualties_overview
     parentname = ['Afghanistan']
     table['number_of_incident_and_casualties_overview'] = {}
-    countryDataParent = parentname + [countryIncident[0]] + [countryData[2]] + [countryData[1]] + [countryData[0]]
+    parentIncident = [countryIncident[0]]
+    parentAbducted = [countryData[2]]
+    parentInjured = [countryData[1]]
+    parentKilled = [countryData[0]]
+
+    if code:
+        getCode = code.split('=')
+        if getCode[0] == 'prov':
+            parentname = [getCode[1]]
+            parentIncident = [provinceIncident[0][0]]
+            parentAbducted = [provinceData[2][0]]
+            parentInjured = [provinceData[1][0]]
+            parentKilled =  [provinceData[0][0]]
+        elif getCode[0] == 'dist':
+            parentname = [getCode[1]]
+            parentIncident = [districtIncident[0][0]]
+            parentAbducted = [districtData[2][0]]
+            parentInjured = [districtData[1][0]]
+            parentKilled =  [districtData[0][0]]
+    
+    countryDataParent = parentname + parentIncident + parentAbducted + parentInjured + parentKilled
 
     table['number_of_incident_and_casualties_overview']['parentdata'] = [countryDataParent]
     table['number_of_incident_and_casualties_overview']['child'] = []
-    countryDataChild = []
-    for i in range(0, len(provinceName[0])):
-        if provinceName[0][i] == 'NULL':
-            provinceName[0][i] = 'NoName'
-        # tot = provinceData[0][i] + provinceData[1][i] + provinceData[2][i]
-        # countryDataChild = [provinceName[0][i]] + [provinceData[0][i]] + [provinceData[1][i]] + [provinceData[2][i]] + [tot]
-        countryDataChild = [provinceName[0][i]] + [provinceIncident[0][i]] +[provinceData[2][i]] + [provinceData[1][i]] + [provinceData[0][i]]
-        # table['number_of_incident_and_casualties_overview']['child'].append({'name':provinceName[0][i].replace(" ", "_").lower(), 'value': countryDataChild})
-        table['number_of_incident_and_casualties_overview']['child'].append({'name':provinceName[0][i], 'value': countryDataChild})
+    
+    dataChild = []
+    if code:
+        getCode = code.split('=')
+        if getCode[0] == 'prov':
+            for i in range(0, len(districtName[0])):
+                if districtName[0][i] == 'NULL':
+                    districtName[0][i] = 'NoName'
+                dataChild = [districtName[0][i]] + [districtIncident[0][i]] +[districtData[2][i]] + [districtData[1][i]] + [districtData[0][i]]
+                table['number_of_incident_and_casualties_overview']['child'].append({'name':districtName[0][i], 'value': dataChild})
+    else:    
+        for i in range(0, len(provinceName[0])):
+            if provinceName[0][i] == 'NULL':
+                provinceName[0][i] = 'NoName'
+            dataChild = [provinceName[0][i]] + [provinceIncident[0][i]] +[provinceData[2][i]] + [provinceData[1][i]] + [provinceData[0][i]]
+            table['number_of_incident_and_casualties_overview']['child'].append({'name':provinceName[0][i], 'value': dataChild})
+    
     table['number_of_incident_and_casualties_overview']['key'] = "number_of_incident_and_casualties_overview"
     table['number_of_incident_and_casualties_overview']['title'] = "Number of Incident and Casualties Overview"
 

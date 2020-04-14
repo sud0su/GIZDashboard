@@ -3,7 +3,7 @@ from django.urls import path, re_path
 from .views import (
     Dashboard,
     DashboardPrint,
-    InputDashboard,
+    FormDashboard,
     get_district,
     get_area_city,
     get_incident_subtype,
@@ -12,7 +12,7 @@ from .views import (
 from . import views
 
 urlpatterns = [
-    path('input', InputDashboard, name='inputdashboard'),
+    path('input', FormDashboard, name='inputdashboard'),
     path('', Dashboard, name='dashboard'),
     re_path(r'^print$', DashboardPrint, name='dashboard_print'),
     # chained_dropdown_url
