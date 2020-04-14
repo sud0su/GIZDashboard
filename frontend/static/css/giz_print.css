@@ -16,6 +16,7 @@
   background: transparent !important;
   padding-left: 0;
   padding-right: 0;
+  padding-top: 0;
 }
 
 .footer {
@@ -51,12 +52,3 @@
 }
 
 /*# sourceMappingURL=giz_print.css.map */
-
-.table {
-  border-collapse: collapse !important;
-  width: 100% !important;
-}
-.table th,
-.table td {
-  page-break-inside: avoid;
-}

@@ -1,8 +1,8 @@
 {% load giz_tags %}
 
-    <ol class="breadcrumb bg-transparent">
+    <ol class="breadcrumb bg-transparent" style="line-height: 28px;">
         {% if not 'print' in request.path %}
-            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}" style="line-height: 28px;">Afghanistan</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Afghanistan</a></li>
         {% else %}
             <li class="breadcrumb-item">Afghanistan</li>
         {% endif %}
