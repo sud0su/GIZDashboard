@@ -301,7 +301,7 @@
                                 {% for parent in tables.number_of_incident_and_casualties_overview.parentdata %}
                                     <tr>
                                         {% for parents in parent %}
-                                            <th class="{% if forloop.counter0 == 0 %}{% else %}hum{% endif %} font-weight-bold">{{parents}}</th>
+                                            <th class="{% if forloop.counter0 == 0 %}{% else %}hum{% endif %}">{{parents}}</th>
                                         {% endfor %}
                                     </tr>
                                 {% endfor %}
@@ -354,10 +354,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js"></script>
     
     <!-- DataTables -->
-    <!-- <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script> -->
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-    <!-- <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script> -->
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <!-- <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script> -->
+    <!-- <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script> -->
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <!-- <script src="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css"></script> -->
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
