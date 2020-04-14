@@ -16,6 +16,10 @@ django-widget-tweaks = "*"
 django-select2 = "*"
 django-bootstrap-datepicker-plus = "*"
 pdfkit = "==0.5.0"
+paver = "*"
+pychrome = "*"
+lxml = "*"
+pypdf2 = "*"
 
 [requires]
 python_version = "3.7"
