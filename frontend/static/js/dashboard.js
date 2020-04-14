@@ -211,13 +211,15 @@ function init_datatable(){
 }
 
 function init_chart2(){
-	colorBarDefault= ["#CF000F"];
-	colorBarOther= ['#b40002', '#f1000f', '#ff5c3c', '#ffb89c', '#ffe4d7' ];
-	colorDefault = ['#ffaaab', '#ff6264', '#d13c3e', '#b92527'];
+	// colorBarDefault= ["#CF000F"];
+	// colorBarOther= ['#b40002', '#f1000f', '#ff5c3c', '#ffb89c', '#ffe4d7' ];
+	// colorDefault = ['#ffaaab', '#ff6264', '#d13c3e', '#b92527'];
+
+	colorDefault = ['#ff4d6b', '#ffde73', '#8e32e9', '#38ce3c', '#1bdbe0'];
 
 	colorChart={
-		'colorDefault': colorBarOther,
-		'colorBar': colorBarDefault,
+		'colorDefault': colorDefault,
+		'colorBar': colorDefault,
 		'colorPolar': colorDefault
 	}
 
