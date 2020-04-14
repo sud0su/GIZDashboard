@@ -20,10 +20,10 @@
 
 {% block content_dashboard %}
     <div class="row">
-        <div class="col-sm-12 col-xl-6 {% if 'print' in request.path %}col-6{% else %}col-12{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-6 {% if 'print' in request.path %}col-md-6{% else %}col-md-12 {% endif %}">
             {% include "dashboard/select_region.html" %}
         </div>
-        <div class="col-sm-12 col-md-10 col-xl-5 {% if 'print' in request.path %}col-6{% else %}col-12{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-5 {% if 'print' in request.path %}col-md-6{% else %}col-md-10{% endif %}">
             <div id="reportrange" class="float-right">
                 <i class="mdi mdi-calendar"></i>&nbsp; {% trans "Incident between" %} :
                 <span></span> <i class="mdi mdi-chevron-down {% if 'print' in request.path %}d-none{% endif %}"></i>
@@ -37,7 +37,7 @@
     <div class="row">
         {% for i in total.total_data %}
             {% for k, v  in i.items %}
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 {% if 'print' in request.path %}col-3{% else %}col-12{% endif %} d-flex grid-margin stretch-card">
+            <div class="col-12 col-sm-12 col-lg-6 col-xl-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-6{% endif %} d-flex grid-margin stretch-card">
                 <div class="card {% if k|lower == 'injured' %}sale-visit-statistics-border{% elif k|lower == 'abducted' %}total-abducted-statistics-border{% elif k == 'incident' %}total-incident-statistics-border{% else %}sale-diffrence-border{% endif %}">
                     <div class="card-body">
                         <h2 class="text-dark mb-2 font-weight-bold">{{ v }}</h2>
@@ -48,7 +48,7 @@
             {% endfor %}
         {% endfor %}
 
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 {% if 'print' in request.path %}col-6{% else %}col-12{% endif %} grid-margin stretch-card">
+        <div class="col-12 col-sm-12 col-lg-12 col-xl-6 {% if 'print' in request.path %}col-md-8{% else %}col-md-12{% endif %} grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Graph of Incident and Casualties Trend by Incident Type" %}</h4>
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 {% if 'print' in request.path %}col-6{% else %}col-12{% endif %} grid-margin stretch-card">
+        <div class="col-12 col-sm-12 col-lg-12 col-xl-6 {% if 'print' in request.path %}col-md-4{% else %}col-md-12{% endif %} grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Select Incident Type" %}</h4>
@@ -108,7 +108,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 grid-margin stretch-card">
+        <div class="col-sm-12 col-lg-12 col-md-12 col-lg-12 col-xl-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Incidents and Casualties by Incident Type" %}</h4>
@@ -273,11 +273,7 @@
         </div>
         {% endcomment %}
 
-<<<<<<< Updated upstream
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 {% if 'print' in request.path %}col-6{% else %}col-12{% endif %} grid-margin stretch-card">
-=======
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 grid-margin stretch-card">
->>>>>>> Stashed changes
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Number of Incident and Casualties Overview" %}</h4>
