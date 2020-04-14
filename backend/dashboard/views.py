@@ -1,17 +1,18 @@
 import urllib
-
+import json
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from datetime import datetime, date
 from django.utils.formats import dateformat
 from django.contrib.auth.decorators import login_required
+from urllib.parse import urlencode
+from .pychromeprint import print_from_urls
 
 from .forms import UndssForm
 from .json_serializable import Common
+from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype
 from giz.utils import replace_query_param
 
-from urllib.parse import urlencode
-from .pychromeprint import print_from_urls
 
 @login_required
 def InputDashboard(request):
@@ -97,3 +98,47 @@ def DashboardPrint(request):
 	template = 'dashboard/dashboard_content.html'
 	response = Common(request)
 	return render(request, template, response)
+
+
+# Chained Dropdown
+def get_district(request, province_id):
+    province = Province.objects.get(pk=province_id)
+    district = District.objects.filter(province=province)
+    district_dict = [{'id' : 0, 'text' : 'Select District'}]
+    for dist in district:
+        district_dict.append({'id' : dist.id, 'text' :dist.name})
+    return HttpResponse(json.dumps(district_dict), 'application/json')
+
+
+def get_area_city(request, province_id, district_id):
+	data_area_city = []
+
+	province = Province.objects.get(pk=province_id)
+	district = District.objects.get(pk=district_id)
+
+	# Area
+	area = Area.objects.filter(province=province).filter(district=district)
+	area_dict = [{'id' : 0, 'text' : 'Select Area'}]
+	for ar in area:
+		area_dict.append({'id' : ar.id, 'text' :ar.name})
+
+	# CityVillage
+	cityvillage = CityVillage.objects.filter(province=province).filter(district=district)
+	cityvillage_dict = [{'id' : 0, 'text' : 'Select City Village'}]
+	for cv in cityvillage:
+		cityvillage_dict.append({'id' : cv.id, 'text' : cv.name})
+
+	data_area_city.append({ 'area': area_dict, 'cityvillage': cityvillage_dict})
+
+	return HttpResponse(json.dumps(data_area_city), 'application/json')
+	
+
+def get_incident_subtype(request, incidenttype_id):
+    incidenttype = IncidentType.objects.get(pk=incidenttype_id)
+    incidentsubtype = IncidentSubtype.objects.filter(incidenttype=incidenttype)
+    incidentsubtype_dict = [{'id' : 0, 'text' : 'Select Incident Subtype'}]
+    for ist in incidentsubtype:
+        incidentsubtype_dict.append({'id' : ist.id, 'text' :ist.name})
+    return HttpResponse(json.dumps(incidentsubtype_dict), 'application/json')
+
+
