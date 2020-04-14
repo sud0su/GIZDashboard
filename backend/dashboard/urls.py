@@ -9,7 +9,7 @@ from .views import (
 from . import views
 
 urlpatterns = [
-    path('', Dashboard, name='dashboard'),
     path('input', InputDashboard, name='inputdashboard'),
+    path('', Dashboard, name='dashboard'),
     re_path(r'^print$', DashboardPrint, name='dashboard_print'),
 ]

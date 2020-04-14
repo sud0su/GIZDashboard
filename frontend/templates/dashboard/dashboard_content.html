@@ -108,7 +108,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-12 col-lg-12 {% if 'print' in request.path %}col-xl-12{% else %}col-xl-6{% endif %} grid-margin stretch-card">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Incidents and Casualties by Incident Type" %}</h4>
@@ -273,7 +273,11 @@
         </div>
         {% endcomment %}
 
+<<<<<<< Updated upstream
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 {% if 'print' in request.path %}col-6{% else %}col-12{% endif %} grid-margin stretch-card">
+=======
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 grid-margin stretch-card">
+>>>>>>> Stashed changes
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Number of Incident and Casualties Overview" %}</h4>
@@ -373,15 +377,11 @@
         var jsondata = {% if jsondata %}{{ jsondata|safe }}{% else %}{}{% endif %};
         {% if 'print' in request.path %}
             var animate= false;
-            $('.Coba').append('cobaocboabocaca')
         {% else %}
             var animate= true;
-            $(".Coba").hide().html('cobaocboabocaca').fadeIn('fast');
         {% endif %}
     </script>
     <script src="{% static 'js/dashboard.js' %}"></script>
-    <!-- <script src="{% static 'js/security.js' %}"></script> -->
-
     <script>
         document.addEventListener('DOMContentLoaded', function(){
 

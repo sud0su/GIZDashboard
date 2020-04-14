@@ -170,44 +170,6 @@ function init_datatable(){
 			"targets": 'hum'
 		}]
 	});
-
-	$('.online_security').DataTable({
-		"ordering": false,
-		// "pageLength": 30,
-		dom: 'Bfrtip',
-		buttons: [
-			{
-				extend: "copy",
-				className: "btn btn-default btn-sm"
-			},
-			{
-				extend: "csv",
-				className: "btn btn-default btn-sm"
-			},
-			{
-				extend: "excel",
-				className: "btn btn-default btn-sm"
-			},
-			{
-				extend: "print",
-				className: "btn btn-default btn-sm"
-			},
-			// {
-			//   extend: "colvis"
-			//   className: "btn btn-default btn-sm"
-			// }
-		],
-
-		"columnDefs": [{
-			"render": function (data, type, row){
-				if (type == 'display') {return humanizeFormatter(data);}
-				return data;
-			},
-			"targets": 'hum'
-		}]
-	});
-
-	// $("button").removeClass("dt-button");
 }
 
 function init_chart2(){

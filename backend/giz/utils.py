@@ -24,3 +24,4 @@ def replace_query_param(url, attr, val):
     query_dict[attr] = val
     query = query_dict.urlencode()
     return urlunparse((scheme, netloc, path, params, query, fragment))
+

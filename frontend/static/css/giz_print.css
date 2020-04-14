@@ -51,3 +51,12 @@
 }
 
 /*# sourceMappingURL=giz_print.css.map */
+
+.table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+.table th,
+.table td {
+  page-break-inside: avoid;
+}
