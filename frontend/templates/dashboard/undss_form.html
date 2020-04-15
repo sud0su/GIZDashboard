@@ -17,7 +17,7 @@
                     <p class="card-description d-none">
                         Basic form elements
                     </p>
-                    <form class="forms-sample form-undss" method="post" enctype="multipart/form-data" >
+                    <form class="forms-sample form-undss" method="POST" enctype="multipart/form-data" >
                         {% csrf_token %}
                         {% include 'dashboard/form_format.html' with form=form %}
 
@@ -35,4 +35,57 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script src="{% static 'js/file-upload.js' %}"></script>
     {{ form.media.js }}
+
+
+    <script>
+    $(document).ready(function(){
+        $('select[name=Province]').change(function(){
+            province_id = $(this).val();
+            request_url = '/get_district/' + province_id + '/';
+            $.ajax({
+                url: request_url,
+                success: function(data){
+                    $('select[name="District"]').empty().select2({
+                        data: data
+                    });
+                }
+            });
+            return false;
+        })
+
+        $('select[name=Incident_Type]').change(function(){
+            incidenttype_id = $(this).val();
+            request_url = '/get_incident_subtype/' + incidenttype_id + '/';
+            $.ajax({
+                url: request_url,
+                success: function(data){
+                    $('select[name="Incident_Subtype"]').empty().select2({
+                        data: data
+                    });
+                }
+            });
+            return false;
+        })
+
+
+        $('select[name=District]').change(function(){
+            district_id = $(this).val();
+            province_id = $('select[name=Province]').children('option:selected').val()
+            request_url_area = '/get_area_city/' + province_id + '/' + district_id + '/';
+            $.ajax({
+                url: request_url_area,
+                success: function(data){
+                    $('select[name="Area"]').empty().select2({
+                        data: data[0]['area']
+                    });
+
+                    $('select[name="City_Village"]').empty().select2({
+                        data: data[0]['cityvillage']
+                    });
+                }
+            });
+            return false;
+        })
+    });
+    </script>
 {% endblock dashboard_script %}

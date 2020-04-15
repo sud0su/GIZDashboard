@@ -290,7 +290,12 @@
                             </thead>
                             <tbody>
                                 {% for child in tables.number_of_incident_and_casualties_overview.child %}
-                                    <tr class="selectable" onclick="jump_url('prov={{child.name}}');">
+
+                                    {% if 'Afghanistan' in tables.number_of_incident_and_casualties_overview.parentdata %}
+                                        <tr class="selectable" onclick="jump_url('prov={{child.name}}');">
+                                    {% else %}
+                                        <tr class="selectable" onclick="jump_url('dist={{child.name}}');">
+                                    {% endif %}
                                         {% for item in child.value %}
                                             <td>{{item}}</td>
                                         {% endfor %}
