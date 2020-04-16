@@ -3,7 +3,9 @@ from django.urls import path, re_path
 from .views import (
     Dashboard,
     DashboardPrint,
-    FormDashboard,
+    InputUndss,
+    InputUndssView,
+    UndssDetailView,
     get_district,
     get_area_city,
     get_incident_subtype,
@@ -12,9 +14,11 @@ from .views import (
 from . import views
 
 urlpatterns = [
-    path('input', FormDashboard, name='inputdashboard'),
     path('', Dashboard, name='dashboard'),
+    # path('input/', InputUndss, name='inputdashboard'),
     re_path(r'^print$', DashboardPrint, name='dashboard_print'),
+    path('input/', InputUndssView.as_view(), name='inputdashboard'),
+    path('undssdetail/<int:pk>/', UndssDetailView.as_view(), name='detail'),
     # chained_dropdown_url
     path('get_district/<int:province_id>/', get_district, name='get_district'),
     path('get_area_city/<int:province_id>/<int:district_id>/', get_area_city, name='get_area_city'),

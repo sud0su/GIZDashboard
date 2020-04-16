@@ -1,43 +1,77 @@
 import urllib
 import json
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime, date
 from django.utils.formats import dateformat
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 from urllib.parse import urlencode
 from .pychromeprint import print_from_urls
 
 from .forms import UndssForm
 from .json_serializable import Common
 from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype
+from organization.models import Organization
+from .models import Undss
 from giz.utils import replace_query_param
 
 
+from django.views.generic import CreateView, DetailView
+
 @login_required
-def FormDashboard(request):
+def InputUndss(request):
 	template = "dashboard/undss_form.html"
-
-	# form = UndssForm(request.POST or None)
-	# if form.is_valid():
-	#     form.save()
-
-	form = UndssForm(request.POST, request.FILES or None)
-	if form.is_valid():
-		form.save()
-
-	# if request.method == 'POST':
-	#     form = UndssForm(request.POST, request.FILES)
-	#     if form.is_valid():
-	#         form.save()
-	# else:
-	#     form = UndssForm()
+	form = UndssForm()
+	if request.method == 'POST':
+		print('Printing POST:', request.POST)
+		form = UndssForm(request.POST, request.FILES,
+			initial= { 
+				'Province': Province.pk,
+				'District': District.pk,
+				'Area': Area.pk,
+				'City_Village': CityVillage.pk, 
+				'Incident_Type': IncidentType.pk,
+				'Incident_Subtype': IncidentSubtype.pk,
+				'Initiator': Organization.pk,
+				'Target': Organization.pk,
+				}
+		)
+		if form.is_valid():
+			form.save()
+			form = UndssForm()
 
 	context = {'form': form }
 	return render(request, template, context)
 
+@method_decorator(login_required, name='dispatch')
+class UndssDetailView(DetailView):
+	template_name = "dashboard/undss_detail.html"
+	queryset = Undss.objects.all()
 
-# @login_required
+	def get_object(self):
+		id_ = self.kwargs.get('pk')
+		return get_object_or_404(Undss, id=id_)
+
+@method_decorator(login_required, name='dispatch')
+class InputUndssView(CreateView):
+	template_name = "dashboard/undss_form.html"
+	form_class = UndssForm
+	queryset = Undss.objects.all()
+
+	def form_valid(self, form):
+		# print(self.request.Province)
+		# form.instance.Province = self.request.Province
+		print(form.cleaned_data)
+		return super().form_valid(form)
+
+# 	model = Undss
+# 	form_class = UndssForm
+# 	template_name = "dashboard/undss_form.html"
+
+
+@login_required
 def Dashboard(request):
 	bodyparam_dict = {}
 	bodyparam = urlencode(bodyparam_dict)
@@ -118,13 +152,13 @@ def get_area_city(request, province_id, district_id):
 
 	# Area
 	area = Area.objects.filter(province=province).filter(district=district)
-	area_dict = [{'id' : 0, 'text' : 'Select Area'}]
+	area_dict = [{'id' : '', 'text' : 'Select Area'}]
 	for ar in area:
 		area_dict.append({'id' : ar.id, 'text' :ar.name})
 
 	# CityVillage
 	cityvillage = CityVillage.objects.filter(province=province).filter(district=district)
-	cityvillage_dict = [{'id' : 0, 'text' : 'Select City Village'}]
+	cityvillage_dict = [{'id' : '', 'text' : 'Select City Village'}]
 	for cv in cityvillage:
 		cityvillage_dict.append({'id' : cv.id, 'text' : cv.name})
 
@@ -136,7 +170,7 @@ def get_area_city(request, province_id, district_id):
 def get_incident_subtype(request, incidenttype_id):
     incidenttype = IncidentType.objects.get(pk=incidenttype_id)
     incidentsubtype = IncidentSubtype.objects.filter(incidenttype=incidenttype)
-    incidentsubtype_dict = [{'id' : 0, 'text' : 'Select Incident Subtype'}]
+    incidentsubtype_dict = [{'id' : '', 'text' : 'Select Incident Subtype'}]
     for ist in incidentsubtype:
         incidentsubtype_dict.append({'id' : ist.id, 'text' :ist.name})
     return HttpResponse(json.dumps(incidentsubtype_dict), 'application/json')
