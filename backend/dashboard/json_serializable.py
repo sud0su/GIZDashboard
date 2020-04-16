@@ -54,7 +54,7 @@ def Chart(request, code, daterange, incident_type):
     chart['spline']['title'] = "Historical Date of Incidents and Casualties by Incident Type"
     chart['spline']['key'] = "history_incident_and_casualties_trend_by_incident_type"
     for pc in main["category"]:
-        undssQueryset = undssQueryset.values('Date').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Date')
+        undssQueryset = undssQueryset.values('Date').annotate(total = Coalesce(Sum(pc), 0)).order_by('Date')
         total_result = [[total['Date'].timestamp() * 1000, total['total']] for total in undssQueryset]
         chart['spline']['data_val'].append({'name':pc, 'data': total_result})
 
