@@ -1,0 +1,50 @@
+{% extends "dashboard/dashboard_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content_dashboard %}
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "Data Saved - UNDSS Detail" %}</h4>
+                    
+                    <div class="float-right">
+                        <a href="{% url 'inputdashboard' %}" class="btn btn-info btn-sm" role="button">Add New Data</a>
+                        <a href="{% url 'dashboard' %}?page=dashboard" class="btn btn-primary btn-sm" role="button">Back to Dashboard</a>
+                    </div>
+                    <div class="clearfix"></div>
+                    
+                    <ul class="list-group mt-2">
+                        <li class="list-group-item">Shape: {{ object.Shape }}</li>
+                        <li class="list-group-item">Data_Entry_No: {{ object.Data_Entry_No }}</li>
+                        <li class="list-group-item">Date: {{ object.Date }}</li>
+                        <li class="list-group-item">Time_of_Incident: {{ object.Time_of_Incident }}</li>
+                        <li class="list-group-item">Province: {{ object.Province }}</li>
+                        <li class="list-group-item">District: {{ object.District }}</li>
+                        <li class="list-group-item">City_Village: {{ object.City_Village }}</li>
+                        <li class="list-group-item">Area: {{ object.Area }}</li>
+                        <li class="list-group-item">Police_District: {{ object.Police_District }}</li>
+                        <li class="list-group-item">Incident_Type: {{ object.Incident_Type }}</li>
+                        <li class="list-group-item">Incident_Subtype: {{ object.Incident_Subtype }}</li>
+                        <li class="list-group-item">Description_of_Incident: {{ object.Description_of_Incident }}</li>
+                        <li class="list-group-item">HPA: {{ object.HPA }}</li>
+                        <li class="list-group-item">Initiator: {{ object.Initiator }}</li>
+                        <li class="list-group-item">Target: {{ object.Target }}</li>
+                        <li class="list-group-item">killed: {{ object.killed }}</li>
+                        <li class="list-group-item">Injured: {{ object.Injured }}</li>
+                        <li class="list-group-item">Abducted: {{ object.Abducted }}</li>
+                        <li class="list-group-item">Latitude: {{ object.Latitude }}</li>
+                        <li class="list-group-item">Longitude: {{ object.Longitude }}</li>
+                        <li class="list-group-item">PRMO: {{ object.PRMO }}</li>
+                        <li class="list-group-item">UNDSS: {{ object.UNDSS }}</li>
+                        <li class="list-group-item">INSO: {{ object.INSO }}</li>
+                    </ul>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content_dashboard %}
+

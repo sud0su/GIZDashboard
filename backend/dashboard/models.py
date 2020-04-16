@@ -8,7 +8,7 @@ from django.contrib import admin
 from django.utils.translation import gettext as _
 from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype
 from organization.models import Organization
-
+from django.urls import reverse
 
 @deconstructible
 class PathAndRename(object):
@@ -33,9 +33,9 @@ def default_start_time():
 mediaPath = PathAndRename("shape/")
 class Undss(models.Model):
     Shape = models.FileField(_("Shape"), upload_to=mediaPath, null=True, blank=True)
-    Data_Entry_No = models.CharField(_("Data Entry No"), max_length=50)
-    Date = models.DateTimeField(_("Date"), auto_now=False, auto_now_add=False)
-    Time_of_Incident = models.TimeField(_("Time Of Incident"), default=default_start_time)
+    Data_Entry_No = models.CharField(_("Data Entry No"), max_length=50, null=True, blank=True)
+    Date = models.DateTimeField(_("Date"), auto_now=False, auto_now_add=False, null=True, blank=True)
+    Time_of_Incident = models.TimeField(_("Time Of Incident"), default=default_start_time, null=True, blank=True)
     Province = models.ForeignKey(Province, verbose_name=_("Province"), on_delete=models.CASCADE, null=True, blank=True)
     District =models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE, null=True, blank=True)
     City_Village = models.ForeignKey(CityVillage, verbose_name=_("City Village"), on_delete=models.CASCADE, null=True, blank=True)
@@ -74,8 +74,8 @@ class Undss(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
-    # def get_absolute_url(self):
-    #     return reverse("model_detail", kwargs={"pk": self.pk})
+    def get_absolute_url(self):
+        return reverse("detail", kwargs={"pk": self.pk})
     
     class Meta:
         ordering = ('-created_at',)

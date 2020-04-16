@@ -11,7 +11,8 @@ class UndssAdmin(admin.ModelAdmin):
         'District',
         'Initiator',
         'Target',
-        'Date'
+        'Date',
+        'created_at'
         ]
 
 # admin.site.register(Undss)

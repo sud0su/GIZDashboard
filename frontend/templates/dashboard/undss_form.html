@@ -5,7 +5,6 @@
 
 {% block extra_head %}
     {{ form.media.css }}
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"> -->
 {% endblock extra_head %}
 
 {% block content_dashboard %}
@@ -19,7 +18,12 @@
                     </p>
                     <form class="forms-sample form-undss" method="POST" enctype="multipart/form-data" >
                         {% csrf_token %}
-                        {% include 'dashboard/form_format.html' with form=form %}
+                        {% comment %} {% include 'dashboard/form_format.html' with form=form %} {% endcomment %}
+
+
+{% comment %} form {% endcomment %}
+    {{ form.as_p }}
+{% comment %} endform {% endcomment %}
 
                         <button type="submit" class="btn btn-primary mr-2">{% trans "Submit" %}</button>
                         <button class="btn btn-light">{% trans "Cancel" %}</button>
@@ -45,7 +49,7 @@
             $.ajax({
                 url: request_url,
                 success: function(data){
-                    $('select[name="District"]').empty().select2({
+                    $('select[name="District"]').empty().djangoSelect2({
                         data: data
                     });
                 }
@@ -59,7 +63,7 @@
             $.ajax({
                 url: request_url,
                 success: function(data){
-                    $('select[name="Incident_Subtype"]').empty().select2({
+                    $('select[name="Incident_Subtype"]').empty().djangoSelect2({
                         data: data
                     });
                 }
@@ -75,11 +79,11 @@
             $.ajax({
                 url: request_url_area,
                 success: function(data){
-                    $('select[name="Area"]').empty().select2({
+                    $('select[name="Area"]').empty().djangoSelect2({
                         data: data[0]['area']
                     });
 
-                    $('select[name="City_Village"]').empty().select2({
+                    $('select[name="City_Village"]').empty().djangoSelect2({
                         data: data[0]['cityvillage']
                     });
                 }
