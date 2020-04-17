@@ -11,6 +11,8 @@ from .views import (
     get_incident_subtype,
     load_district,
     load_subtype,
+    load_area,
+    load_cityillage
 )
 
 from . import views
@@ -27,6 +29,8 @@ urlpatterns = [
     path('get_incident_subtype/<int:incidenttype_id>/', get_incident_subtype, name='get_incident_subtype'),
 
     path('get/district/', load_district, name='ajax_load_district'), 
-    path('get/subtype/', load_subtype, name='ajax_load_subtype'),  # <-- this one here
+    path('get/subtype/', load_subtype, name='ajax_load_subtype'), 
+    path('get/area/', load_area, name='ajax_load_area'), 
+    path('get/cityvlillage/', load_cityillage, name='ajax_load_cityillage'), 
 
 ]

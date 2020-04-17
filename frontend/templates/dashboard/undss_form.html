@@ -43,115 +43,73 @@
 
     <script>
         $("#id_Province").change(function () {
-            var url = '/get/district/';  // get the url of the `load_cities` view
-            var provinceId = $(this).val();  // get the selected country ID from the HTML input
+            var url = '/get/district/';  
+            var provinceId = $(this).val();  
 
-            $.ajax({                       // initialize an AJAX request
-                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+            $.ajax({                       
+                url: url,                    
                 data: {
-                    'province': provinceId       // add the country id to the GET parameters
+                    'province': provinceId       
                 },
-                success: function (data) {   // `data` is the return of the `load_cities` view function
-                    $("#id_District").html(data);  // replace the contents of the city input with the data that came from the server
+                success: function (data) { 
+                    $("#id_District").prop('selectedIndex',0);
+                    $("#id_District").html(data); 
                 }
             });
 
         });
 
         $("#id_Incident_Type").change(function () {
-            var url = '/get/subtype/';  // get the url of the `load_cities` view
-            var incidenttypeId = $(this).val();  // get the selected country ID from the HTML input
+            var url = '/get/subtype/';  
+            var incidenttypeId = $(this).val();  
 
-            $.ajax({                       // initialize an AJAX request
-                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+            $.ajax({                       
+                url: url,                    
                 data: {
-                    'incidenttype': incidenttypeId       // add the country id to the GET parameters
+                    'incidenttype': incidenttypeId       
                 },
-                success: function (data) {   // `data` is the return of the `load_cities` view function
-                    $("#id_Incident_Subtype").html(data);  // replace the contents of the city input with the data that came from the server
+                beforeSend: function() {
+                    $("#id_Incident_Subtype").html(''); 
+                },
+                success: function (data) {   
+                    $("#id_Incident_Subtype").html(data); 
                 }
             });
 
         });
-        /* $('.select_province').select2({
-            dropdownAutoWidth: true,
+
+        $("#id_District").change(function () {
+            var urlArea = '/get/area/';  
+            var urlVillage = '/get/cityvlillage/';  
+            var provinceId = $('#id_Province').children('option:selected').val() 
+            var districtId = $('#id_District').children('option:selected').val() 
+            $.ajax({                          
+                url: urlArea,                    
+                data: {
+                    'province': provinceId,
+                    'district': districtId        
+                },
+                beforeSend: function() {
+                    $("#id_Area").html(''); 
+                },
+                success: function (data) {   
+                    $("#id_Area").html(data); 
+                }
+            });
+            $.ajax({                          
+                url: urlVillage,                    
+                data: {
+                    'province': provinceId,
+                    'district': districtId        
+                },
+                beforeSend: function() {
+                    $("#id_City_Village").html(''); 
+                },
+                success: function (data) {   
+                    $("#id_City_Village").html(data); 
+                }
+            });
+
         });
-
-        $('.select_district').select2({
-            dropdownAutoWidth: true,
-        });
-
-        $('.select_province').on('select2-change', function (e) {
-            var province_id = e.val
-            //alert(province_id)
-            request_url = '/get_district/' + province_id + '/';
-            $.ajax({
-                url: request_url,
-                dataType: 'json',
-                success: function(datas){
-                    console.log(datas)
-                    //var newOption = new Option(data.text, data.id, false, false);
-                    //$(".select_district").append(data).val("").trigger("change");
-                    var kota = $.map(datas, function (obj) {
-                        obj.id = obj.id;
-                        obj.text = obj.text;
-                        return obj;
-                    });
-                    $(".select_district").select2({
-                        placeholder: "Pilih Kota",
-                        data: kota
-                    });
-                }
-            });
-        });*/
-        /*var $districtOption = 'select[name="District"]'
-        $('select[name=Province]').on('change', function(){
-            province_id = $(this).val();
-            request_url = '/get_district/' + province_id + '/';
-            $.ajax({
-                url: request_url,
-                success: function(data){
-                    $('select[name="District"]').html('').djangoSelect2({
-                        data: data
-                    });
-                }
-            });
-            return false
-        })*/
-
-        /*$('select[name=Incident_Type]').change(function(){
-            incidenttype_id = $(this).val();
-            request_url = '/get_incident_subtype/' + incidenttype_id + '/';
-            $.ajax({
-                url: request_url,
-                success: function(data){
-                    $('select[name="Incident_Subtype"]').html('').djangoSelect2({
-                        data: data
-                    });
-                }
-            });
-        })
-
-
-        $('select[name=District]').change(function(){
-            district_id = $(this).val();
-            province_id = $('select[name=Province]').children('option:selected').val()
-            request_url_area = '/get_area_city/' + province_id + '/' + district_id + '/';
-            $.ajax({
-                url: request_url_area,
-                success: function(data){
-                    $('select[name="Area"]').html('').djangoSelect2({
-                        data: data[0]['area']
-                    });
-
-                    $('select[name="City_Village"]').html('').djangoSelect2({
-                        data: data[0]['cityvillage']
-                    });
-                }
-            });
-        })*/
-        
-
-        
     </script>
 {% endblock dashboard_script %}
