@@ -336,7 +336,7 @@
                             </thead>
                             <tbody>
                                 {% for item in tables.list_of_latest_incidents %}
-                                    <tr>
+                                    <tr onclick="window.document.location ='/undssdetail/{{item.id}}' ">
                                         <td>{{ item.Date |date:'M j, Y' }}</td>
                                         <td>{{ item.Time_of_Incident }}</td>
                                         <td>{{ item.Description_of_Incident }}</td>

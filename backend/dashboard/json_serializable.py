@@ -106,7 +106,7 @@ def Table(request, code, daterange, incident_type):
         undssQueryset = undssQueryset.filter(Incident_Type__name__in=incident_type.split(','))
 
     # list_of_latest_incidents
-    table['list_of_latest_incidents'] = undssQueryset.values('Date', 'Time_of_Incident','Description_of_Incident').order_by('-Date')
+    table['list_of_latest_incidents'] = undssQueryset.values('id','Date', 'Time_of_Incident','Description_of_Incident').order_by('-Date')
     
     # total killed, injure, abducted group by incident type
     incidentTypeData = []
