@@ -3,7 +3,7 @@ from django.urls import path, re_path
 from .views import (
     Dashboard,
     DashboardPrint,
-    InputUndss,
+    # InputUndss,
     InputUndssView,
     UndssDetailView,
     get_district,

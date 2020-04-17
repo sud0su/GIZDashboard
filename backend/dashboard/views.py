@@ -6,6 +6,8 @@ from datetime import datetime, date
 from django.utils.formats import dateformat
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 from urllib.parse import urlencode
 from .pychromeprint import print_from_urls
@@ -21,30 +23,30 @@ from giz.utils import replace_query_param
 from django.views.generic import CreateView, DetailView
 
 
-@login_required
-def InputUndss(request):
-    template = "dashboard/undss_form.html"
-    form = UndssForm()
-    if request.method == 'POST':
-        print('Printing POST:', request.POST)
-        form = UndssForm(request.POST, request.FILES,
-                         initial={
-                             'Province': Province.pk,
-                             'District': District.pk,
-                             'Area': Area.pk,
-                             'City_Village': CityVillage.pk,
-                             'Incident_Type': IncidentType.pk,
-                             'Incident_Subtype': IncidentSubtype.pk,
-                             'Initiator': Organization.pk,
-                             'Target': Organization.pk,
-                         }
-                         )
-        if form.is_valid():
-            form.save()
-            form = UndssForm()
+# @login_required
+# def InputUndss(request):
+#     template = "dashboard/undss_form.html"
+#     form = UndssForm()
+#     if request.method == 'POST':
+#         print('Printing POST:', request.POST)
+#         form = UndssForm(request.POST, request.FILES,
+#                          initial={
+#                              'Province': Province.pk,
+#                              'District': District.pk,
+#                              'Area': Area.pk,
+#                              'City_Village': CityVillage.pk,
+#                              'Incident_Type': IncidentType.pk,
+#                              'Incident_Subtype': IncidentSubtype.pk,
+#                              'Initiator': Organization.pk,
+#                              'Target': Organization.pk,
+#                          }
+#                          )
+#         if form.is_valid():
+#             form.save()
+#             form = UndssForm()
 
-    context = {'form': form}
-    return render(request, template, context)
+#     context = {'form': form}
+#     return render(request, template, context)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -57,7 +59,7 @@ class UndssDetailView(DetailView):
         return get_object_or_404(Undss, id=id_)
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(staff_member_required, name='dispatch')
 class InputUndssView(CreateView):
     template_name = "dashboard/undss_form.html"
     form_class = UndssForm
