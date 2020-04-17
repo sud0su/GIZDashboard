@@ -3,7 +3,7 @@ import time
 from uuid import uuid4
 from django.utils.deconstruct import deconstructible
 from django.db import models
-from datetime import datetime    
+from datetime import datetime, timedelta
 from django.contrib import admin
 from django.utils.translation import gettext as _
 from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype

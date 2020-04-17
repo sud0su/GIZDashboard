@@ -1,7 +1,6 @@
 {% load widget_tweaks %}
 
-    {{ form.as_p }}
-    {% comment %} <div class="form-group">
+    <div class="form-group">
         {{ form.Shape.label_tag }}
         <div class="custom-file">
             {{ form.Shape|add_class:"custom-file-input" }}
@@ -257,5 +256,5 @@
             {% if form.INSO.help_text %}
                 <small class="form-text text-muted">{{ form.INSO.help_text }}</small>
             {% endif %}
-        </div> {% endcomment %}
+        </div>
     </div>

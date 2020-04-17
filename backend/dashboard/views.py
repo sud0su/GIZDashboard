@@ -138,7 +138,8 @@ def DashboardPrint(request):
 def get_district(request, province_id):
     province = Province.objects.get(pk=province_id)
     district = District.objects.filter(province=province)
-    district_dict = [{'id' : 0, 'text' : 'Select District'}]
+    district_dict = []
+    district_dict = [{'id' : None, 'text' : 'Select District', 'selected': True}]
     for dist in district:
         district_dict.append({'id' : dist.id, 'text' :dist.name})
     return HttpResponse(json.dumps(district_dict), 'application/json')
@@ -177,3 +178,15 @@ def get_incident_subtype(request, incidenttype_id):
 
 
 
+
+
+def load_district(request):
+    province_id = request.GET.get('province')
+    data = District.objects.filter(province_id=province_id).order_by('name')
+    return render(request, 'dashboard/select/select.html', {'data': data})
+
+
+def load_subtype(request):
+    incidenttype_id = request.GET.get('incidenttype')
+    data = IncidentSubtype.objects.filter(incidenttype_id=incidenttype_id).order_by('name')
+    return render(request, 'dashboard/select/select.html', {'data': data})

@@ -5,6 +5,8 @@
 
 {% block extra_head %}
     {{ form.media.css }}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2.min.css">
+
 {% endblock extra_head %}
 
 {% block content_dashboard %}
@@ -18,12 +20,7 @@
                     </p>
                     <form class="forms-sample form-undss" method="POST" enctype="multipart/form-data" >
                         {% csrf_token %}
-                        {% comment %} {% include 'dashboard/form_format.html' with form=form %} {% endcomment %}
-
-
-{% comment %} form {% endcomment %}
-    {{ form.as_p }}
-{% comment %} endform {% endcomment %}
+                        {% include 'dashboard/form_format.html' with form=form %}
 
                         <button type="submit" class="btn btn-primary mr-2">{% trans "Submit" %}</button>
                         <button class="btn btn-light">{% trans "Cancel" %}</button>
@@ -35,40 +32,104 @@
 {% endblock content_dashboard %}
 
 {% block dashboard_script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script src="{% static 'js/file-upload.js' %}"></script>
+    
     {{ form.media.js }}
 
 
     <script>
-    $(document).ready(function(){
-        $('select[name=Province]').change(function(){
+        $("#id_Province").change(function () {
+            var url = '/get/district/';  // get the url of the `load_cities` view
+            var provinceId = $(this).val();  // get the selected country ID from the HTML input
+
+            $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                    'province': provinceId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    $("#id_District").html(data);  // replace the contents of the city input with the data that came from the server
+                }
+            });
+
+        });
+
+        $("#id_Incident_Type").change(function () {
+            var url = '/get/subtype/';  // get the url of the `load_cities` view
+            var incidenttypeId = $(this).val();  // get the selected country ID from the HTML input
+
+            $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                    'incidenttype': incidenttypeId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    $("#id_Incident_Subtype").html(data);  // replace the contents of the city input with the data that came from the server
+                }
+            });
+
+        });
+        /* $('.select_province').select2({
+            dropdownAutoWidth: true,
+        });
+
+        $('.select_district').select2({
+            dropdownAutoWidth: true,
+        });
+
+        $('.select_province').on('select2-change', function (e) {
+            var province_id = e.val
+            //alert(province_id)
+            request_url = '/get_district/' + province_id + '/';
+            $.ajax({
+                url: request_url,
+                dataType: 'json',
+                success: function(datas){
+                    console.log(datas)
+                    //var newOption = new Option(data.text, data.id, false, false);
+                    //$(".select_district").append(data).val("").trigger("change");
+                    var kota = $.map(datas, function (obj) {
+                        obj.id = obj.id;
+                        obj.text = obj.text;
+                        return obj;
+                    });
+                    $(".select_district").select2({
+                        placeholder: "Pilih Kota",
+                        data: kota
+                    });
+                }
+            });
+        });*/
+        /*var $districtOption = 'select[name="District"]'
+        $('select[name=Province]').on('change', function(){
             province_id = $(this).val();
             request_url = '/get_district/' + province_id + '/';
             $.ajax({
                 url: request_url,
                 success: function(data){
-                    $('select[name="District"]').empty().djangoSelect2({
+                    $('select[name="District"]').html('').djangoSelect2({
                         data: data
                     });
                 }
             });
-            return false;
-        })
+            return false
+        })*/
 
-        $('select[name=Incident_Type]').change(function(){
+        /*$('select[name=Incident_Type]').change(function(){
             incidenttype_id = $(this).val();
             request_url = '/get_incident_subtype/' + incidenttype_id + '/';
             $.ajax({
                 url: request_url,
                 success: function(data){
-                    $('select[name="Incident_Subtype"]').empty().djangoSelect2({
+                    $('select[name="Incident_Subtype"]').html('').djangoSelect2({
                         data: data
                     });
                 }
             });
-            return false;
         })
 
 
@@ -79,17 +140,18 @@
             $.ajax({
                 url: request_url_area,
                 success: function(data){
-                    $('select[name="Area"]').empty().djangoSelect2({
+                    $('select[name="Area"]').html('').djangoSelect2({
                         data: data[0]['area']
                     });
 
-                    $('select[name="City_Village"]').empty().djangoSelect2({
+                    $('select[name="City_Village"]').html('').djangoSelect2({
                         data: data[0]['cityvillage']
                     });
                 }
             });
-            return false;
-        })
-    });
+        })*/
+        
+
+        
     </script>
 {% endblock dashboard_script %}
