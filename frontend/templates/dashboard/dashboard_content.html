@@ -277,6 +277,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Number of Incident and Casualties Overview" %}</h4>
+
                     <div class="table-responsive">
                         <table id="" class="table table-bordered table-hover {% if 'print' in request.build_absolute_uri %}print{% else %}online{% endif %}">
                             <thead>
@@ -291,7 +292,7 @@
                             <tbody>
                                 {% for child in tables.number_of_incident_and_casualties_overview.child %}
 
-                                    {% if 'Afghanistan' in tables.number_of_incident_and_casualties_overview.parentdata %}
+                                    {% if 'Afghanistan' in tables.number_of_incident_and_casualties_overview.parentdata.0 %}
                                         <tr class="selectable" onclick="jump_url('prov={{child.name}}');">
                                     {% else %}
                                         <tr class="selectable" onclick="jump_url('dist={{child.name}}');">
