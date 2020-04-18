@@ -74,6 +74,9 @@ class Undss(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+    def __str__(self):
+        return self.Data_Entry_No
+    
     def get_absolute_url(self):
         return reverse("detail", kwargs={"pk": self.pk})
     
