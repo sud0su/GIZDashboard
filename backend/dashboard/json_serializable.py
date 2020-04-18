@@ -11,11 +11,16 @@ from giz.utils import JSONEncoderCustom
 def MainData(request):
     main = {}
 
+    enddate = datetime.date.today()
+    startdate = datetime.date.today() - datetime.timedelta(days=365)
+    main["daterange"] = startdate.strftime("%Y-%m-%d")+','+enddate.strftime("%Y-%m-%d")
+
     main["incident_type_name"] = IncidentType.objects.values_list('name', flat=True).order_by('-id')
     main["target_type_name"] = Organization.objects.values_list('code', flat=True).order_by('-id')
     main["province_name"] = Province.objects.values_list('name', flat=True).order_by('-id')
     main["category"] = ['killed', 'Injured', 'Abducted']
     main["chart_type"] = ['incident_type', 'target_type']
+
 
     return main
 
@@ -35,10 +40,7 @@ def Chart(request, code, daterange, incident_type):
         date = daterange.split(',')
         undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
     else:
-        enddate = datetime.date.today()
-        startdate = datetime.date.today() - datetime.timedelta(days=365)
-        daterange = startdate.strftime("%Y-%m-%d")+','+enddate.strftime("%Y-%m-%d")
-        date = daterange.split(',')
+        date = main["daterange"].split(',')
         undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
         
 
@@ -125,10 +127,7 @@ def Table(request, code, daterange, incident_type):
         date = daterange.split(',')
         undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
     else:
-        enddate = datetime.date.today()
-        startdate = datetime.date.today() - datetime.timedelta(days=365)
-        daterange = startdate.strftime("%Y-%m-%d")+','+enddate.strftime("%Y-%m-%d")
-        date = daterange.split(',')
+        date = main["daterange"].split(',')
         undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
 
     if incident_type:
@@ -294,10 +293,7 @@ def Total(request, code, daterange, incident_type):
         date = daterange.split(',')
         undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
     else:
-        enddate = datetime.date.today()
-        startdate = datetime.date.today() - datetime.timedelta(days=365)
-        daterange = startdate.strftime("%Y-%m-%d")+','+enddate.strftime("%Y-%m-%d")
-        date = daterange.split(',')
+        date = main["daterange"].split(',')
         undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
 
     if incident_type:
