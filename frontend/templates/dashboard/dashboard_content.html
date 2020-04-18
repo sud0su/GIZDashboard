@@ -112,8 +112,8 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Incidents and Casualties by Incident Type" %}</h4>
-                    <p class="card-description d-none">
-                        Add description
+                    <p class="card-description">
+                        {% trans "An overview of number incidents and casualties occured  in Afghanistan grouped by incident type." %}
                     </p>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover {% if 'print' in request.build_absolute_uri %}print{% else %}online{% endif %}">
@@ -277,7 +277,9 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Number of Incident and Casualties Overview" %}</h4>
-
+                    <p class="card-description">
+                        {% trans "An overview of number incidents and casualties grouped by region. Clicking on any region below will redirect you to more details statistics." %}
+                    </p>
                     <div class="table-responsive">
                         <table id="" class="table table-bordered table-hover {% if 'print' in request.build_absolute_uri %}print{% else %}online{% endif %}">
                             <thead>
@@ -322,8 +324,8 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "List of Incidents" %}</h4>
-                    <p class="card-description d-none">
-                        Add description
+                    <p class="card-description">
+                        {% trans "Summary of all of incidents occured in Afghanistan. Clicking any of the incident below will redirect you to the details page." %}
                     </p>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover {% if 'print' in request.build_absolute_uri %}print{% else %}online{% endif %}">
