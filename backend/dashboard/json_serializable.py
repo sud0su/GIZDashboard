@@ -1,11 +1,12 @@
 import json
+import datetime
 from django.db.models import Sum, Q, Count
 from django.db.models.functions import Coalesce
 from .models import Undss
 from reference.models import IncidentType, Province, District
 from organization.models import Organization
-from datetime import datetime
 from giz.utils import JSONEncoderCustom
+
 
 def MainData(request):
     main = {}
@@ -21,7 +22,8 @@ def MainData(request):
 def Chart(request, code, daterange, incident_type):
     main = MainData(request)
     chart = {}
-    undssQueryset =  Undss.objects.all()
+    undssQueryset = Undss.objects.all()
+    
     if code:
         getCode = code.split('=')
         if getCode[0] == 'prov':
@@ -32,6 +34,13 @@ def Chart(request, code, daterange, incident_type):
     if daterange:
         date = daterange.split(',')
         undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
+    else:
+        enddate = datetime.date.today()
+        startdate = datetime.date.today() - datetime.timedelta(days=365)
+        daterange = startdate.strftime("%Y-%m-%d")+','+enddate.strftime("%Y-%m-%d")
+        date = daterange.split(',')
+        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
+        
 
     if incident_type:
         undssQueryset = undssQueryset.filter(Incident_Type__name__in=incident_type.split(','))
@@ -54,8 +63,22 @@ def Chart(request, code, daterange, incident_type):
     chart['spline']['title'] = "Historical Date of Incidents and Casualties by Incident Type"
     chart['spline']['key'] = "history_incident_and_casualties_trend_by_incident_type"
     for pc in main["category"]:
-        undssQueryset = undssQueryset.values('Date').annotate(total = Coalesce(Sum(pc), 0)).order_by('Date')
-        total_result = [[total['Date'].timestamp() * 1000, total['total']] for total in undssQueryset]
+        # undssQueryset = undssQueryset.values('Date').annotate(total = Coalesce(Sum(pc), 0)).order_by('Date')
+        # total_result = [[total['Date'].timestamp() * 1000, total['total']] for total in undssQueryset]
+        undssQueryset = undssQueryset.values('Date','Time_of_Incident').annotate(total = Coalesce(Sum(pc), 0)).order_by('Date')
+        # total = [total['total'] for total in undssQueryset]
+        # splineDateTime = [(datetime.datetime.combine(total['Date'].date(), total['Time_of_Incident'])).timestamp() * 1000 for total in undssQueryset]
+        
+        # total_result = []
+        # for i in range(len(total)):
+        #     combine = [splineDateTime[i]] + [total[i]]
+        #     total_result.append(combine)
+        
+        total_result = [
+            [(datetime.datetime.combine(total['Date'].date(), total['Time_of_Incident'])).timestamp() * 1000, total['total']]
+            for total in undssQueryset
+        ]
+
         chart['spline']['data_val'].append({'name':pc, 'data': total_result})
 
 
@@ -89,7 +112,8 @@ def Table(request, code, daterange, incident_type):
     table = {}
     main = MainData(request)
 
-    undssQueryset =  Undss.objects.all()
+    undssQueryset = Undss.objects.all()
+    
     if code:
         getCode = code.split('=')
         if getCode[0] == 'prov':
@@ -100,9 +124,14 @@ def Table(request, code, daterange, incident_type):
     if daterange:
         date = daterange.split(',')
         undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
+    else:
+        enddate = datetime.date.today()
+        startdate = datetime.date.today() - datetime.timedelta(days=365)
+        daterange = startdate.strftime("%Y-%m-%d")+','+enddate.strftime("%Y-%m-%d")
+        date = daterange.split(',')
+        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
 
     if incident_type:
-        print(incident_type)
         undssQueryset = undssQueryset.filter(Incident_Type__name__in=incident_type.split(','))
 
     # list_of_latest_incidents
@@ -252,7 +281,8 @@ def Total(request, code, daterange, incident_type):
     total = {}
     main = MainData(request)
 
-    undssQueryset =  Undss.objects.all()
+    undssQueryset = Undss.objects.all()
+    
     if code:
         getCode = code.split('=')
         if getCode[0] == 'prov':
@@ -261,6 +291,12 @@ def Total(request, code, daterange, incident_type):
             undssQueryset = undssQueryset.filter(Q(District__name=getCode[1]))
 
     if daterange:
+        date = daterange.split(',')
+        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
+    else:
+        enddate = datetime.date.today()
+        startdate = datetime.date.today() - datetime.timedelta(days=365)
+        daterange = startdate.strftime("%Y-%m-%d")+','+enddate.strftime("%Y-%m-%d")
         date = daterange.split(',')
         undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
 
