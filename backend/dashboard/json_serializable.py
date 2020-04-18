@@ -182,8 +182,8 @@ def Table(request, code, daterange, incident_type):
         total_incident = [total['count'] for total in province_data] 
         total_result = [total['total'] for total in province_data]
         province_name = [total['Province__name'] for total in province_data]
-        provinceData += [total_result]
-        provinceIncident += [total_incident]
+        provinceData += [[0] if not total_result else total_result]
+        provinceIncident += [[0] if not total_incident else total_incident]
         provinceName += [province_name]
 
     
@@ -195,8 +195,8 @@ def Table(request, code, daterange, incident_type):
         total_incident = [total['count'] for total in district_data] 
         total_result = [total['total'] for total in district_data]
         district_name = [total['District__name'] for total in district_data]
-        districtData += [total_result]
-        districtIncident += [total_incident]
+        districtData += [[0] if not total_result else total_result]
+        districtIncident += [[0] if not total_incident else total_incident]
         districtName += [district_name]
 
     # number_of_incident_and_casualties_overview
@@ -316,8 +316,8 @@ def Total(request, code, daterange, incident_type):
         total_incident = [total['count'] for total in province_data] 
         total_result = [total['total'] for total in province_data]
         province_name = [total['Province__name'] for total in province_data]
-        provinceData += [total_result]
-        provinceIncident += [total_incident]
+        provinceData += [[0] if not total_result else total_result]
+        provinceIncident += [[0] if not total_incident else total_incident]
         provinceName += [province_name]
 
     countryDataChild = []
