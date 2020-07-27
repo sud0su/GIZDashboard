@@ -29,8 +29,11 @@ def start_chrome_devtool():
 		'--run-all-compositor-stages-before-draw',
 		# '--virtual-time-budget=10000',
 	] 
-	print(' '.join(cmd_list))
-	p = subprocess.Popen(cmd_list)
+	# print(' '.join(cmd_list))
+	# p = subprocess.Popen(cmd_list)
+	cmd_str = ' '.join(cmd_list)
+	print(cmd_str)
+	p = subprocess.Popen(cmd_str, shell=True)
 
 @task
 def stop_chrome_devtool():
