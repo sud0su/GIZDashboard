@@ -17,7 +17,8 @@ def start_chrome_devtool():
 		app_path = 'google-chrome'
 		# app_path = 'chromium-browser' # produces smaller pdf size
 	elif system == 'Darwin':
-		app_path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+		app_path = '"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"'
+		# app_path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 		# app_path = '/Applications/Chromium.app/Contents/MacOS/Chromium'
 	elif system == 'Windows':
 		app_path = "start chrome"
