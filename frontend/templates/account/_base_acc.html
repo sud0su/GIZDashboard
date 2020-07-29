@@ -1,1 +1,5 @@
 {% extends "dashboard/dashboard_base.html" %}
+
+{% block messages %}
+    {% include '_messages.html' with messages=messages %}
+{% endblock %}

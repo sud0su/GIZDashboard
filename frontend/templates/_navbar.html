@@ -25,6 +25,9 @@
                         <a class="dropdown-item" href="{% url 'account_email' %}">
                             <i class="mdi mdi-email-edit text-primary"></i>{% trans "Change E-mail" %}
                         </a>
+                        <a class="dropdown-item" href="{% url 'account_change_password' %}">
+                            <i class="mdi mdi-lock-open text-primary"></i>{% trans "Change Password" %}
+                        </a>
                         {% if user.is_superuser %}
                         <a class="dropdown-item" href="{% url 'admin:index' %}">
                             <i class="mdi mdi-account-cog text-primary"></i>
