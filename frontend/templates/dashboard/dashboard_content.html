@@ -32,30 +32,56 @@
         <div class="col-sm-12 col-md-2 col-xl-1 {% if 'print' in request.path %}d-none{% endif %}">
             <button id="pdf" type="button" class="btn btn-primary mb-3" style="margin-top: 9px;">{% trans "PDF" %}</button>
         </div>
-        <div class="col-12 col-sm-12 col-xl-4 mb-3 {% if 'print' in request.path %}col-md-4{% else %}col-md-4{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
+            <div class="">
+                <label class="">Sources:</label>
+            </div>
+            <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" class="custom-control-input" id="filter-prmo" value="prmo" {% if filters.source_type.prmo.selected %}checked{% endif %}>
+                <label class="custom-control-label" for="filter-prmo">PRMO</label>
+            </div>
+            <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" class="custom-control-input" id="filter-undss" value="undss" {% if filters.source_type.undss.selected %}checked{% endif %}>
+                <label class="custom-control-label" for="filter-undss">UNDSS</label>
+            </div>
+            <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" class="custom-control-input" id="filter-inso" value="inso" {% if filters.source_type.inso.selected %}checked{% endif %}>
+                <label class="custom-control-label" for="filter-inso">INSO</label>
+            </div>
+        </div>
+        <!-- <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
             <label for="filter-prmo">PRMO:</label>
             <select id="filter-prmo" class="custom-select">
-                <option value="all" {% if filters.prmo.selected == 'all' %}selected{% endif %}>-</option>
-                {% for option in filters.prmo.options %}
-                <option value="{{ option }}" {% if filters.prmo.selected == option %}selected{% endif %}>{{ option }}</option>
+                <option value="all" {% if filters.source_type.prmo.selected == 'all' %}selected{% endif %}>-</option>
+                {% for option in filters.source_type.prmo.options %}
+                <option value="{{ option }}" {% if filters.source_type.prmo.selected == option %}selected{% endif %}>{{ option }}</option>
                 {% endfor %}
               </select>
         </div>
-        <div class="col-12 col-sm-12 col-xl-4 mb-3 {% if 'print' in request.path %}col-md-4{% else %}col-md-4{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
             <label for="filter-undss">UNDSS:</label>
             <select id="filter-undss" class="custom-select">
-                <option value="all" {% if filters.undss.selected == 'all' %}selected{% endif %}>-</option>
-                {% for option in filters.undss.options %}
-                <option value="{{ option }}" {% if filters.undss.selected == option %}selected{% endif %}>{{ option }}</option>
+                <option value="all" {% if filters.source_type.undss.selected == 'all' %}selected{% endif %}>-</option>
+                {% for option in filters.source_type.undss.options %}
+                <option value="{{ option }}" {% if filters.source_type.undss.selected == option %}selected{% endif %}>{{ option }}</option>
                 {% endfor %}
               </select>
         </div>
-        <div class="col-12 col-sm-12 col-xl-4 mb-3 {% if 'print' in request.path %}col-md-4{% else %}col-md-4{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
             <label for="filter-inso">INSO:</label>
             <select id="filter-inso" class="custom-select">
-                <option value="all" {% if filters.inso.selected == 'all' %}selected{% endif %}>-</option>
-                {% for option in filters.inso.options %}
-                <option value="{{ option }}" {% if filters.inso.selected == option %}selected{% endif %}>{{ option }}</option>
+                <option value="all" {% if filters.source_type.inso.selected == 'all' %}selected{% endif %}>-</option>
+                {% for option in filters.source_type.inso.options %}
+                <option value="{{ option }}" {% if filters.source_type.inso.selected == option %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+              </select>
+        </div> -->
+        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
+            <label for="filter-police_district">Police District:</label>
+            <select id="filter-police_district" class="custom-select">
+                <option value="all" {% if filters.police_district.selected == 'all' %}selected{% endif %}>-</option>
+                {% for option in filters.police_district.options %}
+                <option value="{{ option }}" {% if filters.police_district.selected == option %}selected{% endif %}>{{ option }}</option>
                 {% endfor %}
               </select>
         </div>
@@ -592,6 +618,19 @@
             });
 
             // event handler for filters undss, prmo, inso
+            $('input[type=\'checkbox\'][id^=filter]').on('change', function(ev) {
+                var url = $(location).attr("href");
+                var paramName = ev.target.id.replace('filter-','');
+                if (ev.target.checked) {
+                    url = updateUrlParameter(url, paramName, ev.target.checked)
+                }
+                else {
+                    url = removeParam(paramName, url)
+                }
+                window.document.location = url;
+            });
+
+            // event handler for filters police district
             $('select[id^=filter]').on('change', function(ev) {
                 var url = $(location).attr("href");
                 var paramName = ev.target.id.replace('filter-','');

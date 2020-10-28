@@ -8,6 +8,8 @@ from organization.models import Organization
 from giz.utils import JSONEncoderCustom
 from .utils import NoneStr2Obj
 
+source_type_dbfield = {'prmo':'PRMO', 'undss':'UNDSS', 'inso':'INSO'}
+
 def MainData(request):
     main = {}
 
@@ -21,14 +23,22 @@ def MainData(request):
     main["category"] = ['killed', 'Injured', 'Abducted']
     main["chart_type"] = ['incident_type', 'target_type']
     main['filters'] = {
-        'prmo': {
-            'options': Undss.objects.annotate(PRMO2=Trim(Lower('PRMO'))).values_list('PRMO2', flat=True).distinct().order_by('PRMO2'),
+        'source_type': {
+            'prmo': {
+                'options': Undss.objects.annotate(PRMO2=Lower(Trim('PRMO'))).values_list('PRMO2', flat=True).distinct().order_by('PRMO2'),
+            },
+            'undss': {
+                'options': Undss.objects.annotate(UNDSS2=Lower(Trim('UNDSS'))).values_list('UNDSS2', flat=True).distinct().order_by('UNDSS2'),
+            },
+            'inso': {
+                'options': Undss.objects.annotate(INSO2=Lower(Trim('INSO'))).values_list('INSO2', flat=True).distinct().order_by('INSO2'),
+            },
         },
-        'undss': {
-            'options': Undss.objects.annotate(UNDSS2=Trim(Lower('PRMO'))).values_list('UNDSS2', flat=True).distinct().order_by('UNDSS2'),
+        'target_type': {
+            'options': Organization.objects.values_list('code', flat=True).order_by('-id'),
         },
-        'inso': {
-            'options': Undss.objects.annotate(INSO2=Trim(Lower('PRMO'))).values_list('INSO2', flat=True).distinct().order_by('INSO2'),
+        'police_district': {
+            'options': Undss.objects.values_list('Police_District', flat=True).distinct().order_by('Police_District'),
         },
     }
 
@@ -373,9 +383,17 @@ def DashboardResponse(request, code, daterange, incident_type, filters={}):
         dashboardresponse["incident_type"]["checked"] = incident_type.split(',')
 
     dashboardresponse["filters"] = main["filters"]
-    for filter in dashboardresponse.get("filters"):
-        dashboardresponse["filters"][filter]['selected'] = NoneStr2Obj(request.GET.get(filter, 'all'))
+    dashboardresponse["filters"]['police_district']['selected'] = filters['police_district']
+
+    for filter, item in dashboardresponse.get("filters", {}).get('source_type', {}).items():
+        # item['selected'] = NoneStr2Obj(request.GET.get(filter, 'all'))
+        item['selected'] = filters.get('source_type', {}).get(filter, False) == True
     
+    if not filters.get('target_type') or filters.get('target_type') == "0":
+        dashboardresponse['filters']["target_type"]["checked"] = dashboardresponse['filters']["target_type"]['options']
+    else:
+        dashboardresponse['filters']["target_type"]["checked"] = filters['target_type'].split(',')
+
     return dashboardresponse
 
 def Common(request):
@@ -399,8 +417,12 @@ def Common(request):
         request.GET['page'] = 'dashboard'
         request.GET._mutable = mutable
 
-    filters_mapping = {'prmo':'PRMO', 'undss':'UNDSS', 'inso':'INSO'}
-    filters = {dbfield: NoneStr2Obj(request.GET[filter]) for filter, dbfield in filters_mapping.items() if filter in request.GET}
+    filters = {
+        # 'source_type': {dbfield: NoneStr2Obj(request.GET[filter]) for filter, dbfield in source_type_dbfield.items() if filter in request.GET},
+        'source_type': {filter: json.loads(request.GET[filter]) for filter in source_type_dbfield.keys() if filter in request.GET},
+        'target_type': request.GET.get('target_type'),
+        'police_district': request.GET.get('police_district'),
+    }
 
     if request.GET['page'] == 'dashboard':
         response = DashboardResponse(request, code, daterange, incident_type, filters=filters)
@@ -410,7 +432,13 @@ def Common(request):
     return response
 
 def ApplyFilters(queryset, filters):
-    for key, value in filters.items():
-        trimmed_or_none = value if value is None else value.strip().lower()
-        queryset = queryset.annotate(trimmed=Trim(Lower(key))).filter(**{'trimmed': trimmed_or_none})
+
+    if filters.get('police_district'):
+        queryset = queryset.filter(Police_District=filters.get('police_district'))
+
+    for key, value in filters.get('source_type', {}).items():
+        # trimmed_or_none = value if value is None else value.strip().lower()
+        # queryset = queryset.annotate(trimmed=Lower(Trim(key))).filter(**{'trimmed': trimmed_or_none})
+        queryset = queryset.annotate(**{key+'_trim':Lower(Trim(source_type_dbfield[key]))}).filter(**{key+'_trim':'yes'})
+
     return queryset
