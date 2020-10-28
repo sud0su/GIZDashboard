@@ -433,6 +433,9 @@ def Common(request):
 
 def ApplyFilters(queryset, filters):
 
+    if filters.get('target_type'):
+        queryset = queryset.filter(Target__name__in=filters.get('target_type').split(','))
+
     if filters.get('police_district'):
         queryset = queryset.filter(Police_District=filters.get('police_district'))
 
