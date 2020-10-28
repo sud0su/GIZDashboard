@@ -125,3 +125,34 @@
         background-color: theme-color(primary) !important;
     }
 }
+
+/* Multiselect */
+
+.select2-container, 
+.select2-focused, 
+.select2-input{
+    
+}
+
+
+.select2-container{
+    &.select2-container-multi {
+        width: 100% !important;
+    }
+}
+
+.select2-container-multi{
+    .select2-choices{
+        .select2-search-choice{
+            border-radius: 16px;
+            line-height: 21px;
+            color: rgba(0, 0, 0, 0.6);
+            border: none;
+            background-image: none;
+            font-size: 13px;
+        }
+    }
+    .select2-search-choice-close {
+        top: 8px;
+    }
+}

@@ -1,0 +1,63 @@
+
+{% comment %}
+<div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
+    <label for="filter-police_district">Police District:</label>
+    <select id="filter-police_district" class="custom-select">
+        <option value="all" {% if filters.police_district.selected == 'all' %}selected{% endif %}>-</option>
+        {% for option in filters.police_district.options %}
+        <option value="{{ option }}" {% if filters.police_district.selected == option %}selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+      </select>
+</div>
+{% endcomment %}
+
+<label for="filter_police">Police District:</label>
+<select id="filter_police" class="police-dropdown" data-placeholder="Select Police District">
+    <option value="all" {% if filters.police_district.selected == 'all' %}selected{% endif %}>-</option>
+    {% for option in filters.police_district.options %}
+    <option value="{{ option }}" {% if filters.police_district.selected == option %}selected{% endif %}>{{ option }}</option>
+    {% endfor %}
+</select>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        // event handler for filters police district
+        $('select[id^=filter]').on('change', function(ev) {
+            var url = $(location).attr("href");
+            var paramName = ev.target.id.replace('filter-','');
+            console.log(paramName);
+            if (ev.target.value == 'all') {
+                url = removeParam(paramName, url)
+            }
+            else {
+                url = updateUrlParameter(url, paramName, ev.target.value)
+            }
+
+            console.log(paramName);
+            console.log(ev.target.value);
+            console.log(url);
+            // window.document.location = url;
+        });
+    
+        $('.police-dropdown').select2({
+            dropdownAutoWidth: true,
+            placeholder: "Select Police District"
+        });
+        $('.police-dropdown').on('select2-selecting', function (e) {
+            var url = $(location).attr("href");
+            
+            if (getParameterByName("police_district") == null){
+                url += '&police_district='+e.val;
+            }
+            else {
+                url = updateUrlParameter(url, 'police_district', e.val)
+            }
+
+            if (e.val == 'all') {
+                url = removeParam('police_district', url)
+            }
+
+            window.document.location = url
+        });
+    });
+</script>

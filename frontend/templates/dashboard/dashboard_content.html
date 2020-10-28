@@ -32,59 +32,15 @@
         <div class="col-sm-12 col-md-2 col-xl-1 {% if 'print' in request.path %}d-none{% endif %}">
             <button id="pdf" type="button" class="btn btn-primary mb-3" style="margin-top: 9px;">{% trans "PDF" %}</button>
         </div>
-        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
-            <div class="">
-                <label class="">Sources:</label>
-            </div>
-            <div class="custom-control custom-checkbox custom-control-inline">
-                <input type="checkbox" class="custom-control-input" id="filter-prmo" value="prmo" {% if filters.source_type.prmo.selected %}checked{% endif %}>
-                <label class="custom-control-label" for="filter-prmo">PRMO</label>
-            </div>
-            <div class="custom-control custom-checkbox custom-control-inline">
-                <input type="checkbox" class="custom-control-input" id="filter-undss" value="undss" {% if filters.source_type.undss.selected %}checked{% endif %}>
-                <label class="custom-control-label" for="filter-undss">UNDSS</label>
-            </div>
-            <div class="custom-control custom-checkbox custom-control-inline">
-                <input type="checkbox" class="custom-control-input" id="filter-inso" value="inso" {% if filters.source_type.inso.selected %}checked{% endif %}>
-                <label class="custom-control-label" for="filter-inso">INSO</label>
-            </div>
+        
+        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-6{% endif %}">
+            {% include "dashboard/select_source.html" %}
         </div>
-        <!-- <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
-            <label for="filter-prmo">PRMO:</label>
-            <select id="filter-prmo" class="custom-select">
-                <option value="all" {% if filters.source_type.prmo.selected == 'all' %}selected{% endif %}>-</option>
-                {% for option in filters.source_type.prmo.options %}
-                <option value="{{ option }}" {% if filters.source_type.prmo.selected == option %}selected{% endif %}>{{ option }}</option>
-                {% endfor %}
-              </select>
+
+        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
+            {% include "dashboard/select_police_dist.html" %}
         </div>
-        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
-            <label for="filter-undss">UNDSS:</label>
-            <select id="filter-undss" class="custom-select">
-                <option value="all" {% if filters.source_type.undss.selected == 'all' %}selected{% endif %}>-</option>
-                {% for option in filters.source_type.undss.options %}
-                <option value="{{ option }}" {% if filters.source_type.undss.selected == option %}selected{% endif %}>{{ option }}</option>
-                {% endfor %}
-              </select>
-        </div>
-        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
-            <label for="filter-inso">INSO:</label>
-            <select id="filter-inso" class="custom-select">
-                <option value="all" {% if filters.source_type.inso.selected == 'all' %}selected{% endif %}>-</option>
-                {% for option in filters.source_type.inso.options %}
-                <option value="{{ option }}" {% if filters.source_type.inso.selected == option %}selected{% endif %}>{{ option }}</option>
-                {% endfor %}
-              </select>
-        </div> -->
-        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
-            <label for="filter-police_district">Police District:</label>
-            <select id="filter-police_district" class="custom-select">
-                <option value="all" {% if filters.police_district.selected == 'all' %}selected{% endif %}>-</option>
-                {% for option in filters.police_district.options %}
-                <option value="{{ option }}" {% if filters.police_district.selected == option %}selected{% endif %}>{{ option }}</option>
-                {% endfor %}
-              </select>
-        </div>
+
     </div>
     
     <div class="row">
@@ -146,8 +102,8 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">{{ chart.bar_chart.title }}</h4>
-                    <div id="{{ chart.bar_chart.key }}" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='{{ chart.bar_chart.labels | jsonify | safe }}' data-val='{{ chart.bar_chart.data_val | jsonify | safe }}' ></div>
+                    <h4 class="card-title">{{ chart.bar_chart_incident.title }}</h4>
+                    <div id="{{ chart.bar_chart_incident.key }}" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='{{ chart.bar_chart_incident.labels | jsonify | safe }}' data-val='{{ chart.bar_chart_incident.data_val | jsonify | safe }}' ></div>
                 </div>
             </div>
         </div>
@@ -156,7 +112,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Graph of Incident and Casualties Trend by Target Type" %}</h4>
-                    <div id="{{ chart.polar_incident_type.key }}_id" class="ch-size polar-chart" data-color="colorPolar" data-xaxis='{{ chart.polar_incident_type.labels | jsonify | safe }}' data-val='{{ chart.polar_incident_type.data_val | jsonify | safe }}'></div>
+                    <div id="{{ chart.polar_target_type.key }}_id" class="ch-size polar-chart" data-color="colorPolar" data-xaxis='{{ chart.polar_target_type.labels | jsonify | safe }}' data-val='{{ chart.polar_target_type.data_val | jsonify | safe }}'></div>
                 </div>
             </div>
         </div>
@@ -169,7 +125,7 @@
                             <div class="col">
                                 <p class="mb-2" style="position: absolute;left: 75px;">{% trans "Select All" %}</p>
                                 <label class="toggle-switch parents-checkbox">
-                                    <input type="checkbox" {% if incident_type.checked == incident_type.name %}checked=true{% endif %}>
+                                    <input type="checkbox" {% if filters.target_type.checked == filters.target_type.name %}checked=true{% endif %}>
                                     <span class="toggle-slider round"></span>
                                 </label>
                             </div>
@@ -180,10 +136,10 @@
                         {% get_current_language_bidi as LANGUAGE_BIDI %}
                         <div id="indicatorType" class="child-checkbox">
                             <div class="form-group">
-                                {% for item in incident_type.name %}
+                                {% for item in filters.target_type.name %}
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item }}" {% if item in incident_type.checked %}checked=true{% endif %}> 
+                                        <input type="checkbox" class="form-check-input checkTarget" id="target{{ forloop.counter0 }}" name="main_target_select[]" value="{{ item }}" {% if item in filters.target_type.checked %}checked=true{% endif %}> 
                                         {{ item }}
                                     </label>
                                 </div>
@@ -197,8 +153,8 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">{{ chart.bar_chart.title }}</h4>
-                    <div id="{{ chart.bar_chart.key }}_id" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='{{ chart.bar_chart.labels | jsonify | safe }}' data-val='{{ chart.bar_chart.data_val | jsonify | safe }}' ></div>
+                    <h4 class="card-title">{{ chart.bar_chart_target.title }}</h4>
+                    <div id="{{ chart.bar_chart_target.key }}_id" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='{{ chart.bar_chart_target.labels | jsonify | safe }}' data-val='{{ chart.bar_chart_target.data_val | jsonify | safe }}' ></div>
                 </div>
             </div>
         </div>
@@ -616,33 +572,6 @@
 
                 window.document.location = url;
             });
-
-            // event handler for filters undss, prmo, inso
-            $('input[type=\'checkbox\'][id^=filter]').on('change', function(ev) {
-                var url = $(location).attr("href");
-                var paramName = ev.target.id.replace('filter-','');
-                if (ev.target.checked) {
-                    url = updateUrlParameter(url, paramName, ev.target.checked)
-                }
-                else {
-                    url = removeParam(paramName, url)
-                }
-                window.document.location = url;
-            });
-
-            // event handler for filters police district
-            $('select[id^=filter]').on('change', function(ev) {
-                var url = $(location).attr("href");
-                var paramName = ev.target.id.replace('filter-','');
-                if (ev.target.value == 'all') {
-                    url = removeParam(paramName, url)
-                }
-                else {
-                    url = updateUrlParameter(url, paramName, ev.target.value)
-                }
-                window.document.location = url;
-            });
-
         });
     </script>
 {% endblock dashboard_script %}

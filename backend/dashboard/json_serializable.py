@@ -35,7 +35,7 @@ def MainData(request):
             },
         },
         'target_type': {
-            'options': Organization.objects.values_list('code', flat=True).order_by('-id'),
+            'name': Organization.objects.values_list('code', flat=True).order_by('-id'),
         },
         'police_district': {
             'options': Undss.objects.values_list('Police_District', flat=True).distinct().order_by('Police_District'),
@@ -70,15 +70,25 @@ def Chart(request, code, daterange, incident_type, filters={}, main={}):
     undssQueryset = ApplyFilters(undssQueryset, filters)
 
     ## Bar Chart
-    chart['bar_chart'] = {}
-    chart['bar_chart']['data_val'] = []
-    chart['bar_chart']['title'] = "Number of Casualties by Incident Type"
-    chart['bar_chart']['key'] = "number_of_casualties_by_incident_type"
-    chart['bar_chart']['labels'] = main["incident_type_name"]
+    chart['bar_chart_incident'] = {}
+    chart['bar_chart_incident']['data_val'] = []
+    chart['bar_chart_incident']['title'] = "Number of Casualties by Incident Type"
+    chart['bar_chart_incident']['key'] = "number_of_casualties_by_incident_type"
+    chart['bar_chart_incident']['labels'] = main["incident_type_name"]
     for pc in main["category"]:
         undssQueryset = undssQueryset.values('Incident_Type__name').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Incident_Type_id')
         total_result = [total['total'] for total in undssQueryset]
-        chart['bar_chart']['data_val'].append({'name':pc, 'data': total_result})
+        chart['bar_chart_incident']['data_val'].append({'name':pc, 'data': total_result})
+
+    chart['bar_chart_target'] = {}
+    chart['bar_chart_target']['data_val'] = []
+    chart['bar_chart_target']['title'] = "Number of Casualties by Target Type"
+    chart['bar_chart_target']['key'] = "number_of_casualties_by_target_type"
+    chart['bar_chart_target']['labels'] = main["target_type_name"]
+    for pc in main["category"]:
+        undssQueryset = undssQueryset.values('Target__code').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Target_id')
+        total_result = [total['total'] for total in undssQueryset]
+        chart['bar_chart_target']['data_val'].append({'name':pc, 'data': total_result})
 
     ## Spline Chart
     chart['spline'] = {}
@@ -390,7 +400,7 @@ def DashboardResponse(request, code, daterange, incident_type, filters={}):
         item['selected'] = filters.get('source_type', {}).get(filter, False) == True
     
     if not filters.get('target_type') or filters.get('target_type') == "0":
-        dashboardresponse['filters']["target_type"]["checked"] = dashboardresponse['filters']["target_type"]['options']
+        dashboardresponse['filters']["target_type"]["checked"] = dashboardresponse['filters']["target_type"]['name']
     else:
         dashboardresponse['filters']["target_type"]["checked"] = filters['target_type'].split(',')
 
