@@ -16,3 +16,6 @@ class linenum():
                 frame.f_lineno, 
                 '\n' if self.newline else ''
             )
+
+def NoneStr2Obj(value):
+    return None if value == 'None' else value

@@ -1,12 +1,12 @@
 import json
 import datetime
 from django.db.models import Sum, Q, Count
-from django.db.models.functions import Coalesce
+from django.db.models.functions import Coalesce, Trim, Lower
 from .models import Undss
 from reference.models import IncidentType, Province, District
 from organization.models import Organization
 from giz.utils import JSONEncoderCustom
-
+from .utils import NoneStr2Obj
 
 def MainData(request):
     main = {}
@@ -20,12 +20,22 @@ def MainData(request):
     main["province_name"] = Province.objects.values_list('name', flat=True).order_by('-id')
     main["category"] = ['killed', 'Injured', 'Abducted']
     main["chart_type"] = ['incident_type', 'target_type']
-
+    main['filters'] = {
+        'prmo': {
+            'options': Undss.objects.annotate(PRMO2=Trim(Lower('PRMO'))).values_list('PRMO2', flat=True).distinct().order_by('PRMO2'),
+        },
+        'undss': {
+            'options': Undss.objects.annotate(UNDSS2=Trim(Lower('PRMO'))).values_list('UNDSS2', flat=True).distinct().order_by('UNDSS2'),
+        },
+        'inso': {
+            'options': Undss.objects.annotate(INSO2=Trim(Lower('PRMO'))).values_list('INSO2', flat=True).distinct().order_by('INSO2'),
+        },
+    }
 
     return main
 
-def Chart(request, code, daterange, incident_type):
-    main = MainData(request)
+def Chart(request, code, daterange, incident_type, filters={}, main={}):
+    # main = MainData(request)
     chart = {}
     undssQueryset = Undss.objects.all()
     
@@ -47,6 +57,7 @@ def Chart(request, code, daterange, incident_type):
     if incident_type:
         undssQueryset = undssQueryset.filter(Incident_Type__name__in=incident_type.split(','))
 
+    undssQueryset = ApplyFilters(undssQueryset, filters)
 
     ## Bar Chart
     chart['bar_chart'] = {}
@@ -110,9 +121,9 @@ def Chart(request, code, daterange, incident_type):
 
     return chart
 
-def Table(request, code, daterange, incident_type):
+def Table(request, code, daterange, incident_type, filters={}, main={}):
     table = {}
-    main = MainData(request)
+    # main = MainData(request)
 
     undssQueryset = Undss.objects.all()
     
@@ -132,6 +143,8 @@ def Table(request, code, daterange, incident_type):
 
     if incident_type:
         undssQueryset = undssQueryset.filter(Incident_Type__name__in=incident_type.split(','))
+
+    undssQueryset= ApplyFilters(undssQueryset, filters)
 
     # list_of_latest_incidents
     table['list_of_latest_incidents'] = undssQueryset.values('id','Date', 'Time_of_Incident','Description_of_Incident').order_by('-Date')
@@ -276,9 +289,9 @@ def Region(request, code):
     region["district"].append({"data_val" : getDistrict, "selected": distname, "type" : "District", "urlcode": "dist"})
     return region
 
-def Total(request, code, daterange, incident_type):
+def Total(request, code, daterange, incident_type, filters={}, main={}):
     total = {}
-    main = MainData(request)
+    # main = MainData(request)
 
     undssQueryset = Undss.objects.all()
     
@@ -298,6 +311,8 @@ def Total(request, code, daterange, incident_type):
 
     if incident_type:
         undssQueryset = undssQueryset.filter(Incident_Type__name__in=incident_type.split(','))
+
+    undssQueryset= ApplyFilters(undssQueryset, filters)
 
     countryData = []
     totalCountry = []
@@ -339,12 +354,12 @@ def Total(request, code, daterange, incident_type):
 
     return total  
 
-def DashboardResponse(request, code, daterange, incident_type):
+def DashboardResponse(request, code, daterange, incident_type, filters={}):
     dashboardresponse = {}
     main = MainData(request)
-    chart = Chart(request, code, daterange, incident_type)
-    table = Table(request, code, daterange, incident_type)
-    total = Total(request, code, daterange, incident_type)
+    chart = Chart(request, code, daterange, incident_type, filters=filters, main=main)
+    table = Table(request, code, daterange, incident_type, filters=filters, main=main)
+    total = Total(request, code, daterange, incident_type, filters=filters, main=main)
     region = Region(request, code)
     dashboardresponse["chart"] = chart
     dashboardresponse["tables"] = table
@@ -356,6 +371,10 @@ def DashboardResponse(request, code, daterange, incident_type):
         dashboardresponse["incident_type"]["checked"] =  main["incident_type_name"]
     else:
         dashboardresponse["incident_type"]["checked"] = incident_type.split(',')
+
+    dashboardresponse["filters"] = main["filters"]
+    for filter in dashboardresponse.get("filters"):
+        dashboardresponse["filters"][filter]['selected'] = NoneStr2Obj(request.GET.get(filter, 'all'))
     
     return dashboardresponse
 
@@ -380,11 +399,18 @@ def Common(request):
         request.GET['page'] = 'dashboard'
         request.GET._mutable = mutable
 
+    filters_mapping = {'prmo':'PRMO', 'undss':'UNDSS', 'inso':'INSO'}
+    filters = {dbfield: NoneStr2Obj(request.GET[filter]) for filter, dbfield in filters_mapping.items() if filter in request.GET}
+
     if request.GET['page'] == 'dashboard':
-        response = DashboardResponse(request, code, daterange, incident_type)
+        response = DashboardResponse(request, code, daterange, incident_type, filters=filters)
          
     response['jsondata'] = json.dumps(response, cls=JSONEncoderCustom)
 
     return response
 
-
+def ApplyFilters(queryset, filters):
+    for key, value in filters.items():
+        trimmed_or_none = value if value is None else value.strip().lower()
+        queryset = queryset.annotate(trimmed=Trim(Lower(key))).filter(**{'trimmed': trimmed_or_none})
+    return queryset
