@@ -126,6 +126,57 @@
             </div>
         </div>
 
+        <div class="col-12 col-sm-12 col-xl-6 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "Graph of Incident and Casualties Trend by Target Type" %}</h4>
+                    <div id="{{ chart.polar_incident_type.key }}_id" class="ch-size polar-chart" data-color="colorPolar" data-xaxis='{{ chart.polar_incident_type.labels | jsonify | safe }}' data-val='{{ chart.polar_incident_type.data_val | jsonify | safe }}'></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-lg-12 col-xl-6 {% if 'print' in request.path %}col-md-4{% else %}col-md-12{% endif %} grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "Select Target Type" %}</h4>
+                        <div class="form-group row">
+                            <div class="col">
+                                <p class="mb-2" style="position: absolute;left: 75px;">{% trans "Select All" %}</p>
+                                <label class="toggle-switch parents-checkbox">
+                                    <input type="checkbox" {% if incident_type.checked == incident_type.name %}checked=true{% endif %}>
+                                    <span class="toggle-slider round"></span>
+                                </label>
+                            </div>
+                            <div class="col">
+                                <button type="button" name="" id="" class="btn btn-outline-primary btn-sm float-right ply-trget">{% trans "Apply" %}</button>
+                            </div>
+                        </div> 
+                        {% get_current_language_bidi as LANGUAGE_BIDI %}
+                        <div id="indicatorType" class="child-checkbox">
+                            <div class="form-group">
+                                {% for item in incident_type.name %}
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item }}" {% if item in incident_type.checked %}checked=true{% endif %}> 
+                                        {{ item }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{ chart.bar_chart.title }}</h4>
+                    <div id="{{ chart.bar_chart.key }}_id" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='{{ chart.bar_chart.labels | jsonify | safe }}' data-val='{{ chart.bar_chart.data_val | jsonify | safe }}' ></div>
+                </div>
+            </div>
+        </div>
+
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
