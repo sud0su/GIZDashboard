@@ -1,0 +1,18 @@
+
+
+<label for="initiator">Initiator:</label>
+<select id="initiator" class="initiator-dropdown" data-placeholder="Select Initiator">
+    {% for option in filters.source_type.options %}
+        <option value="{{ option.id }}" {% if filters.source_type.selected == option.id %}selected{% endif %}>{{ option.name }}</option>
+    {% endfor %}
+</select>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        // Event handler for initiator
+        $('.initiator-dropdown').select2({
+            dropdownAutoWidth: true,
+            placeholder: "Select Initiator"
+        });
+    });
+</script>

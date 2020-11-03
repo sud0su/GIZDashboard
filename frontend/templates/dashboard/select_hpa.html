@@ -1,0 +1,14 @@
+
+
+<label for="hpa">HPA:</label>
+<select id="hpa" class="hpa-dropdown" data-placeholder="Select HPA">
+    {% for option in filters.hpa.options %}
+        <option value="{{ option.id }}" {% if filters.hpa.selected == option.id %}selected{% endif %}>{{ option.name }}</option>
+    {% endfor %}
+</select>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        
+    });
+</script>

@@ -1,17 +1,32 @@
 {% load giz_tags %}
 
-<div class="row">
-    <label for="source" class="col-12 col-sm-2 col-xl-2 {% if 'print' in request.path %}col-md-3{% else %}col-md-2{% endif %} mb-0 mt-2">Source:</label>
-    <div class="col-12 col-sm-10 col-xl-10 {% if 'print' in request.path %}col-md-9{% else %}col-md-10{% endif %}">
-        <select class="source-multiple" name="source[]" multiple="multiple">
-            <option value="prmo" {% if filters.source_type.prmo.selected %}selected{% endif %}>PRMO</option>
-            <option value="undss" {% if filters.source_type.undss.selected %}selected{% endif %}>UNDSS</option>
-            <option value="inso" {% if filters.source_type.inso.selected %}selected{% endif %}>INSO</option>
-        </select>
-    </div>
-</div>
+<label for="source">Source:</label>
+<select id="source" class="source-dropdown" data-placeholder="Select Source">
+    {% for option in filters.source_type.options %}
+        <option value="{{ option.id }}" {% if filters.source_type.selected == option.id %}selected{% endif %}>{{ option.name }}</option>
+    {% endfor %}
+</select>
 
 {% comment %}
+    <div class="row">
+        <label for="source" class="col-12 col-sm-2 col-xl-2 {% if 'print' in request.path %}col-md-3{% else %}col-md-2{% endif %} mb-0 mt-2">Source:</label>
+        <div class="col-12 col-sm-10 col-xl-10 {% if 'print' in request.path %}col-md-9{% else %}col-md-10{% endif %}">
+            <select class="source-multiple" name="source[]" multiple="multiple">
+                <option value="prmo" {% if filters.source_type.prmo.selected %}selected{% endif %}>PRMO</option>
+                <option value="undss" {% if filters.source_type.undss.selected %}selected{% endif %}>UNDSS</option>
+                <option value="inso" {% if filters.source_type.inso.selected %}selected{% endif %}>INSO</option>
+            </select>
+        </div>
+    </div>
+    
+    <label for="filter-source_type">Incident Source:</label>
+    <select id="filter-source_type" class="custom-select">
+        <option value="all" {% if filters.source_type.selected == 'all' %}selected{% endif %}>-</option>
+        {% for option in filters.source_type.options %}
+        <option value="{{ option.id }}" {% if filters.source_type.selected == option.id %}selected{% endif %}>{{ option.name }}</option>
+        {% endfor %}
+    </select>
+
 <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
     <div class="">
         <label class="">Sources:</label>
@@ -62,6 +77,40 @@
 <script>
     document.addEventListener('DOMContentLoaded', function(){
         
+        // Event handler for single source
+        $('.source-dropdown').select2({
+            dropdownAutoWidth: true,
+            placeholder: "Select Source"
+        });
+        $('.source-dropdown').on('select2-selecting', function (e) {
+            var url = $(location).attr("href");
+            
+            // if (getParameterByName("source_type") == null){
+            //     console.log('null');
+            //     url += '&source_type='+e.val;
+            // }
+            // else {
+            //     console.log(url);
+            //     url = updateUrlParameter(url, 'source_type', e.val)
+            // }
+            // buat if kalo tidak sama persis 
+
+            // if (e.val == 'all') {
+            //     url = removeParam('source_type', url)
+            // }
+            
+            if (getParameterByName("source_type") != null){
+                url = removeParam('source_type', url)
+            }
+            url += '&source_type='+e.val;
+
+            console.log(e.val);
+            console.log(url);
+
+            window.document.location = url
+        });
+
+        // Event handler for Multiple source
         $('.source-multiple').select2();
         $('.source-multiple').on('select2-selecting', function (e) {
             var url = $(location).attr("href");
@@ -76,11 +125,6 @@
 
             window.document.location = url
         });
-        
-        // $('.source-multiple').on("select2:select", function (e) {
-        //     console.log(e);
-        //     console.log(e.val);
-        // });
 
         // // event handler for filters undss, prmo, inso
         // $('select[id^=filter]').on('change', function(ev) {
