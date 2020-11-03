@@ -13,6 +13,8 @@ media
 backend/giz/local_settings.py
 frontend/staticfiles/
 exceldata/
+node_modules/
+
 
 # Python # 
 *.py[cod] 
