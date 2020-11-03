@@ -44,3 +44,9 @@ class IncidentSubtype(models.Model):
     
     def __str__(self):
         return self.name
+
+class IncidentSource(models.Model):
+    name = models.CharField(_("Incident Source"), max_length=50)
+    
+    def __str__(self):
+        return self.name

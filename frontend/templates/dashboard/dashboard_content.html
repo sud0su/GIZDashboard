@@ -29,18 +29,33 @@
                 <span></span> <i class="mdi mdi-chevron-down {% if 'print' in request.path %}d-none{% endif %}"></i>
             </div>
         </div>
+
         <div class="col-sm-12 col-md-2 col-xl-1 {% if 'print' in request.path %}d-none{% endif %}">
             <button id="pdf" type="button" class="btn btn-primary mb-3" style="margin-top: 9px;">{% trans "PDF" %}</button>
         </div>
         
-        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-6{% endif %}">
-            {% include "dashboard/select_source.html" %}
+        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
+            <label for="filter-source_type">Incident Source:</label>
+            <select id="filter-source_type" class="custom-select">
+                <option value="all" {% if filters.source_type.selected == 'all' %}selected{% endif %}>-</option>
+                {% for option in filters.source_type.options %}
+                <option value="{{ option.id }}" {% if filters.source_type.selected == option.id %}selected{% endif %}>{{ option.name }}</option>
+                {% endfor %}
+            </select>
         </div>
 
         {% if region.province.0.selected == 'Kabul' %}
-        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
-            {% include "dashboard/select_police_dist.html" %}
+        <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
+            <label for="filter-police_district">Police District:</label>
+            <select id="filter-police_district" class="custom-select">
+                <option value="all" {% if filters.police_district.selected == 'all' %}selected{% endif %}>-</option>
+                {% for option in filters.police_district.options %}
+                <option value="{{ option }}" {% if filters.police_district.selected == option %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+              </select>
         </div>
+        {% endif %}
+
         {% endif %}
 
     </div>
@@ -574,6 +589,33 @@
 
                 window.document.location = url;
             });
+
+            // event handler for filters undss, prmo, inso
+            // $('input[type=\'checkbox\'][id^=filter]').on('change', function(ev) {
+            //     var url = $(location).attr("href");
+            //     var paramName = ev.target.id.replace('filter-','');
+            //     if (ev.target.checked) {
+            //         url = updateUrlParameter(url, paramName, ev.target.checked)
+            //     }
+            //     else {
+            //         url = removeParam(paramName, url)
+            //     }
+            //     window.document.location = url;
+            // });
+
+            // event handler for filters police district
+            $('select[id^=filter-]').on('change', function(ev) {
+                var url = $(location).attr("href");
+                var paramName = ev.target.id.replace('filter-','');
+                if (ev.target.value == 'all') {
+                    url = removeParam(paramName, url)
+                }
+                else {
+                    url = updateUrlParameter(url, paramName, ev.target.value)
+                }
+                window.document.location = url;
+            });
+
         });
     </script>
 {% endblock dashboard_script %}

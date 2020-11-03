@@ -2,7 +2,7 @@ from django import forms
 from .models import Undss
 from django_select2.forms import Select2Widget
 from bootstrap_datepicker_plus import DateTimePickerInput, TimePickerInput
-from reference.models import Province, District, Area, CityVillage, IncidentType, IncidentSubtype
+from reference.models import Province, District, Area, CityVillage, IncidentType, IncidentSubtype, IncidentSource
 from organization.models import Organization
 
 class UndssForm(forms.ModelForm):
@@ -62,6 +62,13 @@ class UndssForm(forms.ModelForm):
             attrs={'data-placeholder':'Select Target'}
         )
     )
+    Incident_Source = forms.ModelChoiceField(
+        required=False,
+        queryset=IncidentSource.objects.none(),
+        widget=Select2Widget(
+            attrs={'data-placeholder':'Select Incident Source'}
+        )
+    )
 
     class Meta:
         model = Undss
@@ -86,9 +93,10 @@ class UndssForm(forms.ModelForm):
             'Abducted',
             'Latitude',
             'Longitude',
-            'PRMO',
-            'UNDSS',
-            'INSO',
+            'Incident_Source',
+            # 'PRMO',
+            # 'UNDSS',
+            # 'INSO',
         ]
         widgets = {
             'Date': DateTimePickerInput(), 
@@ -99,6 +107,7 @@ class UndssForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['District'].queryset = District.objects.none()
         self.fields['Incident_Subtype'].queryset = IncidentSubtype.objects.none()
+        self.fields['Incident_Source'].queryset = IncidentSource.objects.all().order_by('name')
 
         if 'Province' in self.data:
             try:

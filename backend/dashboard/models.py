@@ -6,7 +6,7 @@ from django.db import models
 from datetime import datetime, timedelta
 from django.contrib import admin
 from django.utils.translation import gettext as _
-from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype
+from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype, IncidentSource
 from organization.models import Organization
 from django.urls import reverse
 
@@ -68,9 +68,10 @@ class Undss(models.Model):
     Field33 = models.PositiveIntegerField(null=True, blank=True)
     Latitude = models.FloatField(null=True, blank=True)
     Longitude = models.FloatField(null=True, blank=True)
-    PRMO = models.CharField(max_length=255, null=True, blank=True)
-    UNDSS = models.CharField(max_length=255, null=True, blank=True)
-    INSO = models.CharField(max_length=255, null=True, blank=True)
+    Incident_Source = models.ForeignKey(IncidentSource, on_delete=models.CASCADE, null=True, blank=True)
+    # PRMO = models.CharField(max_length=255, null=True, blank=True)
+    # UNDSS = models.CharField(max_length=255, null=True, blank=True)
+    # INSO = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
