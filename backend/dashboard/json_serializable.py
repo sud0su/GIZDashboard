@@ -1,6 +1,6 @@
 import json
 import datetime
-from django.db.models import Sum, Q, Count
+from django.db.models import Sum, Q, Count, F, Case, CharField, Value, When
 from django.db.models.functions import Coalesce, Trim, Lower
 from .models import Undss
 from reference.models import IncidentType, Province, District, IncidentSource
@@ -33,13 +33,16 @@ def MainData(request):
             # 'inso': {
             #     'options': Undss.objects.annotate(INSO2=Lower(Trim('INSO'))).values_list('INSO2', flat=True).distinct().order_by('INSO2'),
             # },
-            'options': IncidentSource.objects.values('id','name').order_by('name'),
+            'options': IncidentSource.objects.values('id','name').order_by('id'),
         },
         'target_type': {
             'name': Organization.objects.values_list('code', flat=True).order_by('-id'),
         },
         'police_district': {
             'options': Undss.objects.values_list('Police_District', flat=True).distinct().order_by('Police_District'),
+        },
+        'hpa': {
+            'options': yesno_annotate(Undss.objects, 'HPA').values_list('yesno', flat=True).distinct().order_by('-yesno'),
         },
     }
 
@@ -395,6 +398,7 @@ def DashboardResponse(request, code, daterange, incident_type, filters={}):
 
     dashboardresponse["filters"] = main["filters"]
     dashboardresponse["filters"]['police_district']['selected'] = filters['police_district']
+    dashboardresponse["filters"]['hpa']['selected'] = filters['hpa']
 
     # for filter, item in dashboardresponse.get("filters", {}).get('source_type', {}).items():
     #     # item['selected'] = NoneStr2Obj(request.GET.get(filter, 'all'))
@@ -436,6 +440,7 @@ def Common(request):
         'source_type': request.GET.get('source_type'),
         'target_type': request.GET.get('target_type'),
         'police_district': request.GET.get('police_district'),
+        'hpa': str(request.GET.get('hpa') or '').strip().lower(),
     }
 
     if request.GET['page'] == 'dashboard':
@@ -456,9 +461,21 @@ def ApplyFilters(queryset, filters):
     if filters.get('police_district'):
         queryset = queryset.filter(Police_District=filters.get('police_district'))
 
+    if filters.get('hpa') in ['yes', 'no']:
+        queryset = yesno_annotate(queryset, 'HPA').filter(**{'yesno': filters.get('hpa')})
+
     # for key, value in filters.get('source_type', {}).items():
     #     # trimmed_or_none = value if value is None else value.strip().lower()
     #     # queryset = queryset.annotate(trimmed=Lower(Trim(key))).filter(**{'trimmed': trimmed_or_none})
     #     queryset = queryset.annotate(**{key+'_trim':Lower(Trim(source_type_dbfield[key]))}).filter(**{key+'_trim':'yes'})
 
     return queryset
+
+def yesno_annotate(queryset, field):
+    return queryset.annotate(lowered=Lower(Trim(field))).annotate(
+                yesno=Case(
+                    When(lowered='yes', then=Value('yes')),
+                    default=Value('no'),
+                    output_field=CharField(),
+                ),
+            )
