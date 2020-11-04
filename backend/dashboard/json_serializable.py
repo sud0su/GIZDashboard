@@ -38,6 +38,9 @@ def MainData(request):
         'target_type': {
             'name': Organization.objects.values_list('code', flat=True).order_by('-id'),
         },
+        'initiator': {
+            'options': Organization.objects.values('id','code','name').order_by('-id'),
+        },
         'police_district': {
             'options': Undss.objects.values_list('Police_District', flat=True).distinct().order_by('Police_District'),
         },
@@ -405,6 +408,7 @@ def DashboardResponse(request, code, daterange, incident_type, filters={}):
     #     item['selected'] = filters.get('source_type', {}).get(filter, False) == True
     
     dashboardresponse['filters']["source_type"]['selected'] = json.loads(filters.get('source_type') or 'null')
+    dashboardresponse['filters']["initiator"]['selected'] = json.loads(filters.get('initiator') or 'null')
 
     if not filters.get('target_type') or filters.get('target_type') == "0":
         dashboardresponse['filters']["target_type"]["checked"] = dashboardresponse['filters']["target_type"]['name']
@@ -441,6 +445,7 @@ def Common(request):
         'target_type': request.GET.get('target_type'),
         'police_district': request.GET.get('police_district'),
         'hpa': str(request.GET.get('hpa') or '').strip().lower(),
+        'initiator': request.GET.get('initiator'),
     }
 
     if request.GET['page'] == 'dashboard':
@@ -454,6 +459,9 @@ def ApplyFilters(queryset, filters):
 
     if filters.get('source_type'):
         queryset = queryset.filter(Incident_Source=filters.get('source_type'))
+
+    if filters.get('initiator'):
+        queryset = queryset.filter(Initiator=filters.get('initiator'))
 
     if filters.get('target_type'):
         queryset = queryset.filter(Target__name__in=filters.get('target_type').split(','))

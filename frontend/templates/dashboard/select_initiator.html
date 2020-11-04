@@ -2,8 +2,9 @@
 
 <label for="initiator">Initiator:</label>
 <select id="initiator" class="initiator-dropdown" data-placeholder="Select Initiator">
-    {% for option in filters.source_type.options %}
-        <option value="{{ option.id }}" {% if filters.source_type.selected == option.id %}selected{% endif %}>{{ option.name }}</option>
+    <option value="all" {% if filters.initiator.selected == 'all' %}selected{% endif %}>-</option>
+    {% for option in filters.initiator.options %}
+    <option value="{{ option.id }}" {% if filters.initiator.selected == option.id %}selected{% endif %}>{{ option.code }}</option>
     {% endfor %}
 </select>
 
@@ -13,6 +14,16 @@
         $('.initiator-dropdown').select2({
             dropdownAutoWidth: true,
             placeholder: "Select Initiator"
+        });
+        $('.initiator-dropdown').on('select2-selecting', function (e) {
+            var url = $(location).attr("href");
+            if (e.val == 'all') {
+                url = removeParam(e.target.id, url)
+            }
+            else {
+                url = updateUrlParameter(url, e.target.id, e.val)
+            }
+            window.document.location = url;
         });
     });
 </script>
