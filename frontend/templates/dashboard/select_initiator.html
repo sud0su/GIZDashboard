@@ -17,10 +17,8 @@
         });
         $('.initiator-dropdown').on('select2-selecting', function (e) {
             var url = $(location).attr("href");
-            if (e.val == 'all') {
-                url = removeParam(e.target.id, url)
-            }
-            else {
+            url = removeParam(e.target.id, url)
+            if (e.val != 'all') {
                 url = updateUrlParameter(url, e.target.id, e.val)
             }
             window.document.location = url;

@@ -71,7 +71,7 @@
         <div class="col-12 col-sm-12 col-xl-6 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">{% trans "Graph of Incident and Casualties Trend by Incident Type" %}</h4>
+                    <h4 class="card-title">{% trans chart.polar_incident_type.title %}</h4>
                     <div id="{{ chart.polar_incident_type.key }}" class="ch-size polar-chart" data-color="colorPolar" data-xaxis='{{ chart.polar_incident_type.labels | jsonify | safe }}' data-val='{{ chart.polar_incident_type.data_val | jsonify | safe }}'></div>
                 </div>
             </div>
@@ -96,13 +96,23 @@
                         {% get_current_language_bidi as LANGUAGE_BIDI %}
                         <div id="indicatorType" class="child-checkbox">
                             <div class="form-group">
-                                {% for item in incident_type.name %}
-                                <div class="form-check">
+                                {% for item in filters.incident_type.options %}
+                                <div class="form-check form-check-incident-type">
                                     <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item }}" {% if item in incident_type.checked %}checked=true{% endif %}> 
-                                        {{ item }}
+                                        <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item.id }}" {% if item.id in filters.incident_type.checked %}checked=true{% endif %}> 
+                                        {{ item.name }}
                                     </label>
                                 </div>
+                                {% for subtype in filters.incident_subtype.options %}
+                                {% if item.id == subtype.incidenttype %}
+                                <div class="form-check ml-4 {% if item.id not in filters.incident_type.checked or filters.incident_type.checked|length > 1 %}d-none{% endif %} form-check-incident-subtype">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input checkIncidentSubtype" id="incidentsubtype{{ forloop.counter0 }}" name="incident_subtype_select[]" value="{{ subtype.id }}" data-parentid="{{ item.id }}" {% if subtype.id in filters.incident_subtype.checked %}checked=true{% endif %}> 
+                                        {{ subtype.name }}
+                                    </label>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
                                 {% endfor %}
                             </div>
                         </div>
@@ -150,8 +160,8 @@
                                 {% for item in filters.target_type.name %}
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input checkTarget" id="target{{ forloop.counter0 }}" name="main_target_select[]" value="{{ item }}" {% if item in filters.target_type.checked %}checked=true{% endif %}> 
-                                        {{ item }}
+                                        <input type="checkbox" class="form-check-input checkTarget" id="target{{ forloop.counter0 }}" name="main_target_select[]" value="{{ item.id }}" {% if item.id in filters.target_type.checked %}checked=true{% endif %}> 
+                                        {{ item.code }}
                                     </label>
                                 </div>
                                 {% endfor %}
@@ -182,7 +192,7 @@
         <div class="col-sm-12 col-lg-12 col-md-12 col-lg-12 col-xl-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">{% trans "Incidents and Casualties by Incident Type" %}</h4>
+                    <h4 class="card-title">{% trans tables.incidents_and_casualties_by_incident_type.title %}</h4>
                     <p class="card-description">
                         {% trans "An overview of number incidents and casualties occured  in Afghanistan grouped by incident type." %}
                     </p>
@@ -198,7 +208,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in tables.incidents_and_casualties_by_incident_type %}
+                                {% for item in tables.incidents_and_casualties_by_incident_type.values %}
                                     <tr>
                                         <td>{{ item.incident_name }}</td>
                                         <td>{{ item.killed }}</td>
@@ -465,6 +475,7 @@
 
             // Select All/None
                 $('.parents-checkbox :checkbox').change(function () {
+                    $('.form-check-incident-subtype:not(.d-none)').addClass('d-none').prop('checked', false);
                     $(this).closest('.card-body').find(':checkbox').not(this).prop('checked', this.checked);
                 });
 
@@ -473,6 +484,21 @@
                     $group.find('.parents-checkbox :checkbox').prop('checked', !$group.find('.child-checkbox :checkbox:not(:checked)').length);
                 });
             // /Select All/None
+
+            // show incident subtype when only 1 incident type selected
+            // hide incident subtype when more than 1 incident type selected
+            $('.child-checkbox :checkbox.checkIncident').change(function (e) {
+                var checked = $('.child-checkbox :checkbox:checked.checkIncident');
+                if (checked.length == 1) {
+                    var ckb_subtype = $(`.child-checkbox :checkbox.checkIncidentSubtype[data-parentid=${checked[0].value}]`);
+                    $('.child-checkbox :checkbox:checked.checkIncidentSubtype').prop('checked', false);
+                    if (checked[0].checked) {ckb_subtype.closest('.form-check').removeClass('d-none')};
+                    ckb_subtype.prop('checked', checked[0].checked);
+                }
+                else {
+                    $('.form-check-incident-subtype:not(.d-none)').addClass('d-none');
+                }
+            });
 
             // DateRangePicker
             var daterange = getParameterByName("daterange");
@@ -568,6 +594,31 @@
 
                 } else {
                     url = removeParam('incident_type', url);
+                }
+                
+                // modify incident_type url param
+                var incident_checked = $("input[name='main_incident_select[]']:checkbox:checked");
+                var incident_unchecked = $("input[name='main_incident_select[]']:checkbox:not(:checked)");
+                url = removeParam('incident_type', url);
+                if ((incident_checked.length != 0) && (incident_unchecked.length != 0)) {
+                    var str_incident_type = $.map(incident_checked, x => x.value).toString();
+                    url = updateUrlParameter(url, 'incident_type', str_incident_type);
+                }
+
+                // modify incident_subtype url param
+                url = removeParam('incident_subtype', url);
+                if (type_selected.length == 1) {
+                    var str_incident_subtype = $.map($('.child-checkbox :checkbox:checked.checkIncidentSubtype'), x => x.value).toString();
+                    url = updateUrlParameter(url, 'incident_subtype', str_incident_subtype);
+                }    
+
+                // modify target_type url param
+                var target_checked = $("input[name='main_target_select[]']:checkbox:checked");
+                var target_unchecked = $("input[name='main_target_select[]']:checkbox:not(:checked)");
+                url = removeParam('target_type', url);
+                if ((target_checked.length != 0) && (target_unchecked.length != 0)) {
+                    var str_target_type = $.map(target_checked, x => x.value).toString();
+                    url = updateUrlParameter(url, 'target_type', str_target_type);
                 }
 
                 // if (target_selected_param != ''){
