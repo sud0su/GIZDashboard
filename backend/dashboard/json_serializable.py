@@ -1,7 +1,10 @@
 import json
 import datetime
+
 from django.db.models import Sum, Q, Count, F, Case, CharField, Value, When
 from django.db.models.functions import Coalesce, Trim, Lower
+from itertools import chain
+
 from .models import Undss
 from reference.models import IncidentType, IncidentSubtype, Province, District, IncidentSource
 from organization.models import Organization
@@ -68,34 +71,17 @@ def MainData(request, filters={}):
     main['filters']["target_type"]["labels"] = [i['code'] for i in main['filters']['target_type']['name'] if i['id'] in main['filters']['target_type']['checked']]
     
     filter_incident = main['filters'][main['type_key']]
-    filter_incident["labels"] = [i['name'] for i in filter_incident['options'] if i['id'] in filter_incident['checked']]
+    filter_incident_options_dict = {i['id']:i['name'] for i in filter_incident['options']}
+    filter_incident["labels"] = [filter_incident_options_dict.get(i) for i in filter_incident['checked']]
 
     return main
 
-def Chart(request, code, daterange, incident_type, filters={}, main={}):
+def Chart(request, filters={}, main={}):
     # main = MainData(request)
     chart = {}
+
     undssQueryset = Undss.objects.all()
-    
-    if code:
-        getCode = code.split('=')
-        if getCode[0] == 'prov':
-            undssQueryset = undssQueryset.filter(Q(Province__name=getCode[1]))
-        else:
-            undssQueryset = undssQueryset.filter(Q(District__name=getCode[1]))
-
-    if daterange:
-        date = daterange.split(',')
-        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
-    else:
-        date = main["daterange"].split(',')
-        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
-        
-
-    if incident_type:
-        undssQueryset = undssQueryset.filter(Incident_Type__in=incident_type.split(','))
-
-    undssQueryset = ApplyFilters(undssQueryset, filters)
+    undssQueryset = ApplyFilters(undssQueryset, filters, main=main)
 
     filter_incident = main['filters'][main['type_key']]
 
@@ -121,8 +107,9 @@ def Chart(request, code, daterange, incident_type, filters={}, main={}):
     # chart['bar_chart_target']['labels'] = main["target_type_name"]
     chart['bar_chart_target']['labels'] = main['filters']["target_type"]["labels"]
     for pc in main["category"]:
-        qs_bar_chart_target = undssQueryset.values('Target__code').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Target_id')
-        total_result = [total['total'] for total in qs_bar_chart_target]
+        qs_bar_chart_target = undssQueryset.values_list('Target').annotate(total = Coalesce(Sum(pc), 0))
+        qs_bar_chart_target_dict = dict(qs_bar_chart_target)
+        total_result = [qs_bar_chart_target_dict.get(id,0) for id in main['filters']["target_type"]['checked']]
         chart['bar_chart_target']['data_val'].append({'name':pc, 'data': total_result})
 
     ## Spline Chart
@@ -189,30 +176,12 @@ def Chart(request, code, daterange, incident_type, filters={}, main={}):
 
     return chart
 
-def Table(request, code, daterange, incident_type, filters={}, main={}):
+def Table(request, filters={}, main={}):
     table = {}
     # main = MainData(request)
 
     undssQueryset = Undss.objects.all()
-    
-    if code:
-        getCode = code.split('=')
-        if getCode[0] == 'prov':
-            undssQueryset = undssQueryset.filter(Q(Province__name=getCode[1]))
-        else:
-            undssQueryset = undssQueryset.filter(Q(District__name=getCode[1]))
-
-    if daterange:
-        date = daterange.split(',')
-        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
-    else:
-        date = main["daterange"].split(',')
-        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
-
-    if incident_type:
-        undssQueryset = undssQueryset.filter(Incident_Type__in=incident_type.split(','))
-
-    undssQueryset= ApplyFilters(undssQueryset, filters)
+    undssQueryset= ApplyFilters(undssQueryset, filters, main=main)
 
     # list_of_latest_incidents
     table['list_of_latest_incidents'] = undssQueryset.values('id','Date', 'Time_of_Incident','Description_of_Incident').order_by('-Date')
@@ -311,8 +280,8 @@ def Table(request, code, daterange, incident_type, filters={}, main={}):
     parentInjured = [countryData[1]]
     parentKilled = [countryData[0]]
 
-    if code:
-        getCode = code.split('=')
+    if filters.get('code'):
+        getCode = filters.get('code').split('=')
         if getCode[0] == 'prov':
             parentname = [getCode[1]]
             parentIncident = [provinceIncident[0][0]]
@@ -332,8 +301,8 @@ def Table(request, code, daterange, incident_type, filters={}, main={}):
     table['number_of_incident_and_casualties_overview']['child'] = []
     
     dataChild = []
-    if code:
-        getCode = code.split('=')
+    if filters.get('code'):
+        getCode = filters.get('code').split('=')
         if getCode[0] == 'prov':
             for i in range(0, len(districtName[0])):
                 if districtName[0][i] == 'NULL':
@@ -380,30 +349,12 @@ def Region(request, code):
     region["district"].append({"data_val" : getDistrict, "selected": distname, "type" : "District", "urlcode": "dist"})
     return region
 
-def Total(request, code, daterange, incident_type, filters={}, main={}):
+def Total(request, filters={}, main={}):
     total = {}
     # main = MainData(request)
 
-    undssQueryset = Undss.objects.all()
-    
-    if code:
-        getCode = code.split('=')
-        if getCode[0] == 'prov':
-            undssQueryset = undssQueryset.filter(Q(Province__name=getCode[1]))
-        else:
-            undssQueryset = undssQueryset.filter(Q(District__name=getCode[1]))
-
-    if daterange:
-        date = daterange.split(',')
-        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
-    else:
-        date = main["daterange"].split(',')
-        undssQueryset = undssQueryset.filter(Date__gte=date[0],Date__lte=date[1])
-
-    if incident_type:
-        undssQueryset = undssQueryset.filter(Incident_Type__in=incident_type.split(','))
-
-    undssQueryset= ApplyFilters(undssQueryset, filters)
+    undssQueryset = Undss.objects.all()    
+    undssQueryset= ApplyFilters(undssQueryset, filters, main=main)
 
     countryData = []
     totalCountry = []
@@ -438,49 +389,96 @@ def Total(request, code, daterange, incident_type, filters={}, main={}):
     
     countryData.append({'incident': sum(total_incident)})
 
-    if code:
+    if filters.get('code'):
         total['total_data'] = countryDataChild
     else:
         total['total_data'] = countryData  
 
     return total  
 
-def DashboardResponse(request, code, daterange, incident_type, filters={}):
+def DashboardResponse(request, filters={}):
     dashboardresponse = {}
     main = MainData(request, filters=filters)
-    chart = Chart(request, code, daterange, incident_type, filters=filters, main=main)
-    table = Table(request, code, daterange, incident_type, filters=filters, main=main)
-    total = Total(request, code, daterange, incident_type, filters=filters, main=main)
-    region = Region(request, code)
+    chart = Chart(request, filters=filters, main=main)
+    table = Table(request, filters=filters, main=main)
+    total = Total(request, filters=filters, main=main)
+    region = Region(request, filters.get('code'))
     dashboardresponse["chart"] = chart
     dashboardresponse["tables"] = table
     dashboardresponse["region"] = region
     dashboardresponse["total"] = total
     dashboardresponse["incident_type"] = {}
     dashboardresponse["incident_type"]["name"] = main["incident_type_name"]
-    if not incident_type or incident_type == "0":
+    if not filters.get('incident_type') or filters.get('incident_type') == [0]:
         dashboardresponse["incident_type"]["checked"] =  main["incident_type_name"]
     else:
-        dashboardresponse["incident_type"]["checked"] = incident_type.split(',')
+        dashboardresponse["incident_type"]["checked"] = filters.get('incident_type')
 
     dashboardresponse["filters"] = main["filters"]
 
     return dashboardresponse
 
+def csv_response(request):
+    field_names = (
+        'Shape',
+        'Data_Entry_No',
+        'Date',
+        'Time_of_Incident',
+        'Province__name',
+        'District__name',
+        'City_Village',
+        'Area',
+        'Police_District',
+        'Incident_Type__name',
+        'Incident_Subtype__name',
+        'Description_of_Incident',
+        'HPA',
+        'Initiator__code',
+        'Target__code',
+        'killed',
+        'Field16',
+        'Field17',
+        'Field18',
+        'Field19',
+        'Field20',
+        'Field21',
+        'Injured',
+        'Field23',
+        'Field24',
+        'Field25',
+        'Field26',
+        'Field27',
+        'Field28',
+        'Abducted',
+        'Field30',
+        'Field31',
+        'Field32',
+        'Field33',
+        'Latitude',
+        'Longitude',
+        'Incident_Source__name',
+        'created_at',
+        'updated_at',
+    )
+    filters = make_filters(request)
+    main = MainData(request, filters=filters)
+    undssQueryset = Undss.objects.all()
+    undssQueryset = ApplyFilters(undssQueryset, filters, main=main)
+    undssQueryset = undssQueryset.values_list(*field_names)
+    return chain([field_names], undssQueryset)
+
 def Common(request):
     response = {}
-    code = None
-    daterange = None
-    incident_type = ""
+    filters = make_filters(request)
 
-    if 'code' in request.GET:
-        code = request.GET['code']
+    if request.GET['page'] == 'dashboard':
+        response = DashboardResponse(request, filters=filters)
+         
+    response['jsondata'] = json.dumps(response, cls=JSONEncoderCustom)
 
-    if 'daterange' in request.GET:
-        daterange = request.GET['daterange']
-    
-    if 'incident_type' in request.GET:
-        incident_type = request.GET['incident_type']
+    return response
+
+def make_filters(request):
 
     if 'page' not in request.GET:
         mutable = request.GET._mutable
@@ -489,27 +487,37 @@ def Common(request):
         request.GET._mutable = mutable
 
     filters = {
-        # 'source_type': {dbfield: NoneStr2Obj(request.GET[filter]) for filter, dbfield in source_type_dbfield.items() if filter in request.GET},
-        # # 'source_type': {filter: json.loads(request.GET[filter]) for filter in source_type_dbfield.keys() if filter in request.GET},
         'source_type': request.GET.get('source_type'),
-        # 'target_type': request.GET.get('target_type'),
         'target_type': [int(i) for i in list(filter(None, (request.GET.get('target_type','').split(','))))],
         'police_district': request.GET.get('police_district'),
         'hpa': str(request.GET.get('hpa') or '').strip().lower(),
         'initiator': request.GET.get('initiator'),
-        # 'incident_type': request.GET.get('incident_type'),
         'incident_type': [int(i) for i in list(filter(None, (request.GET.get('incident_type','').split(','))))],
         'incident_subtype': [int(i) for i in list(filter(None, (request.GET.get('incident_subtype','').split(','))))],
+        'code': request.GET.get('code'),
+        'daterange': request.GET.get('daterange'),    
     }
 
-    if request.GET['page'] == 'dashboard':
-        response = DashboardResponse(request, code, daterange, incident_type, filters=filters)
-         
-    response['jsondata'] = json.dumps(response, cls=JSONEncoderCustom)
+    return filters
 
-    return response
+def ApplyFilters(queryset, filters, main={}):
 
-def ApplyFilters(queryset, filters):
+    if filters.get('code'):
+        getCode = filters['code'].split('=')
+        if getCode[0] == 'prov':
+            queryset = queryset.filter(Q(Province__name=getCode[1]))
+        else:
+            queryset = queryset.filter(Q(District__name=getCode[1]))
+
+    if filters.get('daterange'):
+        date = filters['daterange'].split(',')
+        queryset = queryset.filter(Date__gte=date[0],Date__lte=date[1])
+    else:
+        date = main["daterange"].split(',')
+        queryset = queryset.filter(Date__gte=date[0],Date__lte=date[1])
+        
+    if filters.get('incident_type'):
+        queryset = queryset.filter(Incident_Type__in=filters.get('incident_type'))
 
     if filters.get('source_type'):
         queryset = queryset.filter(Incident_Source=filters.get('source_type'))
@@ -528,11 +536,6 @@ def ApplyFilters(queryset, filters):
 
     if filters.get('hpa') in ['yes', 'no']:
         queryset = yesno_annotate(queryset, 'HPA').filter(**{'yesno': filters.get('hpa')})
-
-    # for key, value in filters.get('source_type', {}).items():
-    #     # trimmed_or_none = value if value is None else value.strip().lower()
-    #     # queryset = queryset.annotate(trimmed=Lower(Trim(key))).filter(**{'trimmed': trimmed_or_none})
-    #     queryset = queryset.annotate(**{key+'_trim':Lower(Trim(source_type_dbfield[key]))}).filter(**{key+'_trim':'yes'})
 
     return queryset
 

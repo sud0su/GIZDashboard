@@ -1,6 +1,8 @@
 import urllib
 import json
-from django.http import HttpResponse
+import csv
+
+from django.http import HttpResponse, StreamingHttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime, date
 from django.utils.formats import dateformat
@@ -13,11 +15,12 @@ from urllib.parse import urlencode
 from .pychromeprint import print_from_urls
 
 from .forms import UndssForm
-from .json_serializable import Common
+from .json_serializable import Common, csv_response
 from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype
 from organization.models import Organization
 from .models import Undss
 from giz.utils import replace_query_param
+from .utils import Echo
 
 
 from django.views.generic import CreateView, DetailView
@@ -92,9 +95,14 @@ def Dashboard(request):
     })
     headerparam = urllib.parse.urlencode(headerparam_dict)
 
+    currenturl = request.build_absolute_uri()
     if not request.GET.get('page'):
-        currenturl = request.build_absolute_uri()
         return redirect(replace_query_param(currenturl, 'page', 'dashboard'))
+
+    # if no source_type in url then redirect with added source_type=DEFAULT_SOURCE_ID
+    if not request.GET.get('source_type'):
+        DEFAULT_SOURCE_ID = 1
+        return redirect(replace_query_param(currenturl, 'source_type', DEFAULT_SOURCE_ID))
 
     if 'pdf' in request.GET:
         options = {
@@ -132,6 +140,17 @@ def Dashboard(request):
         response['Content-Disposition'] = 'attachment; filename="' + \
             request.GET['page']+'_'+date_string+'.pdf"'
         return response
+
+    elif 'csv' in request.GET:
+        date_string = dateformat.format(datetime.now(), "Y-m-d")
+        rows = csv_response(request)
+        pseudo_buffer = Echo()
+        writer = csv.writer(pseudo_buffer)
+        response = HttpResponse((writer.writerow(row) for row in rows), content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="' + \
+            request.GET['page']+'_'+date_string+'.csv"'
+        return response
+    
     else:
         response = Common(request)
         template = "dashboard/dashboard_content.html"

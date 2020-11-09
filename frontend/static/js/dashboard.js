@@ -465,4 +465,9 @@ $(document).ready(function(){
 		window.document.location = url+'&pdf=true';
 		// $(".se-pre-con").fadeOut("slow");
 	});
+
+	$('button#csv').on('click', function(event) {
+		var url = $(location).attr("href");
+		window.document.location = url+'&csv=true';
+	});
 });
