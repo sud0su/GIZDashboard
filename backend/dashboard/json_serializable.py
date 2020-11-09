@@ -63,6 +63,13 @@ def MainData(request, filters={}):
     main['filters']["initiator"]['selected'] = json.loads(filters.get('initiator') or 'null')
     main['filters']["target_type"]["checked"] = filters['target_type'] or [i['id'] for i in main['filters']["target_type"]["name"]]
 
+    main['is_subtype'] = bool(filters.get('incident_subtype'))
+    main['type_key'] = 'incident_subtype' if main['is_subtype'] else "incident_type"
+    main['filters']["target_type"]["labels"] = [i['code'] for i in main['filters']['target_type']['name'] if i['id'] in main['filters']['target_type']['checked']]
+    
+    filter_incident = main['filters'][main['type_key']]
+    filter_incident["labels"] = [i['name'] for i in filter_incident['options'] if i['id'] in filter_incident['checked']]
+
     return main
 
 def Chart(request, code, daterange, incident_type, filters={}, main={}):
@@ -90,23 +97,21 @@ def Chart(request, code, daterange, incident_type, filters={}, main={}):
 
     undssQueryset = ApplyFilters(undssQueryset, filters)
 
-    is_subtype = bool(filters.get('incident_subtype'))
-    type_key = 'incident_subtype' if is_subtype else "incident_type"
-    incident_type_labels = [i['name'] for i in main['filters'][type_key]['options'] if i['id'] in main['filters'][type_key]['checked']]
-    target_type_labels = [i['code'] for i in main['filters']['target_type']['name'] if i['id'] in main['filters']['target_type']['checked']]
+    filter_incident = main['filters'][main['type_key']]
 
     ## Bar Chart
     chart['bar_chart_incident'] = {}
     chart['bar_chart_incident']['data_val'] = []
-    chart['bar_chart_incident']['title'] = "Number of Casualties by Incident Subtype" if is_subtype else "Number of Casualties by Incident Type"
+    chart['bar_chart_incident']['title'] = "Number of Casualties by Incident Subtype" if main['is_subtype'] else "Number of Casualties by Incident Type"
     chart['bar_chart_incident']['key'] = "number_of_casualties_by_incident_type"
     # chart['bar_chart_incident']['labels'] = main["incident_type_name"]
-    chart['bar_chart_incident']['labels'] = incident_type_labels
-    values_field = 'Incident_Subtype__name' if is_subtype else 'Incident_Type__name'
-    order_field = '-Incident_Subtype_id' if is_subtype else '-Incident_Type_id'
+    chart['bar_chart_incident']['labels'] = filter_incident["labels"]
+    values_field = 'Incident_Subtype' if main['is_subtype'] else 'Incident_Type'
+    order_field = '-Incident_Subtype_id' if main['is_subtype'] else '-Incident_Type_id'
     for pc in main["category"]:
-        qs_bar_chart_incident = undssQueryset.values(values_field).annotate(total = Coalesce(Sum(pc), 0)).order_by(order_field)
-        total_result = [total['total'] for total in qs_bar_chart_incident]
+        qs_bar_chart_incident = undssQueryset.values_list(values_field).annotate(total = Coalesce(Sum(pc), 0))
+        qs_bar_chart_incident_dict = dict(qs_bar_chart_incident)
+        total_result = [qs_bar_chart_incident_dict.get(id,0) for id in filter_incident['checked']]
         chart['bar_chart_incident']['data_val'].append({'name':pc, 'data': total_result})
 
     chart['bar_chart_target'] = {}
@@ -114,7 +119,7 @@ def Chart(request, code, daterange, incident_type, filters={}, main={}):
     chart['bar_chart_target']['title'] = "Number of Casualties by Target Type"
     chart['bar_chart_target']['key'] = "number_of_casualties_by_target_type"
     # chart['bar_chart_target']['labels'] = main["target_type_name"]
-    chart['bar_chart_target']['labels'] = target_type_labels
+    chart['bar_chart_target']['labels'] = main['filters']["target_type"]["labels"]
     for pc in main["category"]:
         qs_bar_chart_target = undssQueryset.values('Target__code').annotate(total = Coalesce(Sum(pc), 0)).order_by('-Target_id')
         total_result = [total['total'] for total in qs_bar_chart_target]
@@ -151,34 +156,32 @@ def Chart(request, code, daterange, incident_type, filters={}, main={}):
         chart_ct['data_val'] = []
         filter_key = ct
         if ct == 'incident_type':
-            if is_subtype:
-                filter_key = 'incident_subtype'
+            filter_key = main['type_key']
+            chart_ct['labels'] = filter_incident["labels"]
+            chart_ct['labels_all'] = chart_ct['labels']
+            if main['is_subtype']:
                 Title = 'Incident Subtype'
                 OrderId = 'Incident_Subtype_id'
                 DbRelated = 'Incident_Subtype__name'
                 # chart_ct['labels'] = [i['name'] for i in main['filters']["incident_type"]['incident_subtype']['options']]
-                chart_ct['labels'] = incident_type_labels
-                chart_ct['labels_all'] = chart_ct['labels']
                 chart_ct['key'] = "graph_of_incident_and_casualties_trend_by_incident_type"
             else:
                 Title = 'Incident Type'
                 OrderId = 'Incident_Type_id'
                 DbRelated = 'Incident_Type__name'
                 # chart_ct['labels'] = main["incident_type_name"]
-                chart_ct['labels'] = incident_type_labels
-                chart_ct['labels_all'] = chart_ct['labels']
                 chart_ct['key'] = "graph_of_incident_and_casualties_trend_by_incident_type"
         else:
             Title = 'Target Type'
             OrderId = 'Target_id'
             DbRelated = 'Target__code'
             # chart_ct['labels'] = main["target_type_name"]
-            chart_ct['labels'] = target_type_labels
+            chart_ct['labels'] = main['filters']["target_type"]["labels"]
             chart_ct['labels_all'] = chart_ct['labels']
             chart_ct['key'] = "graph_of_incident_and_casualties_trend_by_target_type"
         chart_ct['title'] = "Graph of Incident and Casualties Trend by "+ Title
         for pc in main["category"]:
-            type_data = undssQueryset.values_list(OrderId).annotate(total = Coalesce(Sum(pc), 0)).order_by('-'+OrderId)
+            type_data = undssQueryset.values_list(OrderId).annotate(total = Coalesce(Sum(pc), 0))
             type_data_dict = dict(type_data)
             # total_result = [total['total'] for total in type_data]
             total_result = [type_data_dict.get(id,0) for id in main['filters'][filter_key]['checked']]
@@ -220,17 +223,25 @@ def Table(request, code, daterange, incident_type, filters={}, main={}):
     incidentSubtypeName = []
     incidentTypeName = []
     incidentCountData = []
-    is_subtype = bool(filters.get('incident_subtype'))
-    values_field = 'Incident_Subtype__name' if is_subtype else 'Incident_Type__name'
-    order_field = '-Incident_Subtype_id' if is_subtype else '-Incident_Type_id'
+    values_field = 'Incident_Subtype' if main['is_subtype'] else 'Incident_Type'
+    order_field = '-Incident_Subtype_id' if main['is_subtype'] else '-Incident_Type_id'
+    filter_incident = main['filters'][main['type_key']]
     for pc in main["category"]:
         incident_type_data = undssQueryset.\
             values(values_field).\
             annotate(count = Coalesce(Count("id"), 0),total = Coalesce(Sum(pc), 0)).\
             order_by(order_field)
-        total_incident = [total['count'] for total in incident_type_data] 
-        total_result = [total['total'] for total in incident_type_data]
-        incident_name = [total[values_field] for total in incident_type_data]
+        incident_type_data_dict = {
+            i[values_field]: {
+                'count': i['count'],
+                'total':i['total']
+            } for i in incident_type_data}
+        # total_incident = [total['count'] for total in incident_type_data] 
+        total_incident = [incident_type_data_dict.get(i,{}).get('count',0) for i in filter_incident['checked']] 
+        # total_result = [total['total'] for total in incident_type_data]
+        total_result = [incident_type_data_dict.get(i,{}).get('total',0) for i in filter_incident['checked']] 
+        # incident_name = [total[values_field] for total in incident_type_data]
+        incident_name = filter_incident['labels']
         # incident_subtype_name = [total['Incident_Subtype__name'] for total in incident_type_data]
         incidentTypeData += [total_result]
         incidentCountData += [total_incident]
@@ -239,9 +250,10 @@ def Table(request, code, daterange, incident_type, filters={}, main={}):
 
     # incidents_and_casualties_by_incident_type
     table_incident_type_total = []
-    for i in range(0, len(incidentTypeName[0])):
+    for i in range(0, len(filter_incident['labels'])):
         table_data = {
-            'incident_name': incidentTypeName[0][i],
+            # 'incident_name': incidentTypeName[0][i],
+            'incident_name': filter_incident['labels'][i],
             # 'incident_subtype_name': incidentSubtypeName[0][i],
             'killed': incidentTypeData[0][i],
             'injured': incidentTypeData[1][i],
@@ -252,7 +264,7 @@ def Table(request, code, daterange, incident_type, filters={}, main={}):
         table_incident_type_total.append(table_data)
     
     table['incidents_and_casualties_by_incident_type'] = {
-        'title': 'Incidents and Casualties by Incident %s' % 'Subtype' if is_subtype else 'Type',
+        'title': 'Incidents and Casualties by Incident %s' % 'Subtype' if main['is_subtype'] else 'Type',
         'values': table_incident_type_total,
     }
 
