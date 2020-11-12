@@ -7,8 +7,7 @@
             <li class="breadcrumb-item">Afghanistan</li>
         {% endif %}
 
-        {% for k,v in region.items %}
-        {% for i in v %}
+        {% for k, i in region.items %}
             {% if not 'print' in request.path %}
                 <li class="breadcrumb-item">
                     <select class="area-dropdown {{i.type}}" data-placeholder="Select {{i.type}}">
@@ -16,20 +15,19 @@
                         <option></option>
                         {% endif %}
                         {% for value in i.data_val %}
-                            <option value="{{i.urlcode}}={{ value.name }}" {% if value.name == i.selected %}selected="selected"{% endif %}>{{  value.name }}</option>
+                            <option value="{{i.urlcode}}={{ value.id }}" {% if value.id == i.selected %}selected="selected"{% endif %}>{{  value.name }}</option>
                         {% endfor %}
                     </select>
                 </li>
             {% else %}
                 {% for value in i.data_val %}
-                    {% if value.name == i.selected %}
+                    {% if value.id == i.selected %}
                     <li class="breadcrumb-item">
                         {{  value.name }}
                     </li>
                     {% endif %}
                 {% endfor %}
             {% endif %}
-        {% endfor %}
         {% endfor %}
     </ol>
 

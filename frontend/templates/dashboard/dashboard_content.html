@@ -50,7 +50,7 @@
             {% include "dashboard/select_hpa.html" %}
         </div>
 
-        {% if region.province.0.selected == 'Kabul' %}
+        {% if region.province.selected == 'Kabul' %}
         <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
             {% include "dashboard/select_police_dist.html" %}
         </div>
@@ -59,17 +59,15 @@
     </div>
     
     <div class="row">
-        {% for i in total.total_data %}
-            {% for k, v  in i.items %}
-            <div class="col-12 col-sm-12 col-lg-6 col-xl-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-6{% endif %} d-flex grid-margin stretch-card">
-                <div class="card {% if k|lower == 'injured' %}sale-visit-statistics-border{% elif k|lower == 'abducted' %}total-abducted-statistics-border{% elif k == 'incident' %}total-incident-statistics-border{% else %}sale-diffrence-border{% endif %}">
-                    <div class="card-body">
-                        <h2 class="text-dark mb-2 font-weight-bold">{{ v }}</h2>
-                        <h4 class="card-title mb-2">{% trans "Total" %} {{k}}</h4>
-                    </div>
+        {% for k, v  in total.items %}
+        <div class="col-12 col-sm-12 col-lg-6 col-xl-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-6{% endif %} d-flex grid-margin stretch-card">
+            <div class="card {% if k|lower == 'injured' %}sale-visit-statistics-border{% elif k|lower == 'abducted' %}total-abducted-statistics-border{% elif k == 'incident' %}total-incident-statistics-border{% else %}sale-diffrence-border{% endif %}">
+                <div class="card-body">
+                    <h2 class="text-dark mb-2 font-weight-bold">{{ v }}</h2>
+                    <h4 class="card-title mb-2">{% trans "Total" %} {{k}}</h4>
                 </div>
             </div>
-            {% endfor %}
+        </div>
         {% endfor %}
 
         <div class="col-12 col-sm-12 col-xl-6 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
@@ -380,9 +378,9 @@
                                 {% for child in tables.number_of_incident_and_casualties_overview.child %}
 
                                     {% if 'Afghanistan' in tables.number_of_incident_and_casualties_overview.parentdata.0 %}
-                                        <tr class="selectable" onclick="jump_url('prov={{child.name}}');">
+                                        <tr class="selectable" onclick="jump_url('prov={{child.id}}');">
                                     {% else %}
-                                        <tr class="selectable" onclick="jump_url('dist={{child.name}}');">
+                                        <tr class="selectable" onclick="jump_url('dist={{child.id}}');">
                                     {% endif %}
                                         {% for item in child.value %}
                                             <td>{{item}}</td>
@@ -391,13 +389,11 @@
                                 {% endfor %}
                             </tbody>
                             <tfoot>
-                                {% for parent in tables.number_of_incident_and_casualties_overview.parentdata %}
-                                    <tr>
-                                        {% for parents in parent %}
-                                            <th class="{% if forloop.counter0 == 0 %}{% else %}hum{% endif %}">{{parents}}</th>
-                                        {% endfor %}
-                                    </tr>
-                                {% endfor %}
+                                <tr>
+                                    {% for item in tables.number_of_incident_and_casualties_overview.parentdata %}
+                                        <th class="{% if forloop.counter0 == 0 %}{% else %}hum{% endif %}">{{item}}</th>
+                                    {% endfor %}
+                                </tr>
                             </tfoot>
                         </table>
                     </div>
