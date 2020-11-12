@@ -15,9 +15,9 @@
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">{% trans "Input UNDSS" %}</h4>
+                    <h4 class="card-title">{% trans "Input New Data" %}</h4>
                     <p class="card-description d-none">
-                        Basic form elements
+                        Input your data
                     </p>
                     <form class="forms-sample form-undss" method="POST" enctype="multipart/form-data" >
                         {% csrf_token %}
@@ -41,7 +41,6 @@
     <script src="{% static 'js/file-upload.js' %}"></script>
     
     {{ form.media.js }}
-
 
     <script>
         $("#id_Province").change(function () {
@@ -91,12 +90,12 @@
                     'province': provinceId,
                     'district': districtId        
                 },
-                beforeSend: function() {
-                    $("#id_Area").html(''); 
-                },
-                success: function (data) {   
-                    $("#id_Area").html(data); 
-                }
+                // beforeSend: function() {
+                //     $("#id_Area").html(''); 
+                // },
+                // success: function (data) {   
+                //     $("#id_Area").html(data); 
+                // }
             });
             $.ajax({                          
                 url: urlVillage,                    
@@ -104,12 +103,12 @@
                     'province': provinceId,
                     'district': districtId        
                 },
-                beforeSend: function() {
-                    $("#id_City_Village").html(''); 
-                },
-                success: function (data) {   
-                    $("#id_City_Village").html(data); 
-                }
+                // beforeSend: function() {
+                //     $("#id_City_Village").html(''); 
+                // },
+                // success: function (data) {   
+                //     $("#id_City_Village").html(data); 
+                // }
             });
 
         });

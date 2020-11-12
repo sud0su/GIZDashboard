@@ -20,20 +20,20 @@ class UndssForm(forms.ModelForm):
             attrs={'data-placeholder':'Select District'},
         )
     )
-    Area = forms.ModelChoiceField(
-        required=False,
-        queryset=Area.objects.none(),
-        widget=Select2Widget(
-            attrs={'data-placeholder':'Select Area'}
-        )
-    )
-    City_Village = forms.ModelChoiceField(
-        required=False,
-        queryset=CityVillage.objects.none(),
-        widget=Select2Widget(
-            attrs={'data-placeholder':'Select City Village'}
-        )
-    )
+    # Area = forms.ModelChoiceField(
+    #     required=False,
+    #     queryset=Area.objects.none(),
+    #     widget=Select2Widget(
+    #         attrs={'data-placeholder':'Select Area'}
+    #     )
+    # )
+    # City_Village = forms.ModelChoiceField(
+    #     required=False,
+    #     queryset=CityVillage.objects.none(),
+    #     widget=Select2Widget(
+    #         attrs={'data-placeholder':'Select City Village'}
+    #     )
+    # )
     Incident_Type = forms.ModelChoiceField(
         required=False,
         queryset=IncidentType.objects.all(),
