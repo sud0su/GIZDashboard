@@ -5,6 +5,7 @@ from .views import (
     DashboardPrint,
     # InputUndss,
     InputUndssView,
+    # ImportDataView,
     UndssDetailView,
     get_district,
     get_area_city,
@@ -12,7 +13,8 @@ from .views import (
     load_district,
     load_subtype,
     load_area,
-    load_cityillage
+    load_cityillage,
+    UndssImportView,
 )
 
 from . import views
@@ -23,6 +25,11 @@ urlpatterns = [
     re_path(r'^print$', DashboardPrint, name='dashboard_print'),
     path('input/', InputUndssView.as_view(), name='inputdashboard'),
     path('undssdetail/<int:pk>/', UndssDetailView.as_view(), name='detail'),
+    
+    # path('import/', ImportDataView.as_view(), name='importdata'),
+    path('import_undss/', UndssImportView.as_view(), name='importdataundss'),
+    path('confirm_import_undss/', UndssImportView.as_view(confirm=True), name='confirmimportdataundss'),
+
     # chained_dropdown_url
     path('get_district/<int:province_id>/', get_district, name='get_district'),
     path('get_area_city/<int:province_id>/<int:district_id>/', get_area_city, name='get_area_city'),

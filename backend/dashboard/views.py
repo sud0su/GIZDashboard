@@ -25,6 +25,27 @@ from .utils import Echo
 
 from django.views.generic import CreateView, DetailView
 
+from import_export.formats import base_formats
+from django.urls import reverse_lazy
+from giz.import_export_views import ImportView
+from .resources import UndssResource
+
+class UndssImportView(ImportView):
+    model = Undss
+    template_name = 'dashboard/import/reference_import_undss.html'
+    formats = (base_formats.XLSX,)
+    resource_class = UndssResource
+    success_url = reverse_lazy('importdataprovince')
+
+    def create_dataset(self, *args, **kwargs):
+        """ Insert an extra 'source_user' field into the data.
+        """
+        dataset = super().create_dataset(*args, **kwargs)
+        length = len(dataset._data)
+        dataset.append_col([self.request.user.id] * length,
+                           header="source_user")
+        return dataset
+
 
 # @login_required
 # def InputUndss(request):
@@ -78,6 +99,10 @@ class InputUndssView(CreateView):
 # 	form_class = UndssForm
 # 	template_name = "dashboard/undss_form.html"
 
+
+@method_decorator(staff_member_required, name='dispatch')
+class ImportDataView(CreateView):
+    pass
 
 @login_required
 def Dashboard(request):
