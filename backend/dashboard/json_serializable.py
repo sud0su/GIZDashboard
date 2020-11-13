@@ -2,7 +2,7 @@ import json
 import datetime
 
 from django.db.models import Sum, Q, Count, F, Case, CharField, Value, When
-from django.db.models.functions import Coalesce, Trim, Lower
+from django.db.models.functions import Coalesce, Trim, Lower, TruncHour, TruncDate
 from itertools import chain
 
 from .models import Undss
@@ -114,16 +114,29 @@ def Chart(request, filters={}, main={}):
     chart['spline']['data_val'] = []
     chart['spline']['title'] = "Historical Date of Incidents and Casualties by Incident Type"
     chart['spline']['key'] = "history_incident_and_casualties_trend_by_incident_type"
-    for pc in main["category"]:
-        # qs_spline = undssQueryset.values('Date','Time_of_Incident').annotate(total = Coalesce(Sum(pc), 0)).order_by('Date')
-        qs_spline = undssQueryset.values('Date','Time_of_Incident').annotate(total = main['sum_by_casualty_type'][pc.lower()]).order_by('Date')
-        total_result = [
-            [(datetime.datetime.combine(total['Date'].date(), total['Time_of_Incident'])).timestamp() * 1000, total['total']]
-            for total in qs_spline
-        ]
+    # for pc in main["category"]:
+    #     # qs_spline = undssQueryset.values('Date','Time_of_Incident').annotate(total = Coalesce(Sum(pc), 0)).order_by('Date')
+    #     qs_spline = undssQueryset.values('Date','Time_of_Incident').annotate(total = main['sum_by_casualty_type'][pc.lower()]).order_by('Date','Time_of_Incident')
+    #     # qs_spline = undssQueryset.values('Date').annotate(total = main['sum_by_casualty_type'][pc.lower()]).order_by('Date')
+    #     total_result = [
+    #         [(datetime.datetime.combine(total['Date'].date(), total['Time_of_Incident'])).timestamp() * 1000, total['total']]
+    #         # [total['Date'].timestamp() * 1000, total['total']]
+    #         for total in qs_spline
+    #     ]
 
-        chart['spline']['data_val'].append({'name':pc, 'data': total_result})
-
+    #     chart['spline']['data_val'].append({'name':pc, 'data': total_result})
+    # qs_spline = undssQueryset.values('Date').annotate(hour=TruncHour('Time_of_Incident'),**main['sum_by_casualty_type']).order_by('Date','hour')
+    qs_spline = undssQueryset.values('Date','Time_of_Incident').annotate(**main['sum_by_casualty_type']).order_by('Date','Time_of_Incident')
+    # qs_spline = undssQueryset.values('Date').annotate(Date_date=TruncDate('Date'),**main['sum_by_casualty_type']).order_by('Date_date')
+    # timestamps = [datetime.datetime.combine(i['Date'].date(), i['hour']).timestamp() * 1000 for i in qs_spline]
+    timestamps = [datetime.datetime.combine(i['Date'].date(), i['Time_of_Incident']).timestamp() * 1000 for i in qs_spline]
+    # timestamps = [i['Date'].timestamp() * 1000 for i in qs_spline]
+    # qs_spline_dict = {ts: qs_spline[i] for i, ts in enumerate(timestamps)}
+    for casualty_type in main['sum_by_casualty_type']:
+        chart['spline']['data_val'].append({
+            'name': casualty_type,
+            'data': [(ts, qs_spline[i][casualty_type]) for i, ts in enumerate(timestamps)]
+        })
 
     ## Polar Chart
     for ct in main["chart_type"]:
@@ -359,7 +372,7 @@ def DashboardResponse(request, filters={}):
 
 def csv_response(request):
     field_names = (
-        'Data_Entry_No',
+        'Single_ID',
         'Date',
         'Time_of_Incident',
         'Province__name',

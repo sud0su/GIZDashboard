@@ -6,7 +6,7 @@ from .models import Undss
 @admin.register(Undss)
 class UndssAdmin(admin.ModelAdmin):
     list_display = [
-        'Data_Entry_No',
+        'Single_ID',
         'Province',
         'District',
         'Initiator',

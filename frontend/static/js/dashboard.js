@@ -449,8 +449,8 @@ function init_chart2(){
 					var s = [];
 
 					console.log(this);
-					// s.push(Highcharts.dateFormat('%A, %b %e, %Y %H:%M', this.x));   // Use UTC
-					s.push(moment(this.x).format("YYYY-MM-DD HH:mm a"));            // Use Local Time
+					s.push(Highcharts.dateFormat('%A, %b %e, %Y %H:%M', this.x));   // Use UTC
+					// s.push(moment(this.x).format("YYYY-MM-DD HH:mm a"));            // Use Local Time
 
 					this.points.forEach(function(point) {
 						s.push('<b>' + point.series.name + '</b>: ' + point.y);

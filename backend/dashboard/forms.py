@@ -69,12 +69,19 @@ class UndssForm(forms.ModelForm):
             attrs={'data-placeholder':'Select Incident Source'}
         )
     )
+    HPA = forms.ChoiceField(
+        required=False,
+        choices=[('yes','Yes'),('no','No')],
+        widget=Select2Widget(
+            attrs={'data-placeholder':'Select HPA'}
+        )
+    )
 
     class Meta:
         model = Undss
         fields = [
             # 'Shape',
-            'Data_Entry_No',
+            'Single_ID',
             'Date',
             'Time_of_Incident',
             'Province',

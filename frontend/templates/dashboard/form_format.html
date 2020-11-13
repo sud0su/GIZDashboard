@@ -22,13 +22,13 @@
             {% endif %}
         </div>
         <div class="form-group col">
-            {{ form.Data_Entry_No.label_tag }}
-            {{ form.Data_Entry_No|add_class:"form-control" }}
-            {% for error in form.Data_Entry_No.errors %}
+            {{ form.Single_ID.label_tag }}
+            {{ form.Single_ID|add_class:"form-control" }}
+            {% for error in form.Single_ID.errors %}
                 <small class="form-text text-muted">{{ error }}</small>
             {% endfor %}
-            {% if form.Data_Entry_No.help_text %}
-                <small class="form-text text-muted">{{ form.Data_Entry_No.help_text }}</small>
+            {% if form.Single_ID.help_text %}
+                <small class="form-text text-muted">{{ form.Single_ID.help_text }}</small>
             {% endif %}
         </div>
     </div>
