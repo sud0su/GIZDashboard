@@ -56,6 +56,8 @@ function updateUrlParameter(url, param, value){
 	} else {
 		a.search = q;
 	}
+	console.log(a.href);
+	
 	return a.href;
 }
 
@@ -140,11 +142,11 @@ function init_datatable(){
 				extend: "copy",
 				className: "btn btn-default btn-sm"
 			},
-			{
-				extend: "csv",
-				filename: 'GIZ Data',
-				className: "btn btn-default btn-sm"
-			},
+			// {
+			// 	extend: "csv",
+			// 	filename: 'GIZ Data',
+			// 	className: "btn btn-default btn-sm"
+			// },
 			{
 				extend: "excel",
 				filename: 'GIZ Data',
@@ -203,6 +205,42 @@ function init_datatable(){
 			}
 		}
 	});
+
+	$('.online_security').DataTable({
+		"ordering": false,
+		// "pageLength": 30,
+		dom: 'Bfrtip',
+		buttons: [
+			{
+				extend: "copy",
+				className: "btn btn-default btn-sm"
+			},
+			// {
+			// 	extend: "csv",
+			// 	className: "btn btn-default btn-sm"
+			// },
+			{
+				extend: "excel",
+				className: "btn btn-default btn-sm"
+			},
+			{
+				extend: "print",
+				className: "btn btn-default btn-sm"
+			},
+			// {
+			//   extend: "colvis"
+			//   className: "btn btn-default btn-sm"
+			// }
+		],
+
+		"columnDefs": [{
+			"render": function (data, type, row){
+				if (type == 'display') {return humanizeTableFormatter(data);}
+				return data;
+			},
+			"targets": 'hum'
+		}]
+	});
 }
 
 function init_chart2(){
@@ -216,6 +254,13 @@ function init_chart2(){
 		'colorDefault': colorDefault,
 		'colorBar': colorDefault,
 		'colorPolar': colorDefault
+	}
+
+	function pie_label() {
+		if (this.y > 0){
+			// return '<b>' + this.key + '</b> : ' + humanizeFormatter(this.y) + '<br/>(' + Highcharts.numberFormat(this.percentage, 2) + '%)';
+			return humanizeFormatter(this.y) + '<br/>(' + Highcharts.numberFormat(this.percentage, 2) + '%)';
+		}
 	}
 
 	Highcharts.theme = {
@@ -301,6 +346,43 @@ function init_chart2(){
 			},
 			colors: color_val,
 			series: data_val
+		});
+	}
+
+	// Object Donut chart
+	function donut_chart(id_val, color_val, data_val, title_val, show_title_val){
+		$(id_val).highcharts({
+			chart: {
+				type: 'pie'
+			},
+			title: {
+				text: title_val,
+				style: {
+					display: show_title_val
+				}
+			},
+			tooltip: {
+				formatter: pie_label
+			},
+			legend:{
+				floating: true,
+				align: 'left',
+				verticalAlign: 'top',
+				layout: 'vertical'
+			},
+			colors: color_val,
+			series: [{
+				name: 'Donut',
+				data: data_val,
+				dataLabels:{
+					connectorShape: 'straight',
+					// crookDistance: '70%',
+					formatter: pie_label
+				},
+				size: '70%',
+				innerSize: '65%',
+				showInLegend:true
+			}]
 		});
 	}
 
@@ -419,6 +501,27 @@ function init_chart2(){
 		selected_color = colorChart[color_chart];
 
 		bar_chart(id_chart, selected_color, colorPoint_bool, legend_bool, yAxis_chart, xAxis_chart, data_chart, title_chart, show_title_chart);
+
+	});
+
+	$('.donut-chart').each(function(){
+		console.log(this.id);
+		var id_chart = '#' + this.id;
+		color_chart = $(id_chart).attr('data-color'); 
+		// var color_chart = $(id_chart).data("color");
+		var data_chart = $(id_chart).data("val");
+		// id_chart.attr('data-chart');
+		var title_chart = $(id_chart).attr('data-title');
+		var show_title_chart = $(id_chart).attr('data-show-title');
+
+		selected_color = colorChart[color_chart];
+
+		console.log(id_chart);
+		console.log(color_chart);
+		console.log(data_chart);
+		console.log(selected_color);
+
+		donut_chart(id_chart, selected_color, data_chart, title_chart, show_title_chart);
 
 	});
 

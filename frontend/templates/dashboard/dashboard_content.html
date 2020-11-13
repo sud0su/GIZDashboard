@@ -23,34 +23,33 @@
         <div class="col-12 col-sm-12 col-xl-6 {% if 'print' in request.path %}col-md-6{% else %}col-md-12 {% endif %}">
             {% include "dashboard/select_region.html" %}
         </div>
-        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-6{% else %}col-md-10{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-6{% else %}col-md-9{% endif %}">
             <div id="reportrange" class="float-right">
                 <i class="mdi mdi-calendar"></i>&nbsp; {% trans "Incident between" %} :
                 <span></span> <i class="mdi mdi-chevron-down {% if 'print' in request.path %}d-none{% endif %}"></i>
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-2 col-xl-1 {% if 'print' in request.path %}d-none{% endif %}">
-            <button id="pdf" type="button" class="btn btn-primary mb-3" style="margin-top: 9px;">{% trans "PDF" %}</button>
+        <div class="col-12 col-sm-12 col-md-3 col-xl-2 {% if 'print' in request.path %}d-none{% endif %}">
+            <div class="text-center float-md-right">
+                <button id="pdf" type="button" class="btn btn-primary mb-3" style="margin-top: 9px;">{% trans "PDF" %}</button>
+                <button id="csv" type="button" class="btn btn-primary mb-3" style="margin-top: 9px;">{% trans "CSV" %}</button>
+            </div>
         </div>
         
-        <div class="col-sm-12 col-md-2 col-xl-1 {% if 'print' in request.path %}d-none{% endif %}">
-            <button id="csv" type="button" class="btn btn-primary mb-3" style="margin-top: 9px;">{% trans "CSV" %}</button>
-        </div>
-        
-        <div class="col-12 col-sm-12 col-xl-2 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-6{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-2 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
             {% include "dashboard/select_source.html" %}
         </div>
 
-        <div class="col-12 col-sm-12 col-xl-2 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-6{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-2 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
             {% include "dashboard/select_initiator.html" %}
         </div>
 
-        <div class="col-12 col-sm-12 col-xl-2 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-6{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-2 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
             {% include "dashboard/select_hpa.html" %}
         </div>
 
-        {% if region.province.selected == 'Kabul' %}
+        {% if region.province.selected == 20 %}
         <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
             {% include "dashboard/select_police_dist.html" %}
         </div>
@@ -69,6 +68,103 @@
             </div>
         </div>
         {% endfor %}
+
+        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "Nationals Casualties" %}</h4>
+                    <div id="casualties_natl_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                    <!-- <div id="{{ chart_key }}_donut" class="ch-size donut-chart" data-color=colorDefault data-val='{{ chart_val.values | jsonify | safe }}' data-title='{{ chart_val.title }}' data-show-title='none'></div> -->
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "Internationals Casualties" %}</h4>
+                    <div id="casualties_intl_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "ANSF Casualties" %}</h4>
+                    <div id="casualties_ansf_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "ALP-PGM Casualties" %}</h4>
+                    <div id="casualties_alp_pgm_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "AOG Casualties" %}</h4>
+                    <div id="casualties_aog_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "ISKP Casualties" %}</h4>
+                    <div id="casualties_iskp_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "IM Casualties" %}</h4>
+                    <div id="casualties_im_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                </div>
+            </div>
+        </div>
+
+        {% comment %}
+        <div class="col-12 col-sm-12 col-xl-12 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col col-xl-3">
+                            <h4 class="card-title">{% trans "Nationals Casualties" %}</h4>
+                            <div id="casualties_natl_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                        </div>
+                        <div class="col col-xl-3">
+                            <h4 class="card-title">{% trans "Internationals Casualties" %}</h4>
+                            <div id="casualties_intl_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                        </div>
+                        <div class="col col-xl-3">
+                            <h4 class="card-title">{% trans "ANSF Casualties" %}</h4>
+                            <div id="casualties_ansf_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                        </div>
+                        <div class="col col-xl-3">
+                            <h4 class="card-title">{% trans "ALP-PGM Casualties" %}</h4>
+                            <div id="casualties_alp_pgm_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                        </div>
+                        <div class="col">
+                            <h4 class="card-title">{% trans "AOG Casualties" %}</h4>
+                            <div id="casualties_aog_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                        </div>
+                        <div class="col">
+                            <h4 class="card-title">{% trans "ISKP Casualties" %}</h4>
+                            <div id="casualties_iskp_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                        </div>
+                        <div class="col">
+                            <h4 class="card-title">{% trans "IM Casualties" %}</h4>
+                            <div id="casualties_im_donut" class="ch-size donut-chart" data-color=colorDefault data-val='[["Killed", 3190195.0], ["Injured", 3009765.0], ["Abducted", 1293374.0]]' data-title='National Casualties' data-show-title='none'></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endcomment %}
 
         <div class="col-12 col-sm-12 col-xl-6 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
             <div class="card">
@@ -116,8 +212,92 @@
                                 {% endif %}
                                 {% endfor %}
                                 {% endfor %}
+
+                                {% comment %}
+                                <div class="incident">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="defaultCheckParent">
+                                            <input class="form-check-input all-sub-incident" type="checkbox" value="" id="defaultCheckParent">
+                                            Default checkbox parent
+                                        </label>
+                                    </div>
+                                    <div class="sub-incident" style="margin-left: 1.75rem;">
+                                        <div class="form-check">
+                                            <label class="form-check-label" for="defaultCheck1">
+                                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name="subs">
+                                                Default checkbox anak 1
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label" for="defaultCheck2">
+                                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2" name="subs">
+                                                Default checkbox anak 2
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="incident">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="defaultCheckParent2">
+                                            <input class="form-check-input all-sub-incident" type="checkbox" value="" id="defaultCheckParent2">
+                                            Default checkbox parent 2
+                                        </label>
+                                    </div>
+                                    <div class="sub-incident" style="margin-left: 1.75rem;">
+                                        <div class="form-check">
+                                            <label class="form-check-label" for="defaultCheck3">
+                                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck3" name="subs">
+                                                Default checkbox anak 3
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label" for="defaultCheck4">
+                                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck4" name="subs">
+                                                Default checkbox anak 4
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endcomment %}
                             </div>
                         </div>
+                    
+                    {% comment %}
+                    <fieldset>
+                        <label>
+                            <input type="checkbox" class="checkall" /><strong> All</strong>
+                        </label>
+                        <fieldset>
+                            <label>
+                                <input type="checkbox" name="checkedLocations" class="chkChild checkall"
+                                    value="China" />
+                                <strong>&nbsp;&nbsp;China</strong>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="checkedLocations" class="chkChild" value="Hong Kong"
+                                    checked="checked" />
+                                &nbsp;&nbsp;&nbsp;Hong Kong
+                            </label>
+                        </fieldset>
+                        <fieldset>
+                            <label>
+                                <input type="checkbox" name="checkedLocations" class="chkChild checkall"
+                                    value="Australia" />
+                                <strong>&nbsp;&nbsp;Australia</strong>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="checkedLocations" class="chkChild" value="NSW" />
+                                &nbsp;&nbsp;&nbsp;NSW
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="checkedLocations" class="chkChild" value="VIC" />
+                                &nbsp;&nbsp;&nbsp;VIC
+                            </label>
+                        </fieldset>
+                    </fieldset>
+                    {% endcomment %}
                 </div>
             </div>
         </div>
@@ -199,7 +379,7 @@
                         {% trans "An overview of number incidents and casualties occured  in Afghanistan grouped by incident type." %}
                     </p>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover {% if 'print' in request.build_absolute_uri %}print{% else %}online{% endif %}">
+                        <table class="table table-bordered table-hover {% if 'print' in request.build_absolute_uri %}print{% else %}online_security{% endif %}">
                             <thead>
                                 <tr>
                                     <th>{% trans "Incident Type" %}</th>
@@ -212,11 +392,18 @@
                             <tbody>
                                 {% for item in tables.incidents_and_casualties_by_incident_type.values %}
                                     <tr>
-                                        <td>{{ item.incident_name }}</td>
-                                        <td>{{ item.killed }}</td>
-                                        <td>{{ item.injured }}</td>
-                                        <td>{{ item.abducted }}</td>
-                                        <td>{{ item.total }}</td>
+                                        <td class="font-weight-bold">{{ item.incident_name }}</td>
+                                        <td class="font-weight-bold">{{ item.killed }}</td>
+                                        <td class="font-weight-bold">{{ item.injured }}</td>
+                                        <td class="font-weight-bold">{{ item.abducted }}</td>
+                                        <td class="font-weight-bold">{{ item.total }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "Incident Sub Type" %}</td>
+                                        <td>{% trans "Killed Sub" %}</td>
+                                        <td>{% trans "Injured Sub" %}</td>
+                                        <td>{% trans "Abducted Sub" %}</td>
+                                        <td>{% trans "Incident Sub" %}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -481,6 +668,8 @@
 
                 $('.child-checkbox :checkbox').change(function () {
                     var $group = $(this).closest('.card-body');
+                    console.log($group);
+                    console.log($group.find('.parents-checkbox :checkbox'));
                     $group.find('.parents-checkbox :checkbox').prop('checked', !$group.find('.child-checkbox :checkbox:not(:checked)').length);
                 });
             // /Select All/None
@@ -499,6 +688,9 @@
                     $('.form-check-incident-subtype:not(.d-none)').addClass('d-none');
                 }
             });
+
+            // When several subtype chosen
+            $('.your-checkbox').prop('indeterminate', true)
 
             // DateRangePicker
             var daterange = getParameterByName("daterange");
@@ -634,6 +826,46 @@
 
                 window.document.location = url;
             });
+
+            {% comment %}
+
+            // all sub incident grouped
+            //clicking the incident parent checkbox should check or uncheck all sub incident checkboxes
+            $('input.all-sub-incident').change(function() {
+                var child_selected = $(this).parents('.incident').find('[name="subs"]');
+                child_selected.prop('checked',this.checked);
+            });
+            //clicking the last unchecked or checked sub incident checkbox should check or uncheck the incident parent checkbox
+            $('.sub-incident input').change(function() {
+                var input_sub_div_closest = $(this).closest('.sub-incident').find('input');
+                var input_checked_sub_div_closest = $(this).closest('.sub-incident').find('input:checked');
+
+                $(this).closest('.incident').find('.all-sub-incident').prop('checked', 
+                    input_sub_div_closest.length === input_checked_sub_div_closest.length
+                ); 
+            });
+
+            $(function () {
+                $('.checkall').on('change', function () {
+                    var $this = $(this);
+                    console.log($this);
+                    console.log($this.closest('fieldset').find(':checkbox'));
+                    
+                    $this.closest('fieldset').find(':checkbox').prop('checked', this.checked);
+                    if($this.is('.chkChild')){
+                    console.log($('.checkall:not(.chkChild)'));
+                        $('.checkall:not(.chkChild)').prop('checked', $('.checkall.chkChild').not(':checked').length == 0)
+                    }
+                });
+                $('.chkChild:not(.checkall)').on('change', function () {
+                    var $fs = $(this).closest('fieldset'),
+                        $all = $fs.find('.checkall'),
+                        childstate = $fs.find('> label > input[type="checkbox"]').not('.checkall').not(':checked').length == 0;
+                    $all[childstate ? 'not' : 'filter'](':checked').prop('checked', childstate).change();
+                });
+            });
+
+            {% endcomment %}
         });
     </script>
 {% endblock dashboard_script %}
