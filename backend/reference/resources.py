@@ -1,3 +1,4 @@
+from django.db.models import fields
 from import_export import resources
 from .models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype, IncidentSource
 
@@ -6,6 +7,7 @@ class ProvinceResource(resources.ModelResource):
     class Meta:
         model = Province
         exclude = ('id',)
+        import_id_fields = ('name',)
 
     # def before_import(self, dataset, using_transactions=True, dry_run=False, **kwargs):
     #     # num_rows = dataset.height
@@ -21,7 +23,8 @@ class DistrictResource(resources.ModelResource):
     class Meta:
         model = District
         exclude = ('id',)
-        import_id_fields = ('name', 'province',)
+        # fields = ('name', 'province__name', )
+        import_id_fields = ('name',)
 
     def before_import_row(self, row, **kwargs):
         province = row.get('province')
@@ -33,3 +36,4 @@ class CityVillageResource(resources.ModelResource):
     class Meta:
         model = CityVillage
         exclude = ('id',)
+        import_id_fields = ('name',)

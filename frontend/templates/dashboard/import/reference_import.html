@@ -1,0 +1,83 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% block content_dashboard %}
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="#ref" class="nav-link active" data-toggle="tab">Import Reference Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#main" class="nav-link" data-toggle="tab">Import UNDSS Data</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="ref">
+                        <h4 class="mt-2">Home tab content</h4>
+                        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#provinceModal">
+                            <i class="mdi mdi-auto-upload menu-icon"></i> Province
+                        </button>
+
+                        <!-- <a data-toggle="modal" data-target="#modal" href="{% url 'importdataprovince' %}">here</a> -->
+
+                        <button class="btn btn-outline-primary">
+                            <i class="mdi mdi-auto-upload menu-icon"></i> District
+                        </button>
+                        <button class="btn btn-outline-primary">
+                            <i class="mdi mdi-auto-upload menu-icon"></i> City Village
+                        </button>
+                        <button class="btn btn-outline-primary">
+                            <i class="mdi mdi-auto-upload menu-icon"></i> Area
+                        </button>
+                        <button class="btn btn-outline-primary">
+                            <i class="mdi mdi-auto-upload menu-icon"></i> Police District
+                        </button>
+                        <button class="btn btn-outline-primary">
+                            <i class="mdi mdi-auto-upload menu-icon"></i> Incident Type
+                        </button>
+                        <button class="btn btn-outline-primary">
+                            <i class="mdi mdi-auto-upload menu-icon"></i> Incident Sub Type
+                        </button>
+                        <button class="btn btn-outline-primary">
+                            <i class="mdi mdi-auto-upload menu-icon"></i> Organization
+                        </button>
+                    </div>
+                    <div class="tab-pane fade" id="main">
+                        <h4 class="mt-2">Profile tab content</h4>
+                        {% block tab_main %}{% endblock tab_main %}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block modal %}
+<div class="modal fade" id="provinceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                modal 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock modal %}
