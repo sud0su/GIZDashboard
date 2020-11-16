@@ -31,9 +31,18 @@
         </div>
 
         <div class="col-12 col-sm-12 col-md-3 col-xl-2 {% if 'print' in request.path %}d-none{% endif %}">
+            {% comment %}
             <div class="text-center float-md-right">
                 <button id="pdf" type="button" class="btn btn-primary mb-3" style="margin-top: 9px;">{% trans "PDF" %}</button>
                 <button id="csv" type="button" class="btn btn-primary mb-3" style="margin-top: 9px;">{% trans "CSV" %}</button>
+            </div>
+            {% endcomment %}
+            <div class="btn-group">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 9px;">{% trans "Download" %}</button>
+                <div class="dropdown-menu">
+                    <button id="pdf" type="button" class="dropdown-item">{% trans "PDF" %}</button>
+                    <button id="csv" type="button" class="dropdown-item">{% trans "CSV" %}</button>
+                </div>
             </div>
         </div>
         
