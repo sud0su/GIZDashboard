@@ -376,6 +376,7 @@ function init_chart2(){
 				data: data_val,
 				dataLabels:{
 					connectorPadding: 0,
+					connectorWidth: 0,
 					padding: 0,
 					distance: -50,
 					connectorShape: 'straight',
