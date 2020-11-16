@@ -375,12 +375,15 @@ function init_chart2(){
 				name: 'Donut',
 				data: data_val,
 				dataLabels:{
+					connectorPadding: 0,
+					padding: 0,
+					distance: -50,
 					connectorShape: 'straight',
 					// crookDistance: '70%',
 					formatter: pie_label
 				},
-				size: '70%',
-				innerSize: '65%',
+				size: '110%',
+				innerSize: '70%',
 				showInLegend:true
 			}]
 		});

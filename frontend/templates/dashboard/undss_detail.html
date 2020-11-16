@@ -12,27 +12,24 @@
                         <a href="{% url 'dashboard' %}?page=dashboard" class="btn btn-outline-primary" role="button">{% trans "Back to Dashboard" %}</a>
                         <a href="{% url 'inputdashboard' %}" class="btn btn-primary" role="button">{% trans "Add Another Data" %}</a>
                     </div>
-                    <h4 class="card-title">{% trans "Data Saved - UNDSS Detail" %}</h4>
+                    <h4 class="card-title">{% trans "Data Saved - Incident Detail" %}</h4>
 
                     <br>
                     <h5 class="mb-2 font-weight-bold">{% trans "Identification" %}</h5>
                     <hr class="mt-0">
                     <dl class="row">
-                        <dt class="col-sm-3 text-right">{% trans "Shape" %}</dt>
-                        <dd class="col-sm-9 mb-4">{{ object.Shape }}</dd>
-                        <dt class="col-sm-3 text-right">{% trans "Data Entry No" %}</dt>
+                        <!-- <dt class="col-sm-3 text-right">{% trans "Shape" %}</dt>
+                        <dd class="col-sm-9 mb-4">{{ object.Shape }}</dd> -->
+                        <dt class="col-sm-3 text-right">{% trans "Single ID" %}</dt>
                         <dd class="col-sm-9">{{ object.Single_ID }}</dd>
 
+                        <dt class="col-sm-3 text-right">{% trans "Source" %}</dt>
+                        <dd class="col-sm-9">{{ object.Date }}</dd>
 
                         <dt class="col-sm-3 text-right">{% trans "Date" %}</dt>
                         <dd class="col-sm-9">{{ object.Date }}</dd>
                         <dt class="col-sm-3 text-right">{% trans "Time of Incident" %}</dt>
                         <dd class="col-sm-9">{{ object.Time_of_Incident }}</dd>
-
-                        <dt class="col-sm-3 text-right">{% trans "Latitude" %}</dt>
-                        <dd class="col-sm-9">{{ object.Latitude }}</dd>
-                        <dt class="col-sm-3 text-right">{% trans "Longitude" %}</dt>
-                        <dd class="col-sm-9">{{ object.Longitude }}</dd>
                     </dl>
 
                     <h5 class="mb-2 font-weight-bold">{% trans "Area" %}</h5>
@@ -48,6 +45,11 @@
                         <dd class="col-sm-9">{{ object.Area }}</dd>
                         <dt class="col-sm-3 text-right">{% trans "Police District" %}</dt>
                         <dd class="col-sm-9">{{ object.Police_District }}</dd>
+
+                        <dt class="col-sm-3 text-right">{% trans "Latitude" %}</dt>
+                        <dd class="col-sm-9">{{ object.Latitude }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Longitude" %}</dt>
+                        <dd class="col-sm-9">{{ object.Longitude }}</dd>
                     </dl>
 
                     <h5 class="mb-2 font-weight-bold">{% trans "Details Incident" %}</h5>
@@ -62,33 +64,126 @@
                     </dl>
 
                     <dl class="row">
-                        <dt class="col-sm-3 text-right">{% trans "HPA" %}</dt>
-                        <dd class="col-sm-9">{{ object.HPA }}</dd>
                         <dt class="col-sm-3 text-right">{% trans "Initiator" %}</dt>
                         <dd class="col-sm-9">{{ object.Initiator }}</dd>
                         <dt class="col-sm-3 text-right">{% trans "Target" %}</dt>
                         <dd class="col-sm-9">{{ object.Target }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "HPA" %}</dt>
+                        <dd class="col-sm-9">{{ object.HPA }}</dd>
                     </dl>
 
                     <h5 class="mb-2 font-weight-bold">{% trans "Casualties" %}</h5>
                     <hr class="mt-0">
+                    {% comment %}
                     <dl class="row">
-                        <dt class="col-sm-3 text-right">{% trans "Killed" %}</dt>
-                        <dd class="col-sm-9">{{ object.killed }}</dd>
-                        <dt class="col-sm-3 text-right">{% trans "Injured" %}</dt>
-                        <dd class="col-sm-9">{{ object.Injured }}</dd>
-                        <dt class="col-sm-3 text-right">{% trans "Abducted" %}</dt>
-                        <dd class="col-sm-9">{{ object.Abducted }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Killed Nationals" %}</dt>
+                        <dd class="col-sm-9">{{ object.Kill_Natl }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Killed Internationals" %}</dt>
+                        <dd class="col-sm-9">{{ object.Kill_Intl }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Killed ANSF" %}</dt>
+                        <dd class="col-sm-9">{{ object.Kill_ANSF }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Killed IM" %}</dt>
+                        <dd class="col-sm-9">{{ object.Kill_IM }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Killed ALP-PGM" %}</dt>
+                        <dd class="col-sm-9">{{ object.Kill_ALP_PGM }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Killed AOG" %}</dt>
+                        <dd class="col-sm-9">{{ object.Kill_AOG }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Killed ISKP" %}</dt>
+                        <dd class="col-sm-9">{{ object.Kill_ISKP }}</dd>
                     </dl>
 
                     <dl class="row">
-                        <dt class="col-sm-3 text-right">{% trans "PRMO" %}</dt>
-                        <dd class="col-sm-9">{{ object.PRMO }}</dd>
-                        <dt class="col-sm-3 text-right">{% trans "UNDSS" %}</dt>
-                        <dd class="col-sm-9">{{ object.UNDSS }}</dd>
-                        <dt class="col-sm-3 text-right">{% trans "INSO" %}</dt>
-                        <dd class="col-sm-9">{{ object.INSO }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Injured Nationals" %}</dt>
+                        <dd class="col-sm-9">{{ object.Inj_Natl }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Injured Internationals" %}</dt>
+                        <dd class="col-sm-9">{{ object.Inj_Intl }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Injured ANSF" %}</dt>
+                        <dd class="col-sm-9">{{ object.Inj_ANSF }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Injured IM" %}</dt>
+                        <dd class="col-sm-9">{{ object.Inj_IM }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Injured ALP-PGM" %}</dt>
+                        <dd class="col-sm-9">{{ object.Inj_ALP_PGM }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Injured AOG" %}</dt>
+                        <dd class="col-sm-9">{{ object.Inj_AOG }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Injured ISKP" %}</dt>
+                        <dd class="col-sm-9">{{ object.Inj_ISKP }}</dd>
                     </dl>
+
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">{% trans "Abducted Nationals" %}</dt>
+                        <dd class="col-sm-9">{{ object.Abd_Natl }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Abducted Internationals" %}</dt>
+                        <dd class="col-sm-9">{{ object.Abd_Intl }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Abducted ANSF" %}</dt>
+                        <dd class="col-sm-9">{{ object.Abd_ANSF }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Abducted IM" %}</dt>
+                        <dd class="col-sm-9">{{ object.Abd_IM }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "Abducted ALP-PGM" %}</dt>
+                        <dd class="col-sm-9">{{ object.Abd_ALP_PGM }}</dd>
+                    </dl>
+                    {% endcomment %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-6 text-right">{% trans "Killed Nationals" %}</dt>
+                                <dd class="col-sm-6">{{ object.Kill_Natl }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Injured Nationals" %}</dt>
+                                <dd class="col-sm-6">{{ object.Inj_Natl }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Abducted Nationals" %}</dt>
+                                <dd class="col-sm-6">{{ object.Abd_Natl }}</dd>
+                            </dl>
+                            <dl class="row">
+                                <dt class="col-sm-6 text-right">{% trans "Killed Internationals" %}</dt>
+                                <dd class="col-sm-6">{{ object.Kill_Intl }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Injured Internationals" %}</dt>
+                                <dd class="col-sm-6">{{ object.Inj_Intl }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Abducted Internationals" %}</dt>
+                                <dd class="col-sm-6">{{ object.Abd_Intl }}</dd>
+                            </dl>
+                            <dl class="row">
+                                <dt class="col-sm-6 text-right">{% trans "Killed ANSF" %}</dt>
+                                <dd class="col-sm-6">{{ object.Kill_ANSF }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Injured ANSF" %}</dt>
+                                <dd class="col-sm-6">{{ object.Inj_ANSF }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Abducted ANSF" %}</dt>
+                                <dd class="col-sm-6">{{ object.Abd_ANSF }}</dd>
+                            </dl>
+                            <dl class="row">
+                                <dt class="col-sm-6 text-right">{% trans "Killed IM" %}</dt>
+                                <dd class="col-sm-6">{{ object.Kill_IM }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Injured IM" %}</dt>
+                                <dd class="col-sm-6">{{ object.Inj_IM }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Abducted IM" %}</dt>
+                                <dd class="col-sm-6">{{ object.Abd_IM }}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-6 text-right">{% trans "Killed ALP-PGM" %}</dt>
+                                <dd class="col-sm-6">{{ object.Kill_ALP_PGM }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Injured ALP-PGM" %}</dt>
+                                <dd class="col-sm-6">{{ object.Inj_ALP_PGM }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Abducted ALP-PGM" %}</dt>
+                                <dd class="col-sm-6">{{ object.Abd_ALP_PGM }}</dd>
+                            </dl>
+                            <dl class="row">
+                                <dt class="col-sm-6 text-right">{% trans "Killed AOG" %}</dt>
+                                <dd class="col-sm-6">{{ object.Kill_AOG }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Injured AOG" %}</dt>
+                                <dd class="col-sm-6">{{ object.Inj_AOG }}</dd>
+                            </dl>
+                            <dl class="row">
+                                <dt class="col-sm-6 text-right">{% trans "Killed ISKP" %}</dt>
+                                <dd class="col-sm-6">{{ object.Kill_ISKP }}</dd>
+                                <dt class="col-sm-6 text-right">{% trans "Injured ISKP" %}</dt>
+                                <dd class="col-sm-6">{{ object.Inj_ISKP }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    
+
+
                 </div>
             </div>
         </div>

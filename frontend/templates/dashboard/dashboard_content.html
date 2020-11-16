@@ -69,7 +69,7 @@
         </div>
         {% endfor %}
 
-        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-4 d-block{% else %}col-md-12 col-lg-12{% endif %} grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Nationals Casualties" %}</h4>
@@ -78,7 +78,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-4 d-block{% else %}col-md-12 col-lg-12{% endif %} grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Internationals Casualties" %}</h4>
@@ -86,7 +86,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-4 d-block{% else %}col-md-12 col-lg-12{% endif %} grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "ANSF Casualties" %}</h4>
@@ -94,7 +94,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-4 d-block{% else %}col-md-12 col-lg-12{% endif %} grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "ALP-PGM Casualties" %}</h4>
@@ -102,7 +102,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-4 d-block{% else %}col-md-12 col-lg-12{% endif %} grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "AOG Casualties" %}</h4>
@@ -110,7 +110,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-4 d-block{% else %}col-md-12 col-lg-12{% endif %} grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "ISKP Casualties" %}</h4>
@@ -118,7 +118,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-12 col-xl-4 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
+        <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-4 d-block{% else %}col-md-12 col-lg-12{% endif %} grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "IM Casualties" %}</h4>
@@ -392,18 +392,11 @@
                             <tbody>
                                 {% for item in tables.incidents_and_casualties_by_incident_type.values %}
                                     <tr>
-                                        <td class="font-weight-bold">{{ item.incident_name }}</td>
-                                        <td class="font-weight-bold">{{ item.killed }}</td>
-                                        <td class="font-weight-bold">{{ item.injured }}</td>
-                                        <td class="font-weight-bold">{{ item.abducted }}</td>
-                                        <td class="font-weight-bold">{{ item.total }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans "Incident Sub Type" %}</td>
-                                        <td>{% trans "Killed Sub" %}</td>
-                                        <td>{% trans "Injured Sub" %}</td>
-                                        <td>{% trans "Abducted Sub" %}</td>
-                                        <td>{% trans "Incident Sub" %}</td>
+                                        <td>{{ item.incident_name }}</td>
+                                        <td>{{ item.killed }}</td>
+                                        <td>{{ item.injured }}</td>
+                                        <td>{{ item.abducted }}</td>
+                                        <td>{{ item.total }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
