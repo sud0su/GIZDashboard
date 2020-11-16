@@ -109,6 +109,51 @@ def Chart(request, filters={}, main={}):
         total_result = [qs_bar_chart_target_dict.get(id,0) for id in main['filters']["target_type"]['checked']]
         chart['bar_chart_target']['data_val'].append({'name':pc, 'data': total_result})
 
+    # Donut Chart by casualtiy type and subtype
+    chart['donut_chart_casualty_subtype'] = [
+        {
+            'key': 'number_of_national_casualties',
+            'title': "National Casualties",
+            'fields': ['Kill_Natl','Inj_Natl','Abd_Natl'],
+        },
+        {
+            'key': 'number_of_international_casualties',
+            'title': "International Casualties",
+            'fields': ['Kill_Intl','Inj_Intl','Abd_Intl'],
+        },
+        {
+            'key': 'number_of_ansf_casualties',
+            'title': "ANSF Casualties",
+            'fields': ['Kill_ANSF','Inj_ANSF','Abd_ANSF'],
+        },
+        {
+            'key': 'number_of_alp-pgm_casualties',
+            'title': "ALP-PGM Casualties",
+            'fields': ['Kill_ALP_PGM','Inj_ALP_PGM','Abd_ALP_PGM'],
+        },
+        {
+            'key': 'number_of_aog_casualties',
+            'title': "AOG Casualties",
+            'fields': ['Kill_AOG','Inj_AOG'],
+        },
+        {
+            'key': 'number_of_iskp_casualties',
+            'title': "ISKP Casualties",
+            'fields': ['Kill_ISKP','Inj_ISKP'],
+        },
+        {
+            'key': 'number_of_im_casualties',
+            'title': "IM Casualties",
+            'fields': ['Kill_IM','Inj_IM','Abd_IM'],
+        },
+    ]
+    all_fields = list(chain.from_iterable([i['fields'] for i in chart['donut_chart_casualty_subtype']]))
+    sum_queries = {i:Coalesce(Sum(i), 0) for i in all_fields}
+    bar_chart_casualty_subtype_qs = undssQueryset.aggregate(**sum_queries)
+    field2label = lambda x: {'Kill':'Killed', 'Inj':'Injured', 'Abd':'Abducted'}.get(x.split('_')[0])
+    for c in chart['donut_chart_casualty_subtype']:
+        c['values'] = [[field2label(field), bar_chart_casualty_subtype_qs[field]] for field in c['fields']]
+
     ## Spline Chart
     chart['spline'] = {}
     chart['spline']['data_val'] = []
