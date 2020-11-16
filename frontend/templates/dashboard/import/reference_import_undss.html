@@ -1,116 +1,198 @@
 {% extends "dashboard/dashboard_base.html" %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% block content_dashboard %}
-{% if confirm_form %}
-<div class="row">
-  <div class="col-12 grid-margin">
-    <form enctype="multipart/form-data" method="post" action=".">
-      {% csrf_token %}
-      {{ confirm_form.as_p }}
-      <p>
-        {% trans "Below is a preview of data to be imported. If you are satisfied with the results, click 'Confirm import'" %}
-      </p>
-      <div class="submit-row">
-        <input type="submit" class="default" name="confirm" value="{% trans "Confirm import" %}">
-      </div>
-    </form>
-    {% else %}
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "Import Data" %}</h4>
+                    <p class="card-description">
+                        {% trans "Import your file to the dashboard." %}
+                        {% trans "Before start importing data, please make sure following things to ensure the import is successful:" %}
+                    </p>
+                    <ol class="card-description">
+                        <li>{% trans "Format your file to .xlsx or .csv file" %}</li>
+                        <li>{% trans "Format the top row of your column as listed below:" %}</li>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        {% for f in fields  %}
+                                            <th>
+                                                {{ f }}
+                                            </th>
+                                        {% endfor %}
+                                        </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <li>{% trans "Date column should be formatted as YYYY-MM-DD hh:mm:ss" %}</li>
+                        <li>{% trans "Time_of_Incident should be formatted in 24-hour formats as hh:mm" %}</li>
+                        <li>{% trans "Province, District, Incident_Type, Incident_Subtype, Initiator, Target, Incident_Source MUST have the exact same word as in our reference list. You can check all of the list in the admin page." %}</li>
+                        <li>{% trans "Click Import Button" %}</li>
+                    </ol>
+                    {% if confirm_form %}
+                        <form enctype="multipart/form-data" method="post" action=".">
+                            {% csrf_token %}
+                            {{ confirm_form.as_p }}
+                            <p class="card-description">
+                                {% trans "Below is a preview of data to be imported. If you are satisfied with the results, click 'Confirm import'" %}
+                            </p>
+                            <div class="submit-row">
+                                <input type="submit" class="default" name="confirm" value="{% trans "Confirm import" %}">
+                            </div>
+                        </form>
+                    {% else %}
+                        <form enctype="multipart/form-data" method="post" action="{% url 'confirmimportdataundss' %}">
+                            {% csrf_token %}
 
-    <form enctype="multipart/form-data" method="post" action="{% url 'confirmimportdataundss' %}">
-      {% csrf_token %}
+                            <p class="card-description">
+                                {% trans "This importer will import the following fields: " %}
+                                {% for f in fields  %}
+                                    {% if forloop.counter0 %}
+                                    ,
+                                    {% endif %}
+                                    <code>{{ f }}</code>
+                                {% endfor %}
+                            </p>
 
-      <p>
-        {% trans "This importer will import the following fields: " %}
-        {% for f in fields  %}
-        {% if forloop.counter0 %}
-        ,
-        {% endif %}
-        <code>{{ f }}</code>
-        {% endfor %}
-      </p>
+                            <div class="form-group">
+                                {{ form.import_file.label_tag }}
+                                <div class="custom-file">
+                                    {{ form.import_file|add_class:"custom-file-input" }}
+                                    <label class="custom-file-label" for="{{ form.import_file.id_for_label }}">Choose file</label>
+                                </div>
+                            </div>
 
-      <fieldset class="module aligned">
-        {% for field in form %}
-        <div class="form-row">
-          {{ field.errors }}
+                            <div class="form-group">
+                                {{ form.input_format.label_tag }}
+                                {{ form.input_format |attr:"class:form-control form-control-lg" }}
+    
+                                {% for error in form.input_format.errors %}
+                                    <small class="form-text text-muted">{{ error }}</small>
+                                {% endfor %}
+                                {% if form.input_format.help_text %}
+                                    <small class="form-text text-muted">{{ form.input_format.help_text }}</small>
+                                {% endif %}
+                            </div>
 
-          {{ field.label_tag }}
+                            {% comment %}
+                            <fieldset class="module aligned">
+                                {% for field in form %}
+                                <div class="form-row">
+                                    {{ field.errors }}
 
-          {{ field }}
+                                    {{ field.label_tag }}
 
-          {% if field.field.help_text %}
-          <p class="help">{{ field.field.help_text|safe }}</p>
-          {% endif %}
+                                    {{ field }}
+
+                                    {% if field.field.help_text %}
+                                    <p class="help">{{ field.field.help_text|safe }}</p>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </fieldset>
+
+                            <div class="submit-row">
+                                <input type="submit" class="default" value="{% trans "Submit" %}">
+                            </div>
+                            {% endcomment %}
+
+                            <button type="submit" class="btn btn-primary mr-2" id="submit_file">{% trans "Submit" %}</button>
+                            <button class="btn btn-light">{% trans "Clear" %}</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        {% endfor %}
-      </fieldset>
+    </div>
+{% endblock %}
 
-      <div class="submit-row">
-        <input type="submit" class="default" value="{% trans "Submit" %}">
-      </div>
-    </form>
+{% block modal %}
+    <!-- Modal -->
+    <div class="modal fade" id="modal_preview" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    {% if result %}
+                        {% if result.has_errors %}
+                        <h2>{% trans "Errors" %}</h2>
+                        <ul>
+                            {% for error in result.base_errors  %}
+                            <li>
+                                {{ error.error }}
+                                <div class="traceback">{{ error.traceback|linebreaks }}</div>
+                            </li>
+                            {% endfor %}
+                            {% for line, errors in result.row_errors %}
+                            {% for error in errors %}
+                            <li>
+                                {% trans "Line number" %}: {{ line }} - {{ error.error }}
+                                <div>{{ error.row }}</div>
+                                <div class="traceback">{{ error.traceback|linebreaks }}</div>
+                            </li>
+                            {% endfor %}
+                            {% endfor %}
+                        </ul>
+                        {% else %}
 
-    {% endif %}
-    {% if result %}
+                        <h2>
+                            {% trans "Preview" %}
+                        </h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    {% for field in result.diff_headers %}
+                                    <th>{{ field }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            {% for row in result.rows %}
+                            <tr>
+                                <td>
+                                    {% if row.import_type == 'new' %}
+                                    {% trans "New" %}
+                                    {% elif row.import_type == 'skip' %}
+                                    {% trans "Skipped" %}
+                                    {% elif row.import_type == 'delete' %}
+                                    {% trans "Delete" %}
+                                    {% elif row.import_type == 'update' %}
+                                    {% trans "Update" %}
+                                    {% endif %}
+                                </td>
+                                {% for field in row.diff %}
+                                <td>
+                                    {{ field }}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock modal %}
 
-    {% if result.has_errors %}
-    <h2>{% trans "Errors" %}</h2>
-    <ul>
-      {% for error in result.base_errors  %}
-      <li>
-        {{ error.error }}
-        <div class="traceback">{{ error.traceback|linebreaks }}</div>
-      </li>
-      {% endfor %}
-      {% for line, errors in result.row_errors %}
-      {% for error in errors %}
-      <li>
-        {% trans "Line number" %}: {{ line }} - {{ error.error }}
-        <div>{{ error.row }}</div>
-        <div class="traceback">{{ error.traceback|linebreaks }}</div>
-      </li>
-      {% endfor %}
-      {% endfor %}
-    </ul>
-    {% else %}
-
-    <h2>
-      {% trans "Preview" %}
-    </h2>
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          {% for field in result.diff_headers %}
-          <th>{{ field }}</th>
-          {% endfor %}
-        </tr>
-      </thead>
-      {% for row in result.rows %}
-      <tr>
-        <td>
-          {% if row.import_type == 'new' %}
-          {% trans "New" %}
-          {% elif row.import_type == 'skip' %}
-          {% trans "Skipped" %}
-          {% elif row.import_type == 'delete' %}
-          {% trans "Delete" %}
-          {% elif row.import_type == 'update' %}
-          {% trans "Update" %}
-          {% endif %}
-        </td>
-        {% for field in row.diff %}
-        <td>
-          {{ field }}
-        </td>
-        {% endfor %}
-      </tr>
-      {% endfor %}
-    </table>
-    {% endif %}
-    {% endif %}
-
-  </div>
-</div>
+{% block dashboard_script %}
+    <script>
+        $("#submit_file").click(function(){
+            // $('#modal_preview').modal('show'); 
+        });
+    </script>
 {% endblock %}

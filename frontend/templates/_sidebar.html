@@ -12,20 +12,21 @@
         {% if user.is_staff %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'inputdashboard' %}">
-                    <i class="mdi mdi-view-headline menu-icon"></i>
+                    <i class="mdi mdi-pencil menu-icon"></i>
                     <span class="menu-title">{% trans "Input New Data" %}</span>
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="{% url 'importdataundss' %}">
+                    <i class="mdi mdi-file-import menu-icon"></i>
+                    <span class="menu-title">{% trans "Import Data" %}</span>
+                </a>
+            </li>
+            {% comment %}
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'importdata' %}">
                     <i class="mdi mdi-view-headline menu-icon"></i>
                     <span class="menu-title">{% trans "Import data" %}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'importdataundss' %}">
-                    <i class="mdi mdi-view-headline menu-icon"></i>
-                    <span class="menu-title">{% trans "Import data undss" %}</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -40,6 +41,7 @@
                     <span class="menu-title">{% trans "Import data district" %}</span>
                 </a>
             </li>
+            {% endcomment %}
         {% endif %}
     </ul>
 </nav>
