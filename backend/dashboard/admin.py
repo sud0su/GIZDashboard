@@ -1,10 +1,11 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 
 # Register your models here.
 from .models import Undss
 
 @admin.register(Undss)
-class UndssAdmin(admin.ModelAdmin):
+class UndssAdmin(ImportExportModelAdmin):
     list_display = [
         'Single_ID',
         'Province',
