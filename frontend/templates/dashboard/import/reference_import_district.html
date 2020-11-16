@@ -54,7 +54,7 @@
     {% endif %}
     {% if result %}
 
-    {% if result.has_errors %}
+    {% if result.has_errors or result.has_validation_errors %}
     <h2>{% trans "Errors" %}</h2>
     <ul>
       {% for error in result.base_errors  %}
@@ -63,14 +63,12 @@
         <div class="traceback">{{ error.traceback|linebreaks }}</div>
       </li>
       {% endfor %}
-      {% for line, errors in result.row_errors %}
-      {% for error in errors %}
+      {% for error in result.invalid_rows %}
       <li>
         {% trans "Line number" %}: {{ line }} - {{ error.error }}
-        <div>{{ error.row }}</div>
+        <div>{{ error.number }}</div>
         <div class="traceback">{{ error.traceback|linebreaks }}</div>
       </li>
-      {% endfor %}
       {% endfor %}
     </ul>
     {% else %}
