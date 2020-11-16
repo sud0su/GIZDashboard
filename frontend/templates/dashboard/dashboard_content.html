@@ -399,7 +399,7 @@
                         {% trans "An overview of number incidents and casualties occured  in Afghanistan grouped by incident type." %}
                     </p>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover {% if 'print' in request.build_absolute_uri %}print{% else %}online_security{% endif %}">
+                        <table class="table table-bordered table-hover {% if 'print' in request.build_absolute_uri %}print{% else %}online{% endif %}">
                             <thead>
                                 <tr>
                                     <th>{% trans "Incident Type" %}</th>
