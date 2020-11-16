@@ -1,6 +1,8 @@
-from django.db.models import fields
-from import_export import resources
+from import_export import resources, fields
+from import_export.widgets import ForeignKeyWidget
 from .models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype, IncidentSource
+from django.core.exceptions import ValidationError
+
 
 
 class ProvinceResource(resources.ModelResource):
@@ -9,27 +11,26 @@ class ProvinceResource(resources.ModelResource):
         exclude = ('id',)
         import_id_fields = ('name',)
 
-    # def before_import(self, dataset, using_transactions=True, dry_run=False, **kwargs):
-    #     # num_rows = dataset.height
-    #     # print('num_rows in dataset: {}'.format(num_rows))
-    #     print(dataset)
-    # def before_import_row(self, row, **kwargs):
-    #     province = row.get('province')
-    #     (cat, _created) = Province.objects.get_or_create(name=province)
-    #     row['category'] = cat.id
-
 
 class DistrictResource(resources.ModelResource):
+    name = fields.Field(column_name='District', attribute='name')
+    province = fields.Field(column_name='Province', attribute='province', widget=ForeignKeyWidget(Province, 'name'))
+
     class Meta:
         model = District
         exclude = ('id',)
-        # fields = ('name', 'province__name', )
+        fields = ('name', 'province',)
+        clean_model_instances = True
         import_id_fields = ('name',)
 
     def before_import_row(self, row, **kwargs):
-        province = row.get('province')
-        (prov, _created) = Province.objects.get_or_create(name=province)
-        row['province'] = prov.id
+        province = row.get('Province')
+        prov = Province.objects.filter(name=province)
+        if not bool(prov):
+            raise ValidationError('Province name %s cannot be found' % province)
+        # else:
+        #     row['province'] = prov[0].id
+
 
 
 class CityVillageResource(resources.ModelResource):
