@@ -1,7 +1,7 @@
 from django import forms
 from .models import Undss
 from django_select2.forms import Select2Widget
-from bootstrap_datepicker_plus import DateTimePickerInput, TimePickerInput
+from bootstrap_datepicker_plus import DatePickerInput, TimePickerInput
 from reference.models import Province, District, Area, CityVillage, IncidentType, IncidentSubtype, IncidentSource
 from organization.models import Organization
 
@@ -122,7 +122,7 @@ class UndssForm(forms.ModelForm):
             # 'INSO',
         ]
         widgets = {
-            'Date': DateTimePickerInput(), 
+            'Date': DatePickerInput(format='%m-%d-%Y'), 
             'Time_of_Incident': TimePickerInput(),
         }
     
