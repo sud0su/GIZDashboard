@@ -5,5 +5,9 @@ from .resources import OrganizationResource
 
 @admin.register(Organization)
 class OrganizationAdmin(ImportExportModelAdmin):
+    list_display = [
+        'code',
+        'name',
+        ]
     model = Organization
     resource_class = OrganizationResource

@@ -5,4 +5,5 @@ class OrganizationResource(resources.ModelResource):
     class Meta:
         model = Organization
         exclude = ('id',)
-        import_id_fields = ('code', 'name',)
+        fields = ('code', 'name',)
+        import_id_fields = ('code',)

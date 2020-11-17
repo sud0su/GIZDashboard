@@ -23,23 +23,27 @@ class IncidentTypeResource(resources.ModelResource):
         exclude = ('id',)
         import_id_fields = ('name',)
 
+# class IncidentTypeForeignKey(ForeignKeyWidget):
+#     def get_queryset(self, value, row, *args, **kwargs):
+#         return self.model.objects.filter(name=value)
 
 class IncidentSubTypeResource(resources.ModelResource):
-    name = fields.Field(column_name='IncidentType', attribute='name')
-    incidenttype = fields.Field(column_name='IncidentSubType', attribute='incidenttype', widget=ForeignKeyWidget(IncidentSubtype, 'name'))
+    name = fields.Field(column_name='IncidentSubType', attribute='name')
+    incidenttype = fields.Field(column_name='IncidentType', attribute='incidenttype', widget=ForeignKeyWidget(IncidentType, 'name'))
 
     class Meta:
         model = IncidentSubtype
         exclude = ('id',)
         fields = ('name', 'incidenttype',)
         clean_model_instances = True
-        import_id_fields = ('name',)
+        import_id_fields = ('name', 'incidenttype')
 
     def before_import_row(self, row, **kwargs):
         inctype = row.get('IncidentType')
-        istype = IncidentSubtype.objects.filter(name=inctype)
+        istype = IncidentType.objects.filter(name=inctype)
         if not bool(istype):
             raise ValidationError('Incident Type name %s cannot be found' % inctype)
+
 
 
 class DistrictResource(resources.ModelResource):
@@ -51,7 +55,7 @@ class DistrictResource(resources.ModelResource):
         exclude = ('id',)
         fields = ('name', 'province',)
         clean_model_instances = True
-        import_id_fields = ('name',)
+        import_id_fields = ('name', 'province')
 
     def before_import_row(self, row, **kwargs):
         province = row.get('Province')
