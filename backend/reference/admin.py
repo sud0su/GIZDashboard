@@ -1,37 +1,30 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 # Register your models here.
-from .models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype, IncidentSource
+from .models import Province, District, IncidentType, IncidentSubtype, IncidentSource
+from .resources import DistrictResource, ProvinceResource, IncidentTypeResource, IncidentSubTypeResource, IncidentSourceResource
 
-@admin.register(Province, District, CityVillage, Area, IncidentType, IncidentSubtype, IncidentSource)
+@admin.register(Province)
+class ProvinceAdmin(ImportExportModelAdmin):
+    model = Province
+    resource_class = ProvinceResource
 
-class ViewAdmin(ImportExportModelAdmin):
-    pass
+@admin.register(District)
+class DistrictAdmin(ImportExportModelAdmin):
+    model = District
+    resource_class = DistrictResource
 
-# @admin.register(Province)
-# class ProvinceAdmin(ImportExportModelAdmin):
-#     pass
+@admin.register(IncidentType)
+class IncidentTypeAdmin(ImportExportModelAdmin):
+    model = IncidentType
+    resource_class = IncidentTypeResource
 
-# @admin.register(District)
-# class DistrictAdmin(ImportExportModelAdmin):
-#     pass
+@admin.register(IncidentSubtype)
+class IncidentSubtypeAdmin(ImportExportModelAdmin):
+    model = IncidentSubtype
+    resource_class = IncidentSubTypeResource
 
-# @admin.register(CityVillage)
-# class CityVillageAdmin(ImportExportModelAdmin):
-#     pass
-
-# @admin.register(Area)
-# class AreaAdmin(ImportExportModelAdmin):
-#     pass
-
-# @admin.register(IncidentType)
-# class IncidentTypeAdmin(ImportExportModelAdmin):
-#     pass
-
-# @admin.register(IncidentSubtype)
-# class IncidentSubtypeAdmin(ImportExportModelAdmin):
-#     pass
-
-# @admin.register(IncidentSource)
-# class IncidentSourceAdmin(ImportExportModelAdmin):
-#     pass
+@admin.register(IncidentSource)
+class IncidentSourceAdmin(ImportExportModelAdmin):
+    model = IncidentSource
+    resource_class = IncidentSourceResource

@@ -1,6 +1,9 @@
 from django.contrib import admin
-
-# Register your models here.
+from import_export.admin import ImportExportModelAdmin
 from .models import Organization
+from .resources import OrganizationResource
 
-admin.site.register(Organization)
+@admin.register(Organization)
+class OrganizationAdmin(ImportExportModelAdmin):
+    model = Organization
+    resource_class = OrganizationResource
