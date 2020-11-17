@@ -7,13 +7,13 @@ from .models import Undss
 
 
 class UndssResource(resources.ModelResource):
-    province = fields.Field(column_name='Province', attribute='province', widget=ForeignKeyWidget(Province, 'name'))
-    district = fields.Field(column_name='District', attribute='district', widget=ForeignKeyWidget(District, 'name'))
-    incident_type = fields.Field(column_name='Incident_Type', attribute='incident_type', widget=ForeignKeyWidget(IncidentType, 'name'))
-    incident_subtype =fields.Field(column_name='Incident_Subtype', attribute='incident_subtype', widget=ForeignKeyWidget(IncidentSubtype, 'name'))
-    initiator = fields.Field(column_name='Initiator', attribute='initiator', widget=ForeignKeyWidget(Organization, 'code'))
-    target = fields.Field(column_name='Target', attribute='target', widget=ForeignKeyWidget(Organization, 'code'))
-    incident_source = fields.Field(column_name='Incident_Source', attribute='incident_source', widget=ForeignKeyWidget(IncidentSource, 'name'))
+    province = fields.Field(column_name='Province', attribute='Province', widget=ForeignKeyWidget(Province, 'name'))
+    district = fields.Field(column_name='District', attribute='District', widget=ForeignKeyWidget(District, 'name'))
+    incident_type = fields.Field(column_name='Incident_Type', attribute='Incident_Type', widget=ForeignKeyWidget(IncidentType, 'name'))
+    incident_subtype =fields.Field(column_name='Incident_Subtype', attribute='Incident_Subtype', widget=ForeignKeyWidget(IncidentSubtype, 'name'))
+    initiator = fields.Field(column_name='Initiator', attribute='Initiator', widget=ForeignKeyWidget(Organization, 'code'))
+    target = fields.Field(column_name='Target', attribute='Target', widget=ForeignKeyWidget(Organization, 'code'))
+    incident_source = fields.Field(column_name='Incident_Source', attribute='Incident_Source', widget=ForeignKeyWidget(IncidentSource, 'name'))
 
     Kill_Natl = fields.Field(column_name='Killed_National', attribute='Kill_Natl')
     Kill_Intl = fields.Field(column_name='Killed_International', attribute='Kill_Intl')
