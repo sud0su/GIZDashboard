@@ -2,8 +2,10 @@ from organization.models import Organization
 from reference.models import District, IncidentSource, IncidentSubtype, IncidentType, Province
 from django.core.exceptions import ValidationError
 from import_export import resources, fields
-from import_export.widgets import ForeignKeyWidget
+from import_export.widgets import ForeignKeyWidget, DateWidget
 from .models import Undss
+import time
+from datetime import datetime
 
 
 class DistrictForeignKey(ForeignKeyWidget):
@@ -22,7 +24,7 @@ class UndssResource(resources.ModelResource):
     initiator = fields.Field(column_name='Initiator', attribute='Initiator', widget=ForeignKeyWidget(Organization, 'code'))
     target = fields.Field(column_name='Target', attribute='Target', widget=ForeignKeyWidget(Organization, 'code'))
     incident_source = fields.Field(column_name='Incident_Source', attribute='Incident_Source', widget=ForeignKeyWidget(IncidentSource, 'name'))
-
+    Date = fields.Field(column_name='Date', attribute='Date', widget=DateWidget(format=("%m-%d-%Y")))
     Kill_Natl = fields.Field(column_name='Killed_National', attribute='Kill_Natl')
     Kill_Intl = fields.Field(column_name='Killed_International', attribute='Kill_Intl')
     Kill_ANSF = fields.Field(column_name='Killed_ANSF', attribute='Kill_ANSF')
@@ -52,6 +54,7 @@ class UndssResource(resources.ModelResource):
         import_id_fields = ('Single_ID',)
 
     def before_import_row(self, row, **kwargs):
+        single_id = row.get('Single_ID')
         province = row.get('Province')
         district = row.get('District')
         incident_type = row.get('Incident_Type')
@@ -59,6 +62,21 @@ class UndssResource(resources.ModelResource):
         initiator = row.get('Initiator')
         target = row.get('Target')
         incident_source = row.get('Incident_Source')
+        # date = row.get('Date')
+        timeofincident = row.get('Time_of_Incident')
+
+        if single_id == 'null' or single_id == None:
+            raise ValidationError("Single ID cannot be null")
+
+        if timeofincident is not None:
+            try:
+                if isinstance(timeofincident, str):
+                    row['Time_of_Incident'] = timeofincident
+                else:
+                    time.strptime(str(timeofincident), '%H:%M:%S')
+                    row['Time_of_Incident'] = str(timeofincident)
+            except ValueError:
+                raise ValidationError("Incorrect time format, should be hh:mm:ss")
 
         prov = Province.objects.filter(name=province)
         if not bool(prov):

@@ -4,9 +4,8 @@ from uuid import uuid4
 from django.utils.deconstruct import deconstructible
 from django.db import models
 from datetime import datetime, timedelta
-from django.contrib import admin
 from django.utils.translation import gettext as _
-from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype, IncidentSource
+from reference.models import Province, District, IncidentType, IncidentSubtype, IncidentSource
 from organization.models import Organization
 from django.urls import reverse
 
@@ -45,7 +44,8 @@ class Undss(models.Model):
     Police_District = models.CharField(max_length=255, null=True, blank=True)
     Incident_Type = models.ForeignKey(IncidentType, verbose_name=_("Incident Type"), on_delete=models.CASCADE, null=True, blank=True)
     Incident_Subtype = models.ForeignKey(IncidentSubtype, verbose_name=_("Incident SubType"), on_delete=models.CASCADE, null=True, blank=True)
-    Description_of_Incident = models.CharField(max_length=255, null=True, blank=True)
+    Description_of_Incident = models.TextField(_("Description of Incident"))
+    # Description_of_Incident = models.CharField(max_length=255, null=True, blank=True)
     HPA = models.CharField(max_length=255, null=True, blank=True)
     Initiator = models.ForeignKey(Organization, related_name="Organization_initiator_name", on_delete=models.CASCADE, null=True, blank=True)
     Target = models.ForeignKey(Organization, related_name="Organization_target_name", on_delete=models.CASCADE, null=True, blank=True)
