@@ -11,8 +11,8 @@ class UndssResource(resources.ModelResource):
     district = fields.Field(column_name='District', attribute='district', widget=ForeignKeyWidget(District, 'name'))
     incident_type = fields.Field(column_name='Incident_Type', attribute='incident_type', widget=ForeignKeyWidget(IncidentType, 'name'))
     incident_subtype =fields.Field(column_name='Incident_Subtype', attribute='incident_subtype', widget=ForeignKeyWidget(IncidentSubtype, 'name'))
-    initiator = fields.Field(column_name='Initiator', attribute='initiator', widget=ForeignKeyWidget(Organization, 'name'))
-    target = fields.Field(column_name='Target', attribute='target', widget=ForeignKeyWidget(Organization, 'name'))
+    initiator = fields.Field(column_name='Initiator', attribute='initiator', widget=ForeignKeyWidget(Organization, 'code'))
+    target = fields.Field(column_name='Target', attribute='target', widget=ForeignKeyWidget(Organization, 'code'))
     incident_source = fields.Field(column_name='Incident_Source', attribute='incident_source', widget=ForeignKeyWidget(IncidentSource, 'name'))
 
     Kill_Natl = fields.Field(column_name='Killed_National', attribute='Kill_Natl')
@@ -52,7 +52,6 @@ class UndssResource(resources.ModelResource):
         target = row.get('Target')
         incident_source = row.get('Incident_Source')
 
-        print(province)
         prov = Province.objects.filter(name=province)
         if not bool(prov):
             raise ValidationError('Province name %s cannot be found' % province)
@@ -71,11 +70,11 @@ class UndssResource(resources.ModelResource):
         if not bool(istype):
             raise ValidationError('Incident Sub Type name %s cannot be found in %s Incident Type' % (incident_subtype ,incident_type))
 
-        init = Organization.objects.filter(name=initiator)
+        init = Organization.objects.filter(code=initiator)
         if not bool(init):
             raise ValidationError('Initiator name %s cannot be found' % init)
 
-        target = Organization.objects.filter(name=target)
+        target = Organization.objects.filter(code=target)
         if not bool(target):
             raise ValidationError('Target name %s cannot be found' % target)
 

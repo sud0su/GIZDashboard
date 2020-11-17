@@ -73,7 +73,7 @@ class Undss(models.Model):
     Incident_Source = models.ForeignKey(IncidentSource, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
-
+    
     def __str__(self):
         return self.Single_ID
     

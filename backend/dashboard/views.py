@@ -35,7 +35,7 @@ class UndssImportView(ImportView):
     template_name = 'dashboard/import/reference_import_undss.html'
     formats = (base_formats.XLSX,)
     resource_class = UndssResource
-    success_url = reverse_lazy('importdataprovince')
+    success_url = reverse_lazy('importdataundss')
 
     def create_dataset(self, *args, **kwargs):
         """ Insert an extra 'source_user' field into the data.
