@@ -34,7 +34,7 @@ mediaPath = PathAndRename("shape/")
 class Undss(models.Model):
     # Shape = models.FileField(_("Shape"), upload_to=mediaPath, null=True, blank=True)
     Single_ID = models.CharField(_("Data Entry No"), max_length=50, null=True, blank=True)
-    Date = models.DateTimeField(_("Date"), auto_now=False, auto_now_add=False, null=True, blank=True)
+    Date = models.DateField(_("Date"), auto_now=False, auto_now_add=False, null=True, blank=True)
     Time_of_Incident = models.TimeField(_("Time Of Incident"), default=default_start_time, null=True, blank=True)
     Province = models.ForeignKey(Province, verbose_name=_("Province"), on_delete=models.CASCADE, null=True, blank=True)
     District =models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE, null=True, blank=True)
