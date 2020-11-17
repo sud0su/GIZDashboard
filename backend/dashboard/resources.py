@@ -6,11 +6,19 @@ from import_export.widgets import ForeignKeyWidget
 from .models import Undss
 
 
+class DistrictForeignKey(ForeignKeyWidget):
+    def get_queryset(self, value, row, *args, **kwargs):
+        return self.model.objects.filter(name=value, province__name__contains=row.get('Province'))
+
+class IncidentSubTypeForeignKey(ForeignKeyWidget):
+    def get_queryset(self, value, row, *args, **kwargs):
+        return self.model.objects.filter(name=value, incidenttype__name__contains=row.get('Incident_Type'))
+
 class UndssResource(resources.ModelResource):
     province = fields.Field(column_name='Province', attribute='Province', widget=ForeignKeyWidget(Province, 'name'))
-    district = fields.Field(column_name='District', attribute='District', widget=ForeignKeyWidget(District, 'name'))
+    district = fields.Field(column_name='District', attribute='District', widget=DistrictForeignKey(District, 'name'))
     incident_type = fields.Field(column_name='Incident_Type', attribute='Incident_Type', widget=ForeignKeyWidget(IncidentType, 'name'))
-    incident_subtype =fields.Field(column_name='Incident_Subtype', attribute='Incident_Subtype', widget=ForeignKeyWidget(IncidentSubtype, 'name'))
+    incident_subtype =fields.Field(column_name='Incident_Subtype', attribute='Incident_Subtype', widget=IncidentSubTypeForeignKey(IncidentSubtype, 'name'))
     initiator = fields.Field(column_name='Initiator', attribute='Initiator', widget=ForeignKeyWidget(Organization, 'code'))
     target = fields.Field(column_name='Target', attribute='Target', widget=ForeignKeyWidget(Organization, 'code'))
     incident_source = fields.Field(column_name='Incident_Source', attribute='Incident_Source', widget=ForeignKeyWidget(IncidentSource, 'name'))
