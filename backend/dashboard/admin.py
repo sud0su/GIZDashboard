@@ -14,6 +14,7 @@ class UndssAdmin(ImportExportModelAdmin):
         'Initiator',
         'Target',
         'Date',
+        'Incident_Source',
         'created_at'
         ]
     model = Undss

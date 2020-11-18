@@ -23,7 +23,7 @@ class UndssResource(resources.ModelResource):
     incident_subtype =fields.Field(column_name='Inc_Subtype', attribute='Incident_Subtype', widget=IncidentSubTypeForeignKey(IncidentSubtype, 'name'))
     initiator = fields.Field(column_name='Initiator', attribute='Initiator', widget=ForeignKeyWidget(Organization, 'code'))
     target = fields.Field(column_name='Target', attribute='Target', widget=ForeignKeyWidget(Organization, 'code'))
-    incident_source = fields.Field(column_name='Incident_Source', attribute='Incident_Source', widget=ForeignKeyWidget(IncidentSource, 'name'))
+    incident_source = fields.Field(column_name='Source', attribute='Incident_Source', widget=ForeignKeyWidget(IncidentSource, 'name'))
     Date = fields.Field(column_name='Date', attribute='Date', widget=DateWidget(format=("%m-%d-%Y")))
     Time_of_Incident = fields.Field(column_name='Time_Inc', attribute='Time_of_Incident')
     City_Village = fields.Field(column_name='City_Vill', attribute='City_Village')
@@ -31,7 +31,7 @@ class UndssResource(resources.ModelResource):
     Description_of_Incident = fields.Field(column_name='Inc_Desc', attribute='Description_of_Incident')
     initiator = fields.Field(column_name='Initiator', attribute='initiator')
     target = fields.Field(column_name='Target', attribute='target')
-    incident_source = fields.Field(column_name='Source', attribute='target')
+    
     # Kill_Natl = fields.Field(column_name='Killed_National', attribute='Kill_Natl')
     # Kill_Intl = fields.Field(column_name='Killed_International', attribute='Kill_Intl')
     # Kill_ANSF = fields.Field(column_name='Killed_ANSF', attribute='Kill_ANSF')
