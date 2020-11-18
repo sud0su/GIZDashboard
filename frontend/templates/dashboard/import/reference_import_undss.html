@@ -18,6 +18,7 @@
                             This tool can only support importing <span class="badge badge-pill badge-primary">.xlsx</span> file
                         {% endblocktrans %}
                     </li>
+                    <li>{% trans "This tool can not import multiple sheets at once" %}</li>
                     <li>{% trans "This tool will only import the top row of your column that has the name as listed below (scroll right the table) :" %}</li>
                     <br>
                     <div class="table-responsive">
@@ -34,8 +35,14 @@
                         </table>
                     </div>
                     <br>
-                    <li>{{ fields.27 }} {% trans "column should be formatted as YYYY-MM-DD hh:mm:ss" %}</li>
-                    <li>{{ fields.28 }} {% trans "should be formatted in 24-hour formats as hh:mm" %}</li>
+                    <li>
+                        <span class="badge badge-pill badge-primary">{{ fields.27 }}</span>
+                        <span class="badge badge-pill badge-primary">{{ fields.7 }}</span>
+                        <span class="badge badge-pill badge-primary">{{ fields.28 }}</span>
+                        {% trans "can not be leave blanks" %}
+                    </li>
+                    <li>{{ fields.7 }} {% trans "column should be formatted as MM-DD-YYYY" %}</li>
+                    <li>{{ fields.28 }} {% trans "should be formatted in 24-hour formats as hh:mm:ss. This fields can not accept 'Daytime', 'Midnight' value." %}</li>
                     <li>
                         {% blocktrans %}
                             This importing tool is case sensitive. So, please make sure data in
@@ -57,6 +64,11 @@
                         {% endblocktrans %}
                     </li>
                     <li>{{ fields.33 }} {% trans "column can only accept 'yes' or 'no' data" %}</li>
+                    <li>
+                        {% trans "If there are duplication of " %}
+                        {{ fields.27 }} 
+                        {% trans "in one sheet, it will only save data in the bottom row" %}
+                    </li>
                     <li>{% trans "Click Import Button" %}</li>
                 </ol>
 

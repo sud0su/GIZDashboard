@@ -58,7 +58,8 @@
             {% include "dashboard/select_hpa.html" %}
         </div>
 
-        {% if region.province.selected == 20 %}
+        {{ region.province.selected }}
+        {% if region.province.selected_name == 'Kabul' %}
         <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
             {% include "dashboard/select_police_dist.html" %}
         </div>
@@ -79,7 +80,7 @@
         {% endfor %}
         
         {% for chart_item in chart.donut_chart_casualty_subtype %}
-        <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-4 d-block{% else %}col-md-12 col-lg-12{% endif %} grid-margin stretch-card">
+        <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-3 d-block{% else %}col-md-12 col-lg-12{% endif %} grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans chart_item.title %}</h4>
@@ -199,89 +200,92 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Select Incident Type" %}</h4>
-                        <div class="form-group row">
-                            <div class="col">
-                                <p class="mb-2" style="position: absolute;left: 75px;">{% trans "Select All" %}</p>
-                                <label class="toggle-switch parents-checkbox">
-                                    <input type="checkbox" {% if filters.incident_type.checked|length == filters.incident_type.options|length %}checked=true{% endif %}>
-                                    <span class="toggle-slider round"></span>
+                    <p class="card-description">
+                        {% trans "Please pick only 1 Incident Type to show Incident Subtype options." %}
+                    </p>
+                    <div class="form-group row">
+                        <div class="col">
+                            <p class="mb-2" style="position: absolute;left: 75px;">{% trans "Select All" %}</p>
+                            <label class="toggle-switch parents-checkbox">
+                                <input type="checkbox" {% if filters.incident_type.checked|length == filters.incident_type.options|length %}checked=true{% endif %}>
+                                <span class="toggle-slider round"></span>
+                            </label>
+                        </div>
+                        <div class="col">
+                            <button type="button" name="" id="" class="btn btn-outline-primary btn-sm float-right ply-trget">{% trans "Apply" %}</button>
+                        </div>
+                    </div> 
+                    {% get_current_language_bidi as LANGUAGE_BIDI %}
+                    <div id="indicatorType" class="child-checkbox">
+                        <div class="form-group">
+                            {% for item in filters.incident_type.options %}
+                            <div class="form-check form-check-incident-type">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item.id }}" {% if item.id in filters.incident_type.checked %}checked=true{% endif %}> 
+                                    {{ item.name }}
                                 </label>
                             </div>
-                            <div class="col">
-                                <button type="button" name="" id="" class="btn btn-outline-primary btn-sm float-right ply-trget">{% trans "Apply" %}</button>
+                            {% for subtype in filters.incident_subtype.options %}
+                            {% if item.id == subtype.incidenttype %}
+                            <div class="form-check ml-4 {% if item.id not in filters.incident_type.checked or filters.incident_type.checked|length > 1 %}d-none{% endif %} form-check-incident-subtype">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input checkIncidentSubtype" id="incidentsubtype{{ forloop.counter0 }}" name="incident_subtype_select[]" value="{{ subtype.id }}" data-parentid="{{ item.id }}" {% if subtype.id in filters.incident_subtype.checked %}checked=true{% endif %}> 
+                                    {{ subtype.name }}
+                                </label>
                             </div>
-                        </div> 
-                        {% get_current_language_bidi as LANGUAGE_BIDI %}
-                        <div id="indicatorType" class="child-checkbox">
-                            <div class="form-group">
-                                {% for item in filters.incident_type.options %}
-                                <div class="form-check form-check-incident-type">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item.id }}" {% if item.id in filters.incident_type.checked %}checked=true{% endif %}> 
-                                        {{ item.name }}
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+
+                            {% comment %}
+                            <div class="incident">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="defaultCheckParent">
+                                        <input class="form-check-input all-sub-incident" type="checkbox" value="" id="defaultCheckParent">
+                                        Default checkbox parent
                                     </label>
                                 </div>
-                                {% for subtype in filters.incident_subtype.options %}
-                                {% if item.id == subtype.incidenttype %}
-                                <div class="form-check ml-4 {% if item.id not in filters.incident_type.checked or filters.incident_type.checked|length > 1 %}d-none{% endif %} form-check-incident-subtype">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input checkIncidentSubtype" id="incidentsubtype{{ forloop.counter0 }}" name="incident_subtype_select[]" value="{{ subtype.id }}" data-parentid="{{ item.id }}" {% if subtype.id in filters.incident_subtype.checked %}checked=true{% endif %}> 
-                                        {{ subtype.name }}
+                                <div class="sub-incident" style="margin-left: 1.75rem;">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="defaultCheck1">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name="subs">
+                                            Default checkbox anak 1
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="defaultCheck2">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2" name="subs">
+                                            Default checkbox anak 2
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="incident">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="defaultCheckParent2">
+                                        <input class="form-check-input all-sub-incident" type="checkbox" value="" id="defaultCheckParent2">
+                                        Default checkbox parent 2
                                     </label>
                                 </div>
-                                {% endif %}
-                                {% endfor %}
-                                {% endfor %}
-
-                                {% comment %}
-                                <div class="incident">
+                                <div class="sub-incident" style="margin-left: 1.75rem;">
                                     <div class="form-check">
-                                        <label class="form-check-label" for="defaultCheckParent">
-                                            <input class="form-check-input all-sub-incident" type="checkbox" value="" id="defaultCheckParent">
-                                            Default checkbox parent
+                                        <label class="form-check-label" for="defaultCheck3">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck3" name="subs">
+                                            Default checkbox anak 3
                                         </label>
                                     </div>
-                                    <div class="sub-incident" style="margin-left: 1.75rem;">
-                                        <div class="form-check">
-                                            <label class="form-check-label" for="defaultCheck1">
-                                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name="subs">
-                                                Default checkbox anak 1
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <label class="form-check-label" for="defaultCheck2">
-                                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2" name="subs">
-                                                Default checkbox anak 2
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="incident">
                                     <div class="form-check">
-                                        <label class="form-check-label" for="defaultCheckParent2">
-                                            <input class="form-check-input all-sub-incident" type="checkbox" value="" id="defaultCheckParent2">
-                                            Default checkbox parent 2
+                                        <label class="form-check-label" for="defaultCheck4">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck4" name="subs">
+                                            Default checkbox anak 4
                                         </label>
                                     </div>
-                                    <div class="sub-incident" style="margin-left: 1.75rem;">
-                                        <div class="form-check">
-                                            <label class="form-check-label" for="defaultCheck3">
-                                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck3" name="subs">
-                                                Default checkbox anak 3
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <label class="form-check-label" for="defaultCheck4">
-                                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck4" name="subs">
-                                                Default checkbox anak 4
-                                            </label>
-                                        </div>
-                                    </div>
                                 </div>
-                                {% endcomment %}
                             </div>
+                            {% endcomment %}
                         </div>
+                    </div>
                     
                     {% comment %}
                     <fieldset>
