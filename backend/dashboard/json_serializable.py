@@ -333,14 +333,17 @@ def Region(request, filters):
     
     getProvince = Province.objects.values()
     getDistrict = District.objects.all().values("id","name","province__id","province__name")
+
+    prov_name = next((item['name'] for item in getProvince if item["id"] == prov), '')
+    dist_name = next((item['name'] for item in getDistrict if item["id"] == filters.get('dist')), '')
      
     if filters.get('dist'):
         dist_qs = getDistrict.get(Q(id=filters.get('dist')))
         prov = dist_qs['province__id']
     getDistrict = getDistrict.filter(Q(province__id=prov))
 
-    region["province"] = {"data_val" : getProvince, "selected": prov, "type" : "Province", "urlcode": "prov"}
-    region["district"] = {"data_val" : getDistrict, "selected": filters.get('dist',''), "type" : "District", "urlcode": "dist"}
+    region["province"] = {"data_val" : getProvince, "selected": prov, "selected_name": prov_name, "type" : "Province", "urlcode": "prov"}
+    region["district"] = {"data_val" : getDistrict, "selected": filters.get('dist',''), "selected_name": dist_name, "type" : "District", "urlcode": "dist"}
     
     return region
 
