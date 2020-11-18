@@ -174,7 +174,7 @@ def Chart(request, filters={}, main={}):
     qs_spline = undssQueryset.values('Date','Time_of_Incident').annotate(**main['sum_by_casualty_type']).order_by('Date','Time_of_Incident')
     # qs_spline = undssQueryset.values('Date').annotate(Date_date=TruncDate('Date'),**main['sum_by_casualty_type']).order_by('Date_date')
     # timestamps = [datetime.datetime.combine(i['Date'].date(), i['hour']).timestamp() * 1000 for i in qs_spline]
-    timestamps = [datetime.datetime.combine(i['Date'], i['Time_of_Incident']).replace(tzinfo=datetime.timezone.utc).timestamp() * 1000 for i in qs_spline]
+    timestamps = [datetime.datetime.combine(i['Date'], i['Time_of_Incident'] or datetime.time()).replace(tzinfo=datetime.timezone.utc).timestamp() * 1000 for i in qs_spline]
     # timestamps = [i['Date'].timestamp() * 1000 for i in qs_spline]
     # qs_spline_dict = {ts: qs_spline[i] for i, ts in enumerate(timestamps)}
     for casualty_type in main['sum_by_casualty_type']:
@@ -182,7 +182,7 @@ def Chart(request, filters={}, main={}):
             'name': casualty_type,
             'data': [(ts, qs_spline[i][casualty_type]) for i, ts in enumerate(timestamps)],
         })
-    chart['spline']['date_combined'] = [datetime.datetime.combine(i['Date'], i['Time_of_Incident']) for i in qs_spline]
+    chart['spline']['date_combined'] = [datetime.datetime.combine(i['Date'], i['Time_of_Incident'] or datetime.time()) for i in qs_spline]
     chart['spline']['timestamps'] = timestamps
 
     ## Polar Chart
