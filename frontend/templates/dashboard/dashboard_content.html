@@ -203,7 +203,7 @@
                             <div class="col">
                                 <p class="mb-2" style="position: absolute;left: 75px;">{% trans "Select All" %}</p>
                                 <label class="toggle-switch parents-checkbox">
-                                    <input type="checkbox" {% if incident_type.checked == incident_type.name %}checked=true{% endif %}>
+                                    <input type="checkbox" {% if filters.incident_type.checked|length == filters.incident_type.options|length %}checked=true{% endif %}>
                                     <span class="toggle-slider round"></span>
                                 </label>
                             </div>
@@ -348,7 +348,7 @@
                             <div class="col">
                                 <p class="mb-2" style="position: absolute;left: 75px;">{% trans "Select All" %}</p>
                                 <label class="toggle-switch parents-checkbox">
-                                    <input type="checkbox" {% if filters.target_type.checked == filters.target_type.name %}checked=true{% endif %}>
+                                    <input type="checkbox" {% if filters.target_type.checked|length == filters.target_type.name|length %}checked=true{% endif %}>>
                                     <span class="toggle-slider round"></span>
                                 </label>
                             </div>
