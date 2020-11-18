@@ -443,7 +443,7 @@ function init_chart2(){
 			},
 
 			time:{
-				useUTC: false,
+				useUTC: true,
 			},
 
 			tooltip: {
