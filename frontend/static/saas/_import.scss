@@ -1,0 +1,14 @@
+.result-card{
+    div{
+        &.content-scroll{
+            overflow-y: auto;
+            max-height: calc(100vh - 212px);
+        }
+    }
+}
+
+tr{
+    .new{
+        background-color: theme-color(success);
+    }
+}

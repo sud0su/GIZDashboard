@@ -170,7 +170,7 @@ class ImportView(FormView):
             dataset, dry_run=False, raise_errors=True,
             file_name=confirm_form.cleaned_data['original_file_name'],
             user=self.request.user)
-        success_message = _('Import finished')
+        success_message = _('Successfully Import!')
         messages.success(self.request, success_message)
         tmp_storage.remove()
 
