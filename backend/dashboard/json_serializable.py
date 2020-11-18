@@ -27,9 +27,28 @@ def MainData(request, filters={}):
     main["chart_type"] = ['incident_type', 'target_type']
 
     main["sum_by_casualty_type"] = {
-        'killed': Coalesce(Sum(F('Kill_Natl'))+Sum(F('Kill_Intl'))+Sum(F('Kill_ANSF'))+Sum(F('Kill_IM'))+Sum(F('Kill_ALP_PGM'))+Sum(F('Kill_AOG'))+Sum(F('Kill_ISKP')), 0),
-        'injured': Coalesce(Sum(F('Inj_Natl'))+Sum(F('Inj_Intl'))+Sum(F('Inj_ANSF'))+Sum(F('Inj_IM'))+Sum(F('Inj_ALP_PGM'))+Sum(F('Inj_AOG'))+Sum(F('Inj_ISKP')), 0),
-        'abducted': Coalesce(Sum(F('Abd_Natl'))+Sum(F('Abd_Intl'))+Sum(F('Abd_ANSF'))+Sum(F('Abd_IM'))+Sum(F('Abd_ALP_PGM')), 0),
+        'killed': \
+            Coalesce(Sum(F('Kill_Natl')), 0)+\
+            Coalesce(Sum(F('Kill_Intl')), 0)+\
+            Coalesce(Sum(F('Kill_ANSF')), 0)+\
+            Coalesce(Sum(F('Kill_IM')), 0)+\
+            Coalesce(Sum(F('Kill_ALP_PGM')), 0)+\
+            Coalesce(Sum(F('Kill_AOG')), 0)+\
+            Coalesce(Sum(F('Kill_ISKP')), 0),
+        'injured': \
+            Coalesce(Sum(F('Inj_Natl')), 0)+\
+            Coalesce(Sum(F('Inj_Intl')), 0)+\
+            Coalesce(Sum(F('Inj_ANSF')), 0)+\
+            Coalesce(Sum(F('Inj_IM')), 0)+\
+            Coalesce(Sum(F('Inj_ALP_PGM')), 0)+\
+            Coalesce(Sum(F('Inj_AOG')), 0)+\
+            Coalesce(Sum(F('Inj_ISKP')), 0),
+        'abducted': \
+            Coalesce(Sum(F('Abd_Natl')), 0)+\
+            Coalesce(Sum(F('Abd_Intl')), 0)+\
+            Coalesce(Sum(F('Abd_ANSF')), 0)+\
+            Coalesce(Sum(F('Abd_IM')), 0)+\
+            Coalesce(Sum(F('Abd_ALP_PGM')), 0),
     }
 
     main['filters'] = {
