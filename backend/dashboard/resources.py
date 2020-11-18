@@ -70,6 +70,7 @@ class UndssResource(resources.ModelResource):
         incident_source = row.get('Source')
         # date = row.get('Date')
         timeofincident = row.get('Time_Inc')
+        hpa = row.get('HPA')
 
         if single_id == 'null' or single_id == None:
             raise ValidationError("Single ID cannot be null")
@@ -83,6 +84,13 @@ class UndssResource(resources.ModelResource):
                     row['Time_of_Incident'] = str(timeofincident)
             except ValueError:
                 raise ValidationError("Incorrect time format, should be hh:mm:ss")
+
+        if hpa is None:
+            row['HPA'] = 'no'
+        elif hpa.lower() == 'yes' or hpa.lower() == 'no':
+            row['HPA'] = hpa.lower()
+        else:
+            raise ValidationError('HPA value must be "yes" or "no"')
 
         prov = Province.objects.filter(name=province)
         if not bool(prov):
