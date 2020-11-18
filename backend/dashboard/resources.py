@@ -14,7 +14,7 @@ class DistrictForeignKey(ForeignKeyWidget):
 
 class IncidentSubTypeForeignKey(ForeignKeyWidget):
     def get_queryset(self, value, row, *args, **kwargs):
-        return self.model.objects.filter(name=value, incidenttype__name__contains=row.get('Incident_Type'))
+        return self.model.objects.filter(name=value, incidenttype__name__contains=row.get('Inc_Type'))
 
 class UndssResource(resources.ModelResource):
     province = fields.Field(column_name='Province', attribute='Province', widget=ForeignKeyWidget(Province, 'name'))
