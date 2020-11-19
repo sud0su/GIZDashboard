@@ -28,8 +28,6 @@ class UndssResource(resources.ModelResource):
     Description_of_Incident = fields.Field(column_name='Inc_Desc', attribute='Description_of_Incident')
     initiator = fields.Field(column_name='Initiator', attribute='Initiator', widget=ForeignKeyWidget(Organization, 'code'))
     target = fields.Field(column_name='Target', attribute='Target', widget=ForeignKeyWidget(Organization, 'code'))
-    initiator = fields.Field(column_name='Initiator', attribute='initiator')
-    target = fields.Field(column_name='Target', attribute='target')
     incident_source = fields.Field(column_name='Source', attribute='Incident_Source', widget=ForeignKeyWidget(IncidentSource, 'name'))
     
     # Kill_Natl = fields.Field(column_name='Killed_National', attribute='Kill_Natl')

@@ -218,22 +218,24 @@
                     <div id="indicatorType" class="child-checkbox">
                         <div class="form-group">
                             {% for item in filters.incident_type.options %}
-                            <div class="form-check form-check-incident-type">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item.id }}" {% if item.id in filters.incident_type.checked %}checked=true{% endif %}> 
-                                    {{ item.name }}
-                                </label>
-                            </div>
-                            {% for subtype in filters.incident_subtype.options %}
-                            {% if item.id == subtype.incidenttype %}
-                            <div class="form-check ml-4 {% if item.id not in filters.incident_type.checked or filters.incident_type.checked|length > 1 %}d-none{% endif %} form-check-incident-subtype">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input checkIncidentSubtype" id="incidentsubtype{{ forloop.counter0 }}" name="incident_subtype_select[]" value="{{ subtype.id }}" data-parentid="{{ item.id }}" {% if subtype.id in filters.incident_subtype.checked %}checked=true{% endif %}> 
-                                    {{ subtype.name }}
-                                </label>
-                            </div>
-                            {% endif %}
-                            {% endfor %}
+                                <div class="form-check form-check-incident-type">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input checkIncident" id="incident{{ forloop.counter0 }}" name="main_incident_select[]" value="{{ item.id }}" {% if item.id in filters.incident_type.checked %}checked=true{% endif %}> 
+                                        {{ item.name }}
+                                    </label>
+                                </div>
+                                <div style="margin-left: 1.75rem;">
+                                    {% for subtype in filters.incident_subtype.options %}
+                                        {% if item.id == subtype.incidenttype %}
+                                        <div class="form-check {% if item.id not in filters.incident_type.checked or filters.incident_type.checked|length > 1 %}d-none{% endif %} form-check-incident-subtype">
+                                            <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input checkIncidentSubtype" id="incidentsubtype{{ forloop.counter0 }}" name="incident_subtype_select[]" value="{{ subtype.id }}" data-parentid="{{ item.id }}" {% if subtype.id in filters.incident_subtype.checked %}checked=true{% endif %}> 
+                                                {{ subtype.name }}
+                                            </label>
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
                             {% endfor %}
 
                             {% comment %}
