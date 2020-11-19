@@ -16,7 +16,7 @@ from .pychromeprint import print_from_urls
 
 from .forms import UndssForm
 from .json_serializable import Common, csv_response
-from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype
+from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype, IncidentSource
 from organization.models import Organization
 from .models import Undss
 from giz.utils import replace_query_param
@@ -126,8 +126,10 @@ def Dashboard(request):
 
     # if no source_type in url then redirect with added source_type=DEFAULT_SOURCE_ID
     if not request.GET.get('source_type'):
-        DEFAULT_SOURCE_ID = 1
-        return redirect(replace_query_param(currenturl, 'source_type', DEFAULT_SOURCE_ID))
+        DEFAULT_SOURCE_NAME = 'UNDSS'
+        source_row = IncidentSource.objects.filter(name=DEFAULT_SOURCE_NAME).first() or IncidentSource.objects.first()
+        if source_row:
+            return redirect(replace_query_param(currenturl, 'source_type', source_row.id))
 
     if 'pdf' in request.GET:
         options = {
