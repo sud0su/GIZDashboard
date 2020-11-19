@@ -24,7 +24,7 @@
                         {% include 'dashboard/form_format.html' with form=form %}
 
                         <button type="submit" class="btn btn-primary mr-2">{% trans "Submit" %}</button>
-                        <button class="btn btn-light">{% trans "Cancel" %}</button>
+                        <a href="{% url 'inputdashboard' %}" class="btn btn-light">{% trans "Cancel" %}</a>
                     </form>
                 </div>
             </div>
