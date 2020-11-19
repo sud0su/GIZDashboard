@@ -36,13 +36,13 @@
                     </div>
                     <br>
                     <li>
-                        <span class="badge badge-pill badge-primary">{{ fields.27 }}</span>
+                        <span class="badge badge-pill badge-primary">{{ fields.12 }}</span>
                         <span class="badge badge-pill badge-primary">{{ fields.7 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.28 }}</span>
+                        <span class="badge badge-pill badge-primary">{{ fields.8 }}</span>
                         {% trans "can not be leave blanks" %}
                     </li>
                     <li>{{ fields.7 }} {% trans "column should be formatted as MM-DD-YYYY" %}</li>
-                    <li>{{ fields.28 }} {% trans "should be formatted in 24-hour formats as hh:mm:ss. This fields can not accept 'Daytime', 'Midnight' value." %}</li>
+                    <li>{{ fields.8 }} {% trans "should be formatted in 24-hour formats as hh:mm:ss. This fields can not accept 'Daytime', 'Midnight' value." %}</li>
                     <li>
                         {% blocktrans %}
                             This importing tool is case sensitive. So, please make sure data in
@@ -63,10 +63,10 @@
                             as in the stored reference list. You can check all of the list via the admin page.
                         {% endblocktrans %}
                     </li>
-                    <li>{{ fields.33 }} {% trans "column can only accept 'yes' or 'no' data" %}</li>
+                    <li>{{ fields.14 }} {% trans "column can only accept 'yes' or 'no' data" %}</li>
                     <li>
                         {% trans "If there are duplication of " %}
-                        {{ fields.27 }} 
+                        {{ fields.12 }} 
                         {% trans "in one sheet, it will only save data in the bottom row" %}
                     </li>
                     <li>{% trans "Click Import Button" %}</li>
@@ -199,7 +199,7 @@
                                                 <ul class="validation-error-list">
                                                     {% for field_name, error_list in row.field_specific_errors.items %}
                                                     <li>
-                                                        <span class="validation-error-field-label">{{ field_name }}</span>
+                                                        <span class="validation-error-field-label font-weight-bold">{{ field_name }}</span>
                                                         <ul>
                                                             {% for error in error_list %}
                                                             <li>{{ error }}</li>
