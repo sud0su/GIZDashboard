@@ -265,7 +265,7 @@ def Table(request, filters={}, main={}):
             # injured = Coalesce(Sum('Injured'), 0),
             # abducted = Coalesce(Sum('Abducted'), 0),
         ).\
-        order_by(order_field)
+        order_by('Date', 'Time_of_Incident')
     qs_casualties_by_incident_type_dict = {i[id_field]:i for i in qs_casualties_by_incident_type}
     default_val = lambda i: {id_field:i,'row_id':i,'incident_name':filter_incident['labels'][i],'total':0,'killed':0,'injured':0,'abducted':0}
     table_incident_type_total = [qs_casualties_by_incident_type_dict.get(type_id, default_val(i)) \
@@ -484,7 +484,7 @@ def csv_response(request):
     main = MainData(request, filters=filters)
     undssQueryset = Undss.objects.all()
     undssQueryset = ApplyFilters(undssQueryset, filters, main=main)
-    undssQueryset = undssQueryset.values_list(*field_names)
+    undssQueryset = undssQueryset.values_list(*field_names).order_by('Date', 'Time_of_Incident')
     return chain([field_names], undssQueryset)
 
 def Common(request):

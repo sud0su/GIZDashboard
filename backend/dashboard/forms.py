@@ -6,15 +6,19 @@ from reference.models import Province, District, Area, CityVillage, IncidentType
 from organization.models import Organization
 
 class UndssForm(forms.ModelForm):
+    Date = forms.DateField(
+        input_formats=['%m-%d-%Y'],
+        widget=DatePickerInput(format='%m-%d-%Y')
+    )
     Province = forms.ModelChoiceField(
-        required=False,
+        # required=False,
         queryset=Province.objects.all(),
         widget=Select2Widget(
             attrs={'data-placeholder':'Select Province', 'class':'select_province'}
         )
     )
     District = forms.ModelChoiceField(
-        required=False,
+        # required=False,
         queryset=District.objects.none(),
         widget=Select2Widget(
             attrs={'data-placeholder':'Select District'},
@@ -35,42 +39,42 @@ class UndssForm(forms.ModelForm):
     #     )
     # )
     Incident_Type = forms.ModelChoiceField(
-        required=False,
+        # required=False,
         queryset=IncidentType.objects.all(),
         widget=Select2Widget(
             attrs={'data-placeholder':'Select Incident Type'}
         )
     )
     Incident_Subtype = forms.ModelChoiceField(
-        required=False,
+        # required=False,
         queryset=IncidentSubtype.objects.none(),
         widget=Select2Widget(
             attrs={'data-placeholder':'Select Incident Subtype'}
         )
     )
     Initiator = forms.ModelChoiceField(
-        required=False,
+        # required=False,
         queryset=Organization.objects.all(),
         widget=Select2Widget(
             attrs={'data-placeholder':'Select Initiator'}
         )
     )
     Target = forms.ModelChoiceField(
-        required=False,
+        # required=False,
         queryset=Organization.objects.all(),
         widget=Select2Widget(
             attrs={'data-placeholder':'Select Target'}
         )
     )
     Incident_Source = forms.ModelChoiceField(
-        required=False,
+        # required=False,
         queryset=IncidentSource.objects.none(),
         widget=Select2Widget(
             attrs={'data-placeholder':'Select Incident Source'}
         )
     )
     HPA = forms.ChoiceField(
-        required=False,
+        # required=False,
         choices=[('yes','Yes'),('no','No')],
         widget=Select2Widget(
             attrs={'data-placeholder':'Select HPA'}
@@ -122,7 +126,7 @@ class UndssForm(forms.ModelForm):
             # 'INSO',
         ]
         widgets = {
-            'Date': DatePickerInput(format='%m-%d-%Y'), 
+            # 'Date': DatePickerInput(format='%m-%d-%Y'), 
             'Time_of_Incident': TimePickerInput(),
         }
     
