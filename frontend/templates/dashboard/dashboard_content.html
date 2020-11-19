@@ -79,14 +79,17 @@
         {% endfor %}
         
         {% for chart_item in chart.donut_chart_casualty_subtype %}
-        <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-3 d-block{% else %}col-md-12 col-lg-12{% endif %} grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">{% trans chart_item.title %}</h4>
-                    <div id="{{chart_item.key}}" class="ch-size donut-chart" data-color=colorDefault data-val='{{chart_item.values | jsonify | safe}}' data-title='{% trans chart_item.title %}' data-show-title='none'></div>
+            <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-4 d-block {% else %}col-md-6 col-lg-6{% endif %} grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">{% trans chart_item.title %}</h4>
+                        <div id="{{chart_item.key}}" class="ch-size donut-chart" data-color=colorDefault data-val='{{chart_item.values | jsonify | safe}}' data-title='{% trans chart_item.title %}' data-show-title='none'></div>
+                    </div>
                 </div>
             </div>
-        </div>
+            {% if chart_item.key == 'number_of_im_casualties' %}
+            <div class="col-12"></div>
+            {% endif %} 
         {% endfor %}
 
         {% comment %}
