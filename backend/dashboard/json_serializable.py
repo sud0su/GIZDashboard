@@ -440,52 +440,54 @@ def DashboardResponse(request, filters={}):
     return dashboardresponse
 
 def csv_response(request):
-    field_names = (
-        'Single_ID',
-        'Date',
-        'Time_of_Incident',
-        'Province__name',
-        'District__name',
-        'City_Village',
-        'Area',
-        'Police_District',
-        'Incident_Type__name',
-        'Incident_Subtype__name',
-        'Description_of_Incident',
-        'HPA',
-        'Initiator__code',
-        'Target__code',
-        'Kill_Natl',
-        'Kill_Intl',
-        'Kill_ANSF',
-        'Kill_IM',
-        'Kill_ALP_PGM',
-        'Kill_AOG',
-        'Kill_ISKP',
-        'Inj_Natl',
-        'Inj_Intl',
-        'Inj_ANSF',
-        'Inj_IM',
-        'Inj_ALP_PGM',
-        'Inj_AOG',
-        'Inj_ISKP',
-        'Abd_Natl',
-        'Abd_Intl',
-        'Abd_ANSF',
-        'Abd_IM',
-        'Abd_ALP_PGM',
-        'Latitude',
-        'Longitude',
-        'Incident_Source__name',
-        'created_at',
-        'updated_at',
+    field_rename_pairs = (
+        ('Single_ID', 'Single_ID'),
+        ('Date', 'Date '),
+        ('Time_of_Incident', 'Time_Inc'),
+        ('Province__name', 'Province'),
+        ('District__name', 'District'),
+        ('City_Village', 'City_Vill'),
+        ('Area', 'Area'),
+        ('Police_District', 'Police_Dist'),
+        ('Incident_Type__name', 'Inc_Type'),
+        ('Incident_Subtype__name', 'Inc_Subtype'),
+        ('Description_of_Incident', 'Inc_Desc'),
+        ('HPA', 'HPA'),
+        ('Initiator__code', 'Initiator'),
+        ('Target__code', 'Target'),
+        ('Kill_Natl', 'Kill_Natl'),
+        ('Kill_Intl', 'Kill_Intl'),
+        ('Kill_ANSF', 'Kill_ANSF'),
+        ('Kill_IM', 'Kill_IM'),
+        ('Kill_ALP_PGM', 'Kill_ALP_PGM'),
+        ('Kill_AOG', 'Kill_AOG'),
+        ('Kill_ISKP', 'Kill_ISKP'),
+        ('Inj_Natl', 'Inj_Natl'),
+        ('Inj_Intl', 'Inj_Intl'),
+        ('Inj_ANSF', 'Inj_ANSF'),
+        ('Inj_IM', 'Inj_IM'),
+        ('Inj_ALP_PGM', 'Inj_ALP_PGM'),
+        ('Inj_AOG', 'Inj_AOG'),
+        ('Inj_ISKP', 'Inj_ISKP'),
+        ('Abd_Natl', 'Abd_Natl'),
+        ('Abd_Intl', 'Abd_Intl'),
+        ('Abd_ANSF', 'Abd_ANSF'),
+        ('Abd_IM', 'Abd_IM'),
+        ('Abd_ALP_PGM', 'Abd_ALP_PGM'),
+        ('Latitude', 'Latitude'),
+        ('Longitude', 'Longitude'),
+        ('Incident_Source__name', 'Source'),
+        # ('created_at', 'created_at'),
+        # ('updated_at', 'updated_at'),
     )
+    field_names = [i[0] for i in field_rename_pairs]
+    field_renames = [i[1] for i in field_rename_pairs]
     filters = make_filters(request)
     main = MainData(request, filters=filters)
     undssQueryset = Undss.objects.all()
     undssQueryset = ApplyFilters(undssQueryset, filters, main=main)
     undssQueryset = undssQueryset.values_list(*field_names).order_by('Date', 'Time_of_Incident')
-    return chain([field_names], undssQueryset)
+    return chain([field_renames], undssQueryset)
 
 def Common(request):
     response = {}
