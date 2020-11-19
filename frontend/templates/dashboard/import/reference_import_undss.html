@@ -34,26 +34,38 @@
                             </thead>
                         </table>
                     </div>
-                    <br>
+                    <p><span style="font-size: large;">&#x22C6;</span><small>{% trans "Difference in order will not affect the import capabilities." %}</small></p>
+                    
                     <li>
                         <span class="badge badge-pill badge-primary">{{ fields.12 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.7 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.8 }}</span>
+                        <span class="badge badge-pill badge-primary">{{ fields.0 }}</span>
+                        <span class="badge badge-pill badge-primary">{{ fields.1 }}</span>
                         {% trans "can not be leave blanks" %}
                     </li>
-                    <li>{{ fields.7 }} {% trans "column should be formatted as MM-DD-YYYY" %}</li>
-                    <li>{{ fields.8 }} {% trans "should be formatted in 24-hour formats as hh:mm:ss. This fields can not accept 'Daytime', 'Midnight' value." %}</li>
+                    <li>
+                        <span class="badge badge-pill badge-primary">{{ fields.0 }}</span>
+                        {% trans "column should be formatted as " %}
+                        <mark class="bg-warning">MM-DD-YYYY</mark>
+                    </li>
+                    <li>
+                        <span class="badge badge-pill badge-primary">{{ fields.1 }}</span>
+                        {% blocktrans %}
+                            should be formatted in 24-hour formats as 
+                            <mark class="bg-warning">hh:mm:ss</mark>. 
+                            This fields can not accept 'Daytime', 'Midnight' value.
+                        {% endblocktrans %}
+                    </li>
                     <li>
                         {% blocktrans %}
                             This importing tool is case sensitive. So, please make sure data in
                         {% endblocktrans %}
-                        <span class="badge badge-pill badge-primary">{{ fields.0 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.1 }}</span>
                         <span class="badge badge-pill badge-primary">{{ fields.2 }}</span>
                         <span class="badge badge-pill badge-primary">{{ fields.3 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.4 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.5 }}</span>
                         <span class="badge badge-pill badge-primary">{{ fields.6 }}</span>
+                        <span class="badge badge-pill badge-primary">{{ fields.7 }}</span>
+                        <span class="badge badge-pill badge-primary">{{ fields.9 }}</span>
+                        <span class="badge badge-pill badge-primary">{{ fields.10 }}</span>
+                        <span class="badge badge-pill badge-primary">{{ fields.11 }}</span>
 
                         {% blocktrans %}
                             column
@@ -63,11 +75,20 @@
                             as in the stored reference list. You can check all of the list via the admin page.
                         {% endblocktrans %}
                     </li>
-                    <li>{{ fields.14 }} {% trans "column can only accept 'yes' or 'no' data" %}</li>
+                    <li>
+                        <span class="badge badge-pill badge-primary">{{ fields.14 }}</span>
+                        {% blocktrans %}
+                            column can only accept 
+                            <mark class="bg-warning">yes</mark> 
+                            or 
+                            <mark class="bg-warning">no</mark> 
+                            data
+                        {% endblocktrans %}
+                    </li>
                     <li>
                         {% trans "If there are duplication of " %}
-                        {{ fields.12 }} 
-                        {% trans "in one sheet, it will only save data in the bottom row" %}
+                        <span class="badge badge-pill badge-primary">{{ fields.12 }}</span> 
+                        {% trans "in one sheet, it will only save the data at the most bottom row" %}
                     </li>
                     <li>{% trans "Click Import Button" %}</li>
                 </ol>
