@@ -19,7 +19,7 @@ class UndssAdmin(ImportExportModelAdmin):
         ]
     model = Undss
     ordering = ('-created_at',)
-    list_filter = ('created_at', 'Province', 'Target')
+    list_filter = ('created_at', 'Incident_Source', 'Province', 'Target', )
     resource_class = UndssResource
 
 # admin.site.register(Undss)

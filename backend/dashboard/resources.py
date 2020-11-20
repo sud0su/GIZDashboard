@@ -2,10 +2,11 @@ from organization.models import Organization
 from reference.models import District, IncidentSource, IncidentSubtype, IncidentType, Province
 from django.core.exceptions import ValidationError
 from import_export import resources, fields
-from import_export.widgets import ForeignKeyWidget, DateWidget
+from import_export.widgets import ForeignKeyWidget, DateWidget, TimeWidget
 from .models import Undss
 import time
 from datetime import datetime
+# from django.utils import datetime_safe
 
 
 class DistrictForeignKey(ForeignKeyWidget):
@@ -17,7 +18,7 @@ class IncidentSubTypeForeignKey(ForeignKeyWidget):
         return self.model.objects.filter(name=value, incidenttype__name__contains=row.get('Inc_Type'))
 
 class UndssResource(resources.ModelResource):
-    Date = fields.Field(column_name='Date', attribute='Date', widget=DateWidget(format=("%m-%d-%Y")))
+    Date = fields.Field(column_name='Date', attribute='Date')
     Time_of_Incident = fields.Field(column_name='Time_Inc', attribute='Time_of_Incident')
     province = fields.Field(column_name='Province', attribute='Province', widget=ForeignKeyWidget(Province, 'name'))
     district = fields.Field(column_name='District', attribute='District', widget=DistrictForeignKey(District, 'name'))
@@ -57,31 +58,65 @@ class UndssResource(resources.ModelResource):
         clean_model_instances = True
         import_id_fields = ('Single_ID',)
 
+    # def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+    #     for row in dataset.dict:
+    #         if row['Date'] is not None or row['Date'] != 'null':
+    #             date_str = row['Date'].date().__str__()
+    #             print(date_str)
+    #             try:
+    #                 date_str = time.strptime(date_str, '%m-%d-%Y')
+    #                 print(date_str)
+    #             except ValueError:
+    #                 raise ValidationError("Incorrect data format, should be MM-DD-YYYY")
+                # try:
+                #     time.strptime(date_str, '%m-%d-%Y')
+                # except ValueError:
+                #     raise ValidationError("Incorrect data format, should be MM-DD-YYYY")
+
     def before_import_row(self, row, **kwargs):
         single_id = row.get('Single_ID')
         province = row.get('Province')
         district = row.get('District')
+        date = row.get('Date')
         incident_type = row.get('Inc_Type')
         incident_subtype = row.get('Inc_Subtype')
         initiator = row.get('Initiator')
         target = row.get('Target')
         incident_source = row.get('Source')
-        # date = row.get('Date')
         timeofincident = row.get('Time_Inc')
         hpa = row.get('HPA')
 
         if single_id == 'null' or single_id == None:
             raise ValidationError("Single ID cannot be null")
 
-        if timeofincident is not None:
+        # if date is not None or date != 'null':
+        #     date_str = date.date().__str__()
+        #     try:
+        #         datetime.strptime(date_str, '%m-%d-%Y')
+        #     except ValueError:
+        #         raise ValidationError("Incorrect data format, should be MM-DD-YYYY")
+        #     row['Date'] = date_str
+        # else:
+        #     raise ValidationError("Date cannot be blank")
+        # if row['Date'] is not None or row['Date'] != 'null':
+        #     date_str = row['Date'].date().__str__()
+        #     print(date_str)
+        #     try:
+        #         date_str = time.strptime(date_str, '%m-%d-%Y')
+        #         print(date_str)
+        #     except ValueError:
+        #         raise ValidationError("Incorrect data format, should be MM-DD-YYYY")
+
+        if timeofincident is not None or timeofincident != 'null':
             try:
-                if isinstance(timeofincident, str):
-                    row['Time_of_Incident'] = timeofincident
+                if isinstance(timeofincident, datetime):
+                    row['Time_Inc'] = timeofincident.strftime('%H:%M:%S')
                 else:
-                    time.strptime(str(timeofincident), '%H:%M:%S')
-                    row['Time_of_Incident'] = str(timeofincident)
+                    row['Time_Inc'] = timeofincident
             except ValueError:
                 raise ValidationError("Incorrect time format, should be hh:mm:ss")
+        else: 
+            raise ValidationError('Time of Incident cannot be blank')
 
         if hpa is None:
             row['HPA'] = 'no'
