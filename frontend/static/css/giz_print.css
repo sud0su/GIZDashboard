@@ -59,4 +59,13 @@
   border: none;
 }
 
+.ch-size {
+  page-break-after: always;
+  page-break-inside: avoid;
+  -webkit-region-break-after: always;
+  -webkit-region-break-inside: avoid;
+  display: block;
+  float: none;
+}
+
 /*# sourceMappingURL=giz_print.css.map */

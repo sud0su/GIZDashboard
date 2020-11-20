@@ -56,7 +56,7 @@ function updateUrlParameter(url, param, value){
 	} else {
 		a.search = q;
 	}
-	console.log(a.href);
+	// console.log(a.href);
 	
 	return a.href;
 }
@@ -195,11 +195,11 @@ function init_datatable(){
 			for (i = 1; i < colLength; i++) {
 				this_footer = $(api.column(i).footer());
 				dispData = humanizeFormatter(this_footer.html());
-				console.log(this_footer);
-				console.log(this_footer.attr('class'));
-				console.log(dispData);
+				// console.log(this_footer);
+				// console.log(this_footer.attr('class'));
+				// console.log(dispData);
 				if(this_footer.attr('class') == 'hum'){
-					console.log(this_footer);
+					// console.log(this_footer);
 					this_footer.html(dispData);
 				}
 			}
@@ -408,7 +408,7 @@ function init_chart2(){
 			},
 			tooltip: {
 				formatter: function() {
-					console.log(this);
+					// console.log(this);
 					return '<b>'+ this.x +'</b>: '+ humanizeFormatter(this.y);
 				}
 			},
@@ -452,7 +452,7 @@ function init_chart2(){
 				formatter: function() {
 					var s = [];
 
-					console.log(this);
+					// console.log(this);
 					s.push(Highcharts.dateFormat('%A, %b %e, %Y %H:%M', this.x));   // Use UTC
 					// s.push(moment(this.x).format("YYYY-MM-DD HH:mm a"));            // Use Local Time
 
@@ -509,7 +509,7 @@ function init_chart2(){
 	});
 
 	$('.donut-chart').each(function(){
-		console.log(this.id);
+		// console.log(this.id);
 		var id_chart = '#' + this.id;
 		color_chart = $(id_chart).attr('data-color'); 
 		// var color_chart = $(id_chart).data("color");
@@ -520,10 +520,10 @@ function init_chart2(){
 
 		selected_color = colorChart[color_chart];
 
-		console.log(id_chart);
-		console.log(color_chart);
-		console.log(data_chart);
-		console.log(selected_color);
+		// console.log(id_chart);
+		// console.log(color_chart);
+		// console.log(data_chart);
+		// console.log(selected_color);
 
 		donut_chart(id_chart, selected_color, data_chart, title_chart, show_title_chart);
 

@@ -19347,12 +19347,15 @@ code {
 }
 
 .result-card div.content-scroll {
-  overflow-y: auto;
   max-height: calc(100vh - 212px);
 }
 
-tr .new {
-  background-color: #0ddbb9;
+.preview tr.new {
+  background-color: #e6ffe6;
+}
+
+.bootstrap-table .fixed-table-container .table.table-sm .th-inner {
+  padding: 0.775rem 0.675rem;
 }
 
 /*-------------------------------------------------------------------*/

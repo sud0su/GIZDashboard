@@ -1,14 +1,29 @@
 .result-card{
     div{
         &.content-scroll{
-            overflow-y: auto;
+            // overflow-y: auto;
             max-height: calc(100vh - 212px);
         }
     }
 }
 
-tr{
-    .new{
-        background-color: theme-color(success);
+.preview{
+    tr{
+        &.new{
+            // background-color: theme-color(success);
+            background-color: #e6ffe6;
+        }
+    }
+}
+
+.bootstrap-table{
+    .fixed-table-container {
+        .table{
+            &.table-sm{
+                .th-inner{
+                    padding: 0.775rem 0.675rem;
+                }
+            }
+        }
     }
 }

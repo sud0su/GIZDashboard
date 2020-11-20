@@ -2,306 +2,313 @@
 {% load i18n %}
 {% load widget_tweaks %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css">
+    <link href="https://unpkg.com/bootstrap-table@1.18.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.css" rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.18.0/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.css" rel="stylesheet">
+{% endblock %}
+
 {% block content_dashboard %}
-<div class="row">
-    <div class="col-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">{% trans "Import Data" %}</h4>
-                <p class="card-description">
-                    {% trans "Import your file to the dashboard." %}
-                    {% trans "Before start importing data, please make sure following things to ensure the import is successful:" %}
-                </p>
-                <ol class="card-description">
-                    <li>
-                        {% blocktrans %}
-                            This tool can only support importing <span class="badge badge-pill badge-primary">.xlsx</span> file
-                        {% endblocktrans %}
-                    </li>
-                    <li>{% trans "This tool can not import multiple sheets at once" %}</li>
-                    <li>{% trans "This tool will only import the top row of your column that has the name as listed below (scroll right the table) :" %}</li>
-                    <br>
-                    <div class="table-responsive">
-                        <table class="table table-sm table-bordered">
-                            <thead>
-                                <tr>
-                                    {% for f in fields  %}
-                                    <th>
-                                        {{ f }}
-                                    </th>
-                                    {% endfor %}
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <p><span style="font-size: large;">&#x22C6;</span><small>{% trans "Difference in order will not affect the import capabilities." %}</small></p>
-                    
-                    <li>
-                        <span class="badge badge-pill badge-primary">{{ fields.12 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.0 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.1 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.2 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.3 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.6 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.7 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.9 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.10 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.11 }}</span>
-                        {% trans "can not be leave blanks" %}
-                    </li>
-                    <li>
-                        <span class="badge badge-pill badge-primary">{{ fields.0 }}</span>
-                        {% trans "column should be formatted as " %}
-                        <mark class="bg-warning">MM-DD-YYYY</mark>
-                    </li>
-                    <li>
-                        <span class="badge badge-pill badge-primary">{{ fields.1 }}</span>
-                        {% blocktrans %}
-                            should be formatted in 24-hour formats as 
-                            <mark class="bg-warning">hh:mm:ss</mark>. 
-                            This fields can not accept 'Daytime', 'Midnight' value.
-                        {% endblocktrans %}
-                    </li>
-                    <li>
-                        {% blocktrans %}
-                            This importing tool is case sensitive. So, please make sure data in
-                        {% endblocktrans %}
-                        <span class="badge badge-pill badge-primary">{{ fields.2 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.3 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.6 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.7 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.9 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.10 }}</span>
-                        <span class="badge badge-pill badge-primary">{{ fields.11 }}</span>
-
-                        {% blocktrans %}
-                            column
-                            <b>MUST</b>
-                            have the 
-                            <b>exact same word</b> 
-                            as in the stored reference list. You can check all of the list via the admin page.
-                        {% endblocktrans %}
-                    </li>
-                    <li>
-                        <span class="badge badge-pill badge-primary">{{ fields.14 }}</span>
-                        {% blocktrans %}
-                            column can only accept 
-                            <mark class="bg-warning">yes</mark> 
-                            or 
-                            <mark class="bg-warning">no</mark> 
-                            data
-                        {% endblocktrans %}
-                    </li>
-                    <li>
-                        {% trans "If there are any duplication of " %}
-                        <span class="badge badge-pill badge-primary">{{ fields.12 }}</span> 
-                        {% trans "in one sheet, it will only save the data at the most bottom row" %}
-                    </li>
-                    <li>{% trans "Click Import Button" %}</li>
-                </ol>
-
-                {% if result %}
-                    {% if result.has_validation_errors or result.has_errors%}
-                        <a href="{% url 'importdataundss' %}" class="btn btn-light">{% trans "Back" %}</a>
-                    {% else %}
-                        <form action="." method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{ confirm_form.as_p }}
-                            <p>
-                                {% trans "Below shows the preview of data that will be imported. If you are satisfied with the results, click 'Confirm Import'" %}
-                            </p>
-                            <input type="submit" class="btn btn-primary" name="confirm" value="{% trans "Confirm Import" %}">
-                        </form>
-                    {% endif %}
-
-                {% else %}
-                    <form enctype="multipart/form-data" method="post" action="{% url 'confirmimportdataundss' %}">
-                        {% csrf_token %}
-
-                        {% comment %}
-                        <p>
-                            {% trans "This importer will import the following fields: " %}
-                            <code>{{ fields|join:", " }}</code>
-                        </p>
-
-                        <fieldset class="module aligned">
-                            {% for field in form %}
-                            <div class="form-row">
-                                {{ field.errors }}
-
-                                {{ field.label_tag }}
-
-                                {{ field }}
-
-                                {% if field.field.help_text %}
-                                <p class="help">{{ field.field.help_text|safe }}</p>
-                                {% endif %}
-                            </div>
-                            {% endfor %}
-                        </fieldset>
-
-                        <div class="submit-row">
-                            <input type="submit" class="default" value="{% trans "Submit" %}">
-                        </div>
-                        {% endcomment %}
-
-                        <div class="form-group">
-                            {{ form.import_file.label_tag }}
-                            <div class="custom-file">
-                                {{ form.import_file|add_class:"custom-file-input" }}
-                                <label class="custom-file-label" for="{{ form.import_file.id_for_label }}">Choose file</label>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            {{ form.input_format.label_tag }}
-                            {{ form.input_format |attr:"class:form-control form-control-lg" }}
-
-                            {% for error in form.input_format.errors %}
-                                <small class="form-text text-muted">{{ error }}</small>
-                            {% endfor %}
-                            {% if form.input_format.help_text %}
-                                <small class="form-text text-muted">{{ form.input_format.help_text }}</small>
-                            {% endif %}
-                        </div>
-
-                        <button type="submit" class="btn btn-primary mr-2" id="submit_file">{% trans "Import" %}</button>
-                        <a href="{% url 'importdataundss' %}" class="btn btn-light">{% trans "Clear" %}</a>
-                    </form>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-
-    {% if result %}
-    <div class="col-12 grid-margin stretch-card">
-        <div class="card result-card">
-            <div class="card-body">
-                {% if result.has_errors %}
-                    <h4 class="card-title">{% trans "Errors" %}</h4>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "Import Data" %}</h4>
                     <p class="card-description">
+                        {% trans "Import your file to the dashboard." %}
+                        {% trans "Before start importing data, please make sure following things to ensure the import is successful:" %}
                     </p>
-                    <div class="content-scroll">
-                        <ul>
-                            {% for error in result.base_errors  %}
-                                <li>
-                                    {{ error.error }}
-                                    <div class="traceback">{{ error.traceback|linebreaks }}</div>
-                                </li>
-                            {% endfor %}
-                            {% for line, errors in result.row_errors %}
-                                {% for error in errors %}
-                                    <li>
-                                        {% trans "Line number" %}: {{ line }} - {{ error.error }}
-                                        <div><code>{{ error.row.values|join:", " }}</code></div>
-                                        <div class="traceback">{{ error.traceback|linebreaks }}</div>
-                                    </li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% elif result.has_validation_errors %}
-                    <h4 class="card-title">{% trans "Failed to validate" %}</h4>
-                    <p class="card-description">
-                        {% trans "Please correct these errors in your data where possible, then reupload it using the form above." %}
-                    </p>
-                    <div class="content-scroll">
-                        <div class="table-responsive">
-                            <table class="table table-sm table-bordered import-preview">
-                                <thead>
-                                    <tr>
-                                        <th>{% trans "Row" %}</th>
-                                        <th>{% trans "Errors" %}</th>
-                                        {% for field in result.diff_headers %}
-                                        <th>{{ field }}</th>
-                                        {% endfor %}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for row in result.invalid_rows %}
-                                    <tr>
-                                        <td>{{ row.number }} </td>
-                                        <td class="errors">
-                                            <span class="validation-error-count">{{ row.error_count }} error found</span>
-                                            <div class="validation-error-container">
-                                                <ul class="validation-error-list">
-                                                    {% for field_name, error_list in row.field_specific_errors.items %}
-                                                    <li>
-                                                        <span class="validation-error-field-label font-weight-bold">{{ field_name }}</span>
-                                                        <ul>
-                                                            {% for error in error_list %}
-                                                            <li>{{ error }}</li>
-                                                            {% endfor %}
-                                                        </ul>
-                                                    </li>
-                                                    {% endfor %}
-                                                    {% if row.non_field_specific_errors %}
-                                                    <li>
-                                                        <span
-                                                            class="validation-error-field-label">{% trans "Non field specific" %}</span>
-                                                        <ul>
-                                                            {% for error in row.non_field_specific_errors %}
-                                                            <li class="font-weight-bold">{{ error }}</li>
-                                                            {% endfor %}
-                                                        </ul>
-                                                    </li>
-                                                    {% endif %}
-                                                </ul>
-                                            </div>
-                                        </td>
-                                        {% for field in row.values %}
-                                        <td>{{ field }}</td>
-                                        {% endfor %}
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                {% else %}
-                    <h4 class="card-title">{% trans "Preview" %}</h4>
-                    <p class="card-description">
-                    </p>
-                    <div class="content-scroll">
+                    <ol class="card-description">
+                        <li>
+                            {% blocktrans %}
+                                This tool can only support importing <span class="badge badge-pill badge-primary">.xlsx</span> file
+                            {% endblocktrans %}
+                        </li>
+                        <li>{% trans "This tool can not import multiple sheets at once" %}</li>
+                        <li>{% trans "This tool will only import the top row of your column that has the name as listed below (scroll right the table) :" %}</li>
+                        <br>
                         <div class="table-responsive">
                             <table class="table table-sm table-bordered">
                                 <thead>
                                     <tr>
-                                        <th></th>
-                                        {% for field in result.diff_headers %}
-                                            <th>{{ field }}</th>
+                                        {% for f in fields  %}
+                                        <th>
+                                            {{ f }}
+                                        </th>
                                         {% endfor %}
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {% for row in result.valid_rows %}
-                                        <tr class="{{ row.import_type }}">
-                                            <td class="">
-                                                {% if row.import_type == 'new' %}
-                                                    {% trans "New" %}
-                                                {% elif row.import_type == 'skip' %}
-                                                    {% trans "Skipped" %}
-                                                {% elif row.import_type == 'delete' %}
-                                                    {% trans "Delete" %}
-                                                {% elif row.import_type == 'update' %}
-                                                    {% trans "Update" %}
-                                                {% endif %}
-                                            </td>
-                                            {% for field in row.diff %}
-                                                <td>{{ field }}</td>
-                                            {% endfor %}
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
                             </table>
                         </div>
-                    </div>
-                {% endif %}
+                        <p><span style="font-size: large;">&#x22C6;</span><small>{% trans "Difference in order will not affect the import capabilities." %}</small></p>
+                        
+                        <li>
+                            <span class="badge badge-pill badge-primary">{{ fields.12 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.0 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.1 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.2 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.3 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.6 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.7 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.9 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.10 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.11 }}</span>
+                            {% trans "can not be leave blanks" %}
+                        </li>
+                        <li>
+                            <span class="badge badge-pill badge-primary">{{ fields.0 }}</span>
+                            {% trans "column should be formatted as " %}
+                            <mark class="bg-warning">MM-DD-YYYY</mark>
+                        </li>
+                        <li>
+                            <span class="badge badge-pill badge-primary">{{ fields.1 }}</span>
+                            {% blocktrans %}
+                                should be formatted in 24-hour formats as 
+                                <mark class="bg-warning">hh:mm:ss</mark>. 
+                                This fields can not accept 'Daytime', 'Midnight' value.
+                            {% endblocktrans %}
+                        </li>
+                        <li>
+                            {% blocktrans %}
+                                This importing tool is case sensitive. So, please make sure data in
+                            {% endblocktrans %}
+                            <span class="badge badge-pill badge-primary">{{ fields.2 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.3 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.6 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.7 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.9 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.10 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.11 }}</span>
+
+                            {% blocktrans %}
+                                column
+                                <b>MUST</b>
+                                have the 
+                                <b>exact same word</b> 
+                                as in the stored reference list. You can check all of the list via the admin page.
+                            {% endblocktrans %}
+                        </li>
+                        <li>
+                            <span class="badge badge-pill badge-primary">{{ fields.14 }}</span>
+                            {% blocktrans %}
+                                column can only accept 
+                                <mark class="bg-warning">yes</mark> 
+                                or 
+                                <mark class="bg-warning">no</mark> 
+                                data
+                            {% endblocktrans %}
+                        </li>
+                        <li>
+                            {% trans "If there are any duplication of " %}
+                            <span class="badge badge-pill badge-primary">{{ fields.12 }}</span> 
+                            {% trans "in one sheet, it will only save the data at the most bottom row" %}
+                        </li>
+                        <li>{% trans "This tool will not import any data when validation fails" %}</li>
+                        <li>{% trans "Click Import Button to start" %}</li>
+                    </ol>
+
+                    {% if result %}
+                        {% if result.has_validation_errors or result.has_errors%}
+                            <a href="{% url 'importdataundss' %}" class="btn btn-light">{% trans "Back" %}</a>
+                        {% else %}
+                            <form action="." method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ confirm_form.as_p }}
+                                <p>
+                                    {% trans "Below shows the preview of data that will be imported. If you are satisfied with the results, click 'Confirm Import'" %}
+                                </p>
+                                <input type="submit" class="btn btn-primary" name="confirm" value="{% trans "Confirm Import" %}">
+                            </form>
+                        {% endif %}
+
+                    {% else %}
+                        <form enctype="multipart/form-data" method="post" action="{% url 'confirmimportdataundss' %}">
+                            {% csrf_token %}
+
+                            {% comment %}
+                            <p>
+                                {% trans "This importer will import the following fields: " %}
+                                <code>{{ fields|join:", " }}</code>
+                            </p>
+
+                            <fieldset class="module aligned">
+                                {% for field in form %}
+                                <div class="form-row">
+                                    {{ field.errors }}
+
+                                    {{ field.label_tag }}
+
+                                    {{ field }}
+
+                                    {% if field.field.help_text %}
+                                    <p class="help">{{ field.field.help_text|safe }}</p>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </fieldset>
+
+                            <div class="submit-row">
+                                <input type="submit" class="default" value="{% trans "Submit" %}">
+                            </div>
+                            {% endcomment %}
+
+                            <div class="form-group">
+                                {{ form.import_file.label_tag }}
+                                <div class="custom-file">
+                                    {{ form.import_file|add_class:"custom-file-input" }}
+                                    <label class="custom-file-label" for="{{ form.import_file.id_for_label }}">Choose file</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.input_format.label_tag }}
+                                {{ form.input_format |attr:"class:form-control form-control-lg" }}
+
+                                {% for error in form.input_format.errors %}
+                                    <small class="form-text text-muted">{{ error }}</small>
+                                {% endfor %}
+                                {% if form.input_format.help_text %}
+                                    <small class="form-text text-muted">{{ form.input_format.help_text }}</small>
+                                {% endif %}
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mr-2" id="submit_file">{% trans "Import" %}</button>
+                            <a href="{% url 'importdataundss' %}" class="btn btn-light">{% trans "Clear" %}</a>
+                        </form>
+                    {% endif %}
+                </div>
             </div>
         </div>
+
+        {% if result %}
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card result-card">
+                <div class="card-body">
+                    {% if result.has_errors %}
+                        <h4 class="card-title">{% trans "Errors" %}</h4>
+                        <p class="card-description">
+                        </p>
+                        <div class="content-scroll">
+                            <ul>
+                                {% for error in result.base_errors  %}
+                                    <li>
+                                        {{ error.error }}
+                                        <div class="traceback">{{ error.traceback|linebreaks }}</div>
+                                    </li>
+                                {% endfor %}
+                                {% for line, errors in result.row_errors %}
+                                    {% for error in errors %}
+                                        <li>
+                                            {% trans "Line number" %}: {{ line }} - {{ error.error }}
+                                            <div><code>{{ error.row.values|join:", " }}</code></div>
+                                            <div class="traceback">{{ error.traceback|linebreaks }}</div>
+                                        </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% elif result.has_validation_errors %}
+                        <h4 class="card-title">{% trans "Failed to validate" %}</h4>
+                        <p class="card-description">
+                            {% trans "Please correct these errors in your data where possible, then reupload it using the form above." %}
+                        </p>
+                        <div class="content-scroll">
+                            <div class="table-responsive-sm">
+                                <table class="table table-sm table-bordered validation-error" data-show-columns="true">
+                                    <thead>
+                                        <tr>
+                                            <th>{% trans "Row" %}</th>
+                                            <th>{% trans "Errors" %}</th>
+                                            {% for field in result.diff_headers %}
+                                            <th data-sortable="true">{{ field }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in result.invalid_rows %}
+                                        <tr>
+                                            <td>{{ row.number }} </td>
+                                            <td class="errors">
+                                                <span class="validation-error-count">{{ row.error_count }} error found</span>
+                                                <div class="validation-error-container">
+                                                    <ul class="validation-error-list">
+                                                        {% for field_name, error_list in row.field_specific_errors.items %}
+                                                        <li>
+                                                            <span class="validation-error-field-label font-weight-bold">{{ field_name }}</span>
+                                                            <ul>
+                                                                {% for error in error_list %}
+                                                                <li>{{ error }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </li>
+                                                        {% endfor %}
+                                                        {% if row.non_field_specific_errors %}
+                                                        <li>
+                                                            <span
+                                                                class="validation-error-field-label">{% trans "Non field specific" %}</span>
+                                                            <ul>
+                                                                {% for error in row.non_field_specific_errors %}
+                                                                <li class="font-weight-bold">{{ error }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </li>
+                                                        {% endif %}
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            {% for field in row.values %}
+                                            <td>{{ field }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% else %}
+                        <h4 class="card-title">{% trans "Preview" %}</h4>
+                        <p class="card-description">
+                        </p>
+                        <div class="content-scroll">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered preview">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            {% for field in result.diff_headers %}
+                                                <th>{{ field }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in result.valid_rows %}
+                                            <tr class="{{ row.import_type }}">
+                                                <td class="">
+                                                    {% if row.import_type == 'new' %}
+                                                        {% trans "New" %}
+                                                    {% elif row.import_type == 'skip' %}
+                                                        {% trans "Skipped" %}
+                                                    {% elif row.import_type == 'delete' %}
+                                                        {% trans "Delete" %}
+                                                    {% elif row.import_type == 'update' %}
+                                                        {% trans "Update" %}
+                                                    {% endif %}
+                                                </td>
+                                                {% for field in row.diff %}
+                                                    <td>{{ field }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-</div>
 {% endblock %}
 
 {% block modal %}
@@ -348,6 +355,9 @@
 {% endblock modal %}
 
 {% block dashboard_script %}
+    <script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.0/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.js"></script>
     <script>
         $('#id_import_file').on('change',function(e){
             //get the file name
@@ -357,7 +367,24 @@
         })
         $("#submit_file").click(function(){
             // $('#modal_preview').modal('show'); 
-            $('#_loading_upload').modal('toggle');
+            if ($('#id_import_file').get(0).files.length != 0){
+                $('#_loading_upload').modal('toggle');
+            }
         });
+        $(".validation-error").bootstrapTable({
+            height: 700,
+            showColumnsToggleAll: true,
+            // search: true,
+            sortable: true,
+            sortReset: true,
+            stickyHeader: true,
+            // stickyHeaderOffsetLeft: '3em',
+            // stickyHeaderOffsetRight: '3em',
+            fixedColumns: true,
+            fixedNumber: 2,
+            showFullscreen: true
+        });
+        $('.content-scroll button i.fa-arrows-alt').removeClass('fa fa-arrows-alt').addClass('mdi mdi-fullscreen');
+        $('.content-scroll button i.fa-th-list').removeClass('fa fa-th-list').addClass('mdi mdi-view-list');
     </script>
 {% endblock %} 
