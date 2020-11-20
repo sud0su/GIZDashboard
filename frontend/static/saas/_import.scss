@@ -1,8 +1,10 @@
 .result-card{
     div{
-        &.content-scroll{
-            // overflow-y: auto;
+        &.content{
             max-height: calc(100vh - 212px);
+        }
+        &.content-scroll{
+            overflow-y: auto;
         }
     }
 }

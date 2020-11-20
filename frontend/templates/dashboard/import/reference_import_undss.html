@@ -188,7 +188,7 @@
                         <h4 class="card-title">{% trans "Errors" %}</h4>
                         <p class="card-description">
                         </p>
-                        <div class="content-scroll">
+                        <div class="content content-scroll">
                             <ul>
                                 {% for error in result.base_errors  %}
                                     <li>
@@ -212,7 +212,7 @@
                         <p class="card-description">
                             {% trans "Please correct these errors in your data where possible, then reupload it using the form above." %}
                         </p>
-                        <div class="content-scroll">
+                        <div class="content">
                             <div class="table-responsive-sm">
                                 <table class="table table-sm table-bordered validation-error" data-show-columns="true">
                                     <thead>
@@ -269,7 +269,7 @@
                         <h4 class="card-title">{% trans "Preview" %}</h4>
                         <p class="card-description">
                         </p>
-                        <div class="content-scroll">
+                        <div class="content content-scroll">
                             <div class="table-responsive">
                                 <table class="table table-sm table-bordered preview">
                                     <thead>
@@ -384,7 +384,7 @@
             fixedNumber: 2,
             showFullscreen: true
         });
-        $('.content-scroll button i.fa-arrows-alt').removeClass('fa fa-arrows-alt').addClass('mdi mdi-fullscreen');
-        $('.content-scroll button i.fa-th-list').removeClass('fa fa-th-list').addClass('mdi mdi-view-list');
+        $('.content button i.fa-arrows-alt').removeClass('fa fa-arrows-alt').addClass('mdi mdi-fullscreen');
+        $('.content button i.fa-th-list').removeClass('fa fa-th-list').addClass('mdi mdi-view-list');
     </script>
 {% endblock %} 

@@ -19346,8 +19346,11 @@ code {
   font-size: 0.875rem;
 }
 
-.result-card div.content-scroll {
+.result-card div.content {
   max-height: calc(100vh - 212px);
+}
+.result-card div.content-scroll {
+  overflow-y: auto;
 }
 
 .preview tr.new {
