@@ -44,7 +44,7 @@ class Undss(models.Model):
     Area = models.CharField(verbose_name=_("Area"), max_length=255, null=True, blank=True)
     Police_District = models.CharField(max_length=255, null=True, blank=True)
     Incident_Type = models.ForeignKey(IncidentType, verbose_name=_("Incident Type"), on_delete=models.CASCADE, null=True, blank=False)
-    Incident_Subtype = models.ForeignKey(IncidentSubtype, verbose_name=_("Incident SubType"), on_delete=models.CASCADE, null=True, blank=False)
+    Incident_Subtype = models.ForeignKey(IncidentSubtype, verbose_name=_("Incident SubType"), on_delete=models.CASCADE, null=True, blank=True)
     Description_of_Incident = models.TextField(_("Description of Incident"), null=True, blank=True)
     # Description_of_Incident = models.CharField(max_length=255, null=True, blank=True)
     HPA = models.CharField(max_length=255, null=True, blank=True)
