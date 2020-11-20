@@ -2,35 +2,46 @@ from organization.models import Organization
 from reference.models import District, IncidentSource, IncidentSubtype, IncidentType, Province
 from django.core.exceptions import ValidationError
 from import_export import resources, fields
-from import_export.widgets import ForeignKeyWidget, DateWidget, TimeWidget
+from import_export.widgets import ForeignKeyWidget, DateWidget
 from .models import Undss
-import time
 from datetime import datetime
-# from django.utils import datetime_safe
 
 
 class DistrictForeignKey(ForeignKeyWidget):
     def get_queryset(self, value, row, *args, **kwargs):
         return self.model.objects.filter(name=value, province__name__contains=row.get('Province'))
 
+
 class IncidentSubTypeForeignKey(ForeignKeyWidget):
     def get_queryset(self, value, row, *args, **kwargs):
         return self.model.objects.filter(name=value, incidenttype__name__contains=row.get('Inc_Type'))
 
 class UndssResource(resources.ModelResource):
-    Date = fields.Field(column_name='Date', attribute='Date')
-    Time_of_Incident = fields.Field(column_name='Time_Inc', attribute='Time_of_Incident')
-    province = fields.Field(column_name='Province', attribute='Province', widget=ForeignKeyWidget(Province, 'name'))
-    district = fields.Field(column_name='District', attribute='District', widget=DistrictForeignKey(District, 'name'))
-    City_Village = fields.Field(column_name='City_Vill', attribute='City_Village')
-    Police_District = fields.Field(column_name='Police_Dist', attribute='Police_District')
-    incident_type = fields.Field(column_name='Inc_Type', attribute='Incident_Type', widget=ForeignKeyWidget(IncidentType, 'name'))
-    incident_subtype =fields.Field(column_name='Inc_Subtype', attribute='Incident_Subtype', widget=IncidentSubTypeForeignKey(IncidentSubtype, 'name'))
-    Description_of_Incident = fields.Field(column_name='Inc_Desc', attribute='Description_of_Incident')
-    initiator = fields.Field(column_name='Initiator', attribute='Initiator', widget=ForeignKeyWidget(Organization, 'code'))
-    target = fields.Field(column_name='Target', attribute='Target', widget=ForeignKeyWidget(Organization, 'code'))
-    incident_source = fields.Field(column_name='Source', attribute='Incident_Source', widget=ForeignKeyWidget(IncidentSource, 'name'))
-    
+    Date = fields.Field(column_name='Date', attribute='Date',
+                        widget=DateWidget(format='%m-%d-%Y'))
+    Time_of_Incident = fields.Field(
+        column_name='Time_Inc', attribute='Time_of_Incident')
+    province = fields.Field(column_name='Province', attribute='Province',
+                            widget=ForeignKeyWidget(Province, 'name'))
+    district = fields.Field(column_name='District', attribute='District',
+                            widget=DistrictForeignKey(District, 'name'))
+    City_Village = fields.Field(
+        column_name='City_Vill', attribute='City_Village')
+    Police_District = fields.Field(
+        column_name='Police_Dist', attribute='Police_District')
+    incident_type = fields.Field(
+        column_name='Inc_Type', attribute='Incident_Type', widget=ForeignKeyWidget(IncidentType, 'name'))
+    incident_subtype = fields.Field(column_name='Inc_Subtype', attribute='Incident_Subtype',
+                                    widget=IncidentSubTypeForeignKey(IncidentSubtype, 'name'))
+    Description_of_Incident = fields.Field(
+        column_name='Inc_Desc', attribute='Description_of_Incident')
+    initiator = fields.Field(column_name='Initiator', attribute='Initiator',
+                             widget=ForeignKeyWidget(Organization, 'code'))
+    target = fields.Field(column_name='Target', attribute='Target',
+                          widget=ForeignKeyWidget(Organization, 'code'))
+    incident_source = fields.Field(
+        column_name='Source', attribute='Incident_Source', widget=ForeignKeyWidget(IncidentSource, 'name'))
+
     # Kill_Natl = fields.Field(column_name='Killed_National', attribute='Kill_Natl')
     # Kill_Intl = fields.Field(column_name='Killed_International', attribute='Kill_Intl')
     # Kill_ANSF = fields.Field(column_name='Killed_ANSF', attribute='Kill_ANSF')
@@ -53,25 +64,11 @@ class UndssResource(resources.ModelResource):
 
     class Meta:
         model = Undss
-        fields = ('Single_ID','Date','Time_of_Incident','province','district','City_Village','Area','Police_District','incident_type','incident_subtype','Description_of_Incident','HPA','initiator','target','Kill_Natl','Kill_Intl','Kill_ANSF','Kill_IM','Kill_ALP_PGM','Kill_AOG','Kill_ISKP','Inj_Natl','Inj_Intl','Inj_ANSF','Inj_IM','Inj_ALP_PGM','Inj_AOG','Inj_ISKP','Abd_Natl','Abd_Intl','Abd_ANSF','Abd_IM','Abd_ALP_PGM','Latitude','Longitude','incident_source',)
-        exclude = ('id', 'created_at' , 'updated_at',)
+        fields = ('Single_ID', 'Date', 'Time_of_Incident', 'province', 'district', 'City_Village', 'Area', 'Police_District', 'incident_type', 'incident_subtype', 'Description_of_Incident', 'HPA', 'initiator', 'target', 'Kill_Natl', 'Kill_Intl', 'Kill_ANSF',
+                  'Kill_IM', 'Kill_ALP_PGM', 'Kill_AOG', 'Kill_ISKP', 'Inj_Natl', 'Inj_Intl', 'Inj_ANSF', 'Inj_IM', 'Inj_ALP_PGM', 'Inj_AOG', 'Inj_ISKP', 'Abd_Natl', 'Abd_Intl', 'Abd_ANSF', 'Abd_IM', 'Abd_ALP_PGM', 'Latitude', 'Longitude', 'incident_source',)
+        exclude = ('id', 'created_at', 'updated_at',)
         clean_model_instances = True
         import_id_fields = ('Single_ID',)
-
-    # def before_import(self, dataset, using_transactions, dry_run, **kwargs):
-    #     for row in dataset.dict:
-    #         if row['Date'] is not None or row['Date'] != 'null':
-    #             date_str = row['Date'].date().__str__()
-    #             print(date_str)
-    #             try:
-    #                 date_str = time.strptime(date_str, '%m-%d-%Y')
-    #                 print(date_str)
-    #             except ValueError:
-    #                 raise ValidationError("Incorrect data format, should be MM-DD-YYYY")
-                # try:
-                #     time.strptime(date_str, '%m-%d-%Y')
-                # except ValueError:
-                #     raise ValidationError("Incorrect data format, should be MM-DD-YYYY")
 
     def before_import_row(self, row, **kwargs):
         single_id = row.get('Single_ID')
@@ -89,23 +86,20 @@ class UndssResource(resources.ModelResource):
         if single_id == 'null' or single_id == None:
             raise ValidationError("Single ID cannot be null")
 
-        # if date is not None or date != 'null':
-        #     date_str = date.date().__str__()
-        #     try:
-        #         datetime.strptime(date_str, '%m-%d-%Y')
-        #     except ValueError:
-        #         raise ValidationError("Incorrect data format, should be MM-DD-YYYY")
-        #     row['Date'] = date_str
-        # else:
-        #     raise ValidationError("Date cannot be blank")
-        # if row['Date'] is not None or row['Date'] != 'null':
-        #     date_str = row['Date'].date().__str__()
-        #     print(date_str)
-        #     try:
-        #         date_str = time.strptime(date_str, '%m-%d-%Y')
-        #         print(date_str)
-        #     except ValueError:
-        #         raise ValidationError("Incorrect data format, should be MM-DD-YYYY")
+        if date is not None or date != 'null':
+            if isinstance(date, datetime):
+                value = date.date().strftime('%m-%d-%Y')
+                try:
+                    datetime.strptime(str(value), '%m-%d-%Y')
+                    row['Date'] = value
+                except (ValueError, TypeError):
+                    raise ValidationError(
+                        "Incorrect data format, should be MM-DD-YYYY")
+            else:
+                raise ValidationError(
+                    "Incorrect data format, Date should be in date format")
+        else:
+            raise ValidationError("Date cannot be blank")
 
         if timeofincident is not None or timeofincident != 'null':
             try:
@@ -114,8 +108,9 @@ class UndssResource(resources.ModelResource):
                 else:
                     row['Time_Inc'] = timeofincident
             except ValueError:
-                raise ValidationError("Incorrect time format, should be hh:mm:ss")
-        else: 
+                raise ValidationError(
+                    "Incorrect time format, should be hh:mm:ss")
+        else:
             raise ValidationError('Time of Incident cannot be blank')
 
         if hpa is None:
@@ -127,21 +122,26 @@ class UndssResource(resources.ModelResource):
 
         prov = Province.objects.filter(name=province)
         if not bool(prov):
-            raise ValidationError('Province name %s cannot be found' % province)
+            raise ValidationError(
+                'Province name %s cannot be found' % province)
 
-        dist = District.objects.filter(name=district, province__name__contains=province)
+        dist = District.objects.filter(
+            name=district, province__name__contains=province)
         if not bool(dist):
-            raise ValidationError('District name %s cannot be found in %s Province' % (district ,province))
-
+            raise ValidationError(
+                'District name %s cannot be found in %s Province' % (district, province))
 
         itype = IncidentType.objects.filter(name=incident_type)
         if not bool(itype):
-            raise ValidationError('Incident Type name %s cannot be found' % incident_type)
+            raise ValidationError(
+                'Incident Type name %s cannot be found' % incident_type)
 
-
-        istype = IncidentSubtype.objects.filter(name=incident_subtype, incidenttype__name__contains=incident_type)
-        if not bool(istype):
-            raise ValidationError('Incident Sub Type name %s cannot be found in %s Incident Type' % (incident_subtype ,incident_type))
+        if incident_subtype is not None:
+            istype = IncidentSubtype.objects.filter(
+                name=incident_subtype, incidenttype__name__contains=incident_type)
+            if not bool(istype):
+                raise ValidationError('Incident Sub Type name %s cannot be found in %s Incident Type' % (
+                    incident_subtype, incident_type))
 
         init = Organization.objects.filter(code=initiator)
         if not bool(init):
@@ -153,4 +153,5 @@ class UndssResource(resources.ModelResource):
 
         incsource = IncidentSource.objects.filter(name=incident_source)
         if not bool(incsource):
-            raise ValidationError('Incident Source name %s cannot be found' % incident_source)
+            raise ValidationError(
+                'Incident Source name %s cannot be found' % incident_source)
