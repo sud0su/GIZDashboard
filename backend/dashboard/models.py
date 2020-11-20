@@ -3,7 +3,7 @@ import time
 from uuid import uuid4
 from django.utils.deconstruct import deconstructible
 from django.db import models
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from django.utils.translation import gettext as _
 from reference.models import Province, District, IncidentType, IncidentSubtype, IncidentSource
 from organization.models import Organization
@@ -34,7 +34,7 @@ class Undss(models.Model):
     # Shape = models.FileField(_("Shape"), upload_to=mediaPath, null=True, blank=True)
     Single_ID = models.CharField(_("Data Entry No"), max_length=50, null=True, blank=False)
     Date = models.DateField(_("Date"), auto_now=False, auto_now_add=False, null=True, blank=False)
-    Time_of_Incident = models.TimeField(_("Time Of Incident"), null=True, blank=False)
+    Time_of_Incident = models.TimeField(_("Time Of Incident"), default=time(), null=False, blank=False)
     # Time_of_Incident = models.TimeField(_("Time Of Incident"), default=default_start_time, null=True, blank=True)
     Province = models.ForeignKey(Province, verbose_name=_("Province"), on_delete=models.CASCADE, null=True, blank=False)
     District =models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE, null=True, blank=False)

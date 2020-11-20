@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget, DateWidget
 from .models import Undss
-from datetime import datetime
+from datetime import datetime, time
 
 
 class DistrictForeignKey(ForeignKeyWidget):
@@ -20,7 +20,7 @@ class UndssResource(resources.ModelResource):
     Date = fields.Field(column_name='Date', attribute='Date',
                         widget=DateWidget(format='%m-%d-%Y'))
     Time_of_Incident = fields.Field(
-        column_name='Time_Inc', attribute='Time_of_Incident')
+        column_name='Time_Inc', attribute='Time_of_Incident', default=time())
     province = fields.Field(column_name='Province', attribute='Province',
                             widget=ForeignKeyWidget(Province, 'name'))
     district = fields.Field(column_name='District', attribute='District',
