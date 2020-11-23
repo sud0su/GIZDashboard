@@ -12,16 +12,17 @@
 
 {% block content_dashboard %}
     <div class="row">
-        <div class="col-12 stretch-card">
+        <div class="col-12 col-xl-10 offset-xl-1 stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">{% trans "Input New Data" %}</h4>
+                    <h4 class="card-title d-none">{% trans "Input New Data" %}</h4>
                     <p class="card-description d-none">
                         Input your data
                     </p>
                     <form class="forms-sample form-undss" method="POST" enctype="multipart/form-data" >
                         {% csrf_token %}
-                        {% include 'dashboard/form_format.html' with form=form %}
+                        <!-- {#% include 'dashboard/form_format.html' with form=form %} -->
+                        {% include 'dashboard/form_format_vertical.html' with form=form %}
 
                         <button type="submit" class="btn btn-primary mr-2">{% trans "Submit" %}</button>
                         <a href="{% url 'inputdashboard' %}" class="btn btn-light">{% trans "Cancel" %}</a>

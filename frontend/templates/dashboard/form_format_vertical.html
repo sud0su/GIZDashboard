@@ -1,0 +1,526 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+    {% comment %}
+    <div class="form-group row">
+        {{ form.Shape|add_label_class:"col-form-label col-md-2" }}
+        <div class="col-md-10">
+            <div class="custom-file">
+                {{ form.Shape|add_class:"custom-file-input" }}
+                <label class="custom-file-label" for="{{ form.Shape.id_for_label }}">Choose file</label>
+            </div>
+        </div>
+    </div>
+    {% endcomment %}
+
+    <h4 class="card-title font-weight-bold display-5">{% trans 'Identification' %}</h4>
+    <div class="">
+        <div class="form-group row">
+            {{ form.Incident_Source|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Incident_Source|add_class:"form-control" }}
+            </div>
+            {% for error in form.Incident_Source.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Incident_Source.help_text %}
+                <small class="form-text text-muted">{{ form.Incident_Source.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Single_ID|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Single_ID|add_class:"form-control" }}
+            </div>
+            {% for error in form.Single_ID.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Single_ID.help_text %}
+                <small class="form-text text-muted">{{ form.Single_ID.help_text }}</small>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="">
+        <div class="form-group row">
+            {{ form.Date|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Date|add_class:"form-control" }}
+            </div>
+            {% for error in form.Date.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Date.help_text %}
+                <small class="form-text text-muted">{{ form.Date.help_text }}</small>
+            {% endif %}
+        </div>
+    
+        <div class="form-group row">
+            {{ form.Time_of_Incident|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Time_of_Incident|add_class:"form-control" }}
+            </div>
+            {% for error in form.Time_of_Incident.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Time_of_Incident.help_text %}
+                <small class="form-text text-muted">{{ form.Time_of_Incident.help_text }}</small>
+            {% endif %}
+        </div>
+    </div>
+
+    <h4 class="card-title font-weight-bold display-5">{% trans 'Area' %}</h4>
+    <div class="">
+        <div class="form-group row">
+            {{ form.Province|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Province|add_class:"form-control" }}
+            </div>
+            {% for error in form.Province.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Province.help_text %}
+                <small class="form-text text-muted">{{ form.Province.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.District|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.District|add_class:"form-control" }}
+            </div>
+            {% for error in form.District.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.District.help_text %}
+                <small class="form-text text-muted">{{ form.District.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.City_Village|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.City_Village|add_class:"form-control" }}
+            </div>
+            {% for error in form.City_Village.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.City_Village.help_text %}
+                <small class="form-text text-muted">{{ form.City_Village.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Area|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Area|add_class:"form-control" }}
+            </div>
+            {% for error in form.Area.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Area.help_text %}
+                <small class="form-text text-muted">{{ form.Area.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Police_District|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Police_District|add_class:"form-control" }}
+            </div>
+            {% for error in form.Police_District.errors %}
+                    <small class="form-text text-muted">{{ error }}</small>
+                {% endfor %}
+            {% if form.Police_District.help_text %}
+                <small class="form-text text-muted">{{ form.Police_District.help_text }}</small>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="">
+        <div class="form-group row">
+            {{ form.Latitude|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Latitude|add_class:"form-control" }}
+            </div>
+            {% for error in form.Latitude.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Latitude.help_text %}
+                <small class="form-text text-muted">{{ form.Latitude.help_text }}</small>
+            {% endif %}
+        </div>
+    
+        <div class="form-group row">
+            {{ form.Longitude|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Longitude|add_class:"form-control" }}
+            </div>
+            {% for error in form.Longitude.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Longitude.help_text %}
+                <small class="form-text text-muted">{{ form.Longitude.help_text }}</small>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <h4 class="card-title font-weight-bold display-5">{% trans 'Details Incident' %}</h4>
+    <div class="">
+        <div class="form-group row">
+            {{ form.Incident_Type|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Incident_Type|add_class:"form-control" }}
+            </div>
+            {% for error in form.Incident_Type.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Incident_Type.help_text %}
+                <small class="form-text text-muted">{{ form.Incident_Type.help_text }}</small>
+            {% endif %}
+        </div>
+    
+        <div class="form-group row">
+            {{ form.Incident_Subtype|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Incident_Subtype|add_class:"form-control" }}
+            </div>
+            {% for error in form.Incident_Subtype.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Incident_Subtype.help_text %}
+                <small class="form-text text-muted">{{ form.Incident_Subtype.help_text }}</small>
+            {% endif %}
+        </div>
+
+        <div class="form-group row">
+            {{ form.HPA|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.HPA|add_class:"form-control" }}
+            </div>
+            {% for error in form.HPA.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.HPA.help_text %}
+                <small class="form-text text-muted">{{ form.HPA.help_text }}</small>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        {{ form.Description_of_Incident|add_label_class:"col-form-label col-md-2" }}
+        <div class="col-md-10">
+            {{ form.Description_of_Incident|add_class:"form-control" }}
+        </div>
+        {% for error in form.Description_of_Incident.errors %}
+            <small class="form-text text-muted">{{ error }}</small>
+        {% endfor %}
+        {% if form.Description_of_Incident.help_text %}
+            <small class="form-text text-muted">{{ form.Description_of_Incident.help_text }}</small>
+        {% endif %}
+    </div>
+
+    <div class="">
+        <div class="form-group row">
+            {{ form.Initiator|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Initiator|add_class:"form-control" }}
+            </div>
+            {% for error in form.Initiator.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Initiator.help_text %}
+                <small class="form-text text-muted">{{ form.Initiator.help_text }}</small>
+            {% endif %}
+        </div>
+    
+        <div class="form-group row">
+            {{ form.Target|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Target|add_class:"form-control" }}
+            </div>
+            {% for error in form.Target.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Target.help_text %}
+                <small class="form-text text-muted">{{ form.Target.help_text }}</small>
+            {% endif %}
+        </div>
+    </div>
+
+    <h4 class="card-title font-weight-bold display-5">{% trans 'Casualties' %}</h4>
+    <div class="">
+        <div class="form-group row">
+            {{ form.Kill_Natl|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Kill_Natl|add_class:"form-control" }}
+            </div>
+            {% for error in form.Kill_Natl.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Kill_Natl.help_text %}
+                <small class="form-text text-muted">{{ form.Kill_Natl.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Kill_Intl|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Kill_Intl|add_class:"form-control" }}
+            </div>
+            {% for error in form.Kill_Intl.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Kill_Intl.help_text %}
+                <small class="form-text text-muted">{{ form.Kill_Intl.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Kill_ANSF|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Kill_ANSF|add_class:"form-control" }}
+            </div>
+            {% for error in form.Kill_ANSF.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Kill_ANSF.help_text %}
+                <small class="form-text text-muted">{{ form.Kill_ANSF.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Kill_IM|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Kill_IM|add_class:"form-control" }}
+            </div>
+            {% for error in form.Kill_IM.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Kill_IM.help_text %}
+                <small class="form-text text-muted">{{ form.Kill_IM.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Kill_ALP_PGM|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Kill_ALP_PGM|add_class:"form-control" }}
+            </div>
+            {% for error in form.Kill_ALP_PGM.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Kill_ALP_PGM.help_text %}
+                <small class="form-text text-muted">{{ form.Kill_ALP_PGM.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Kill_AOG|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Kill_AOG|add_class:"form-control" }}
+            </div>
+            {% for error in form.Kill_AOG.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Kill_AOG.help_text %}
+                <small class="form-text text-muted">{{ form.Kill_AOG.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Kill_ISKP|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Kill_ISKP|add_class:"form-control" }}
+            </div>
+            {% for error in form.Kill_ISKP.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Kill_ISKP.help_text %}
+                <small class="form-text text-muted">{{ form.Kill_ISKP.help_text }}</small>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="">
+        <div class="form-group row">
+            {{ form.Inj_Natl|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Inj_Natl|add_class:"form-control" }}
+            </div>
+            {% for error in form.Inj_Natl.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Inj_Natl.help_text %}
+                <small class="form-text text-muted">{{ form.Inj_Natl.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Inj_Intl|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Inj_Intl|add_class:"form-control" }}
+            </div>
+            {% for error in form.Inj_Intl.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Inj_Intl.help_text %}
+                <small class="form-text text-muted">{{ form.Inj_Intl.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Inj_ANSF|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Inj_ANSF|add_class:"form-control" }}
+            </div>
+            {% for error in form.Inj_ANSF.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Inj_ANSF.help_text %}
+                <small class="form-text text-muted">{{ form.Inj_ANSF.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Inj_IM|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Inj_IM|add_class:"form-control" }}
+            </div>
+            {% for error in form.Inj_IM.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Inj_IM.help_text %}
+                <small class="form-text text-muted">{{ form.Inj_IM.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Inj_ALP_PGM|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Inj_ALP_PGM|add_class:"form-control" }}
+            </div>
+            {% for error in form.Inj_ALP_PGM.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Inj_ALP_PGM.help_text %}
+                <small class="form-text text-muted">{{ form.Inj_ALP_PGM.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Inj_AOG|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Inj_AOG|add_class:"form-control" }}
+            </div>
+            {% for error in form.Inj_AOG.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Inj_AOG.help_text %}
+                <small class="form-text text-muted">{{ form.Inj_AOG.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Inj_ISKP|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Inj_ISKP|add_class:"form-control" }}
+            </div>
+            {% for error in form.Inj_ISKP.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Inj_ISKP.help_text %}
+                <small class="form-text text-muted">{{ form.Inj_ISKP.help_text }}</small>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="">
+        <div class="form-group row">
+            {{ form.Abd_Natl|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Abd_Natl|add_class:"form-control" }}
+            </div>
+            {% for error in form.Abd_Natl.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Abd_Natl.help_text %}
+                <small class="form-text text-muted">{{ form.Abd_Natl.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Abd_Intl|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Abd_Intl|add_class:"form-control" }}
+            </div>
+            {% for error in form.Abd_Intl.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Abd_Intl.help_text %}
+                <small class="form-text text-muted">{{ form.Abd_Intl.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Abd_ANSF|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Abd_ANSF|add_class:"form-control" }}
+            </div>
+            {% for error in form.Abd_ANSF.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Abd_ANSF.help_text %}
+                <small class="form-text text-muted">{{ form.Abd_ANSF.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Abd_IM|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Abd_IM|add_class:"form-control" }}
+            </div>
+            {% for error in form.Abd_IM.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Abd_IM.help_text %}
+                <small class="form-text text-muted">{{ form.Abd_IM.help_text }}</small>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {{ form.Abd_ALP_PGM|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.Abd_ALP_PGM|add_class:"form-control" }}
+            </div>
+            {% for error in form.Abd_ALP_PGM.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.Abd_ALP_PGM.help_text %}
+                <small class="form-text text-muted">{{ form.Abd_ALP_PGM.help_text }}</small>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="">
+        
+        <!-- <div class="form-group row">
+            {{ form.PRMO|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.PRMO|add_class:"form-control" }}
+            </div>
+            {% for error in form.PRMO.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.PRMO.help_text %}
+                <small class="form-text text-muted">{{ form.PRMO.help_text }}</small>
+            {% endif %}
+        </div>
+    
+        <div class="form-group row">
+            {{ form.UNDSS|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.UNDSS|add_class:"form-control" }}
+            </div>
+            {% for error in form.UNDSS.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.UNDSS.help_text %}
+                <small class="form-text text-muted">{{ form.UNDSS.help_text }}</small>
+            {% endif %}
+        </div>
+    
+        <div class="form-group row">
+            {{ form.INSO|add_label_class:"col-form-label col-md-2" }}
+            <div class="col-md-10">
+                {{ form.INSO|add_class:"form-control" }}
+            </div>
+            {% for error in form.INSO.errors %}
+                <small class="form-text text-muted">{{ error }}</small>
+            {% endfor %}
+            {% if form.INSO.help_text %}
+                <small class="form-text text-muted">{{ form.INSO.help_text }}</small>
+            {% endif %}
+        </div> -->
+    </div>
