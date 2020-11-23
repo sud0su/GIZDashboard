@@ -28,6 +28,9 @@
 .select2-container{
     &.area-dropdown,
     &.source-multiple,
+    &.source-dropdown,
+    &.initiator-dropdown,
+    &.hpa-dropdown,
     &.police-dropdown{
         border: none;
     }
@@ -35,6 +38,9 @@
 
 .select2-container{
     &.area-dropdown,
+    &.source-dropdown,
+    &.initiator-dropdown,
+    &.hpa-dropdown,
     &.police-dropdown{
         .select2-choice{
             padding: 0;
@@ -74,11 +80,27 @@
     border: none;
 }
 
-.ch-size{
-    page-break-after: always;
-    page-break-inside: avoid;
-    -webkit-region-break-after: always;
-    -webkit-region-break-inside: avoid;
-    display: block;
-    float: none;
-}
+// * { 
+//     float: none !important; 
+//     overflow: initial !important;
+//   }
+
+
+// .stretch-card,
+// .card{
+//     display: block;
+// }
+
+
+// .ch-size{
+//     height: 400px;
+//     page-break-after: always;
+//     page-break-inside: avoid;
+//     -webkit-region-break-after: always;
+//     -webkit-region-break-inside: avoid;
+//     break-after: always;
+//     break-inside: avoid;
+//     display: block;
+//     float: none;
+//     overflow: initial !important;
+// }

@@ -302,7 +302,7 @@ function init_chart2(){
 	Highcharts.setOptions(Highcharts.theme);
 
 	// Object Bar chart
-	function bar_chart(id_val, color_val, colorPoint_val, legend_val, y_title, x_title, data_val, title_val, show_title_val){
+	function bar_chart(id_val, color_val, colorPoint_val, legend_val, y_title, x_title, data_val, title_val, show_title_val, animate_val){
 		$(id_val).highcharts({
 			chart: {
 				type: 'bar'
@@ -332,7 +332,7 @@ function init_chart2(){
 			},
 			plotOptions:{
 				series: {
-					animation: false
+					animation: animate_val
 				},
 				bar: {
 					colorByPoint: colorPoint_val,
@@ -350,10 +350,10 @@ function init_chart2(){
 	}
 
 	// Object Donut chart
-	function donut_chart(id_val, color_val, data_val, title_val, show_title_val){
+	function donut_chart(id_val, color_val, data_val, title_val, show_title_val, animate_val){
 		$(id_val).highcharts({
 			chart: {
-				type: 'pie'
+				type: 'pie',
 			},
 			title: {
 				text: title_val,
@@ -369,6 +369,11 @@ function init_chart2(){
 				align: 'left',
 				verticalAlign: 'top',
 				layout: 'vertical'
+			},
+			plotOptions: {
+				series: {
+					animation: animate_val
+				},	
 			},
 			colors: color_val,
 			series: [{
@@ -391,7 +396,7 @@ function init_chart2(){
 	}
 
 	// Object Stacked Bar chart
-	function polar_chart(id_val, color_val, data_title, data_val){
+	function polar_chart(id_val, color_val, data_title, data_val, animate_val){
 		$(id_val).highcharts({
 			chart: {
 				polar: true
@@ -417,7 +422,7 @@ function init_chart2(){
 			},
 			plotOptions: {
 				series: {
-					animation: false
+					animation: animate_val
 				},
 				
 			},
@@ -428,7 +433,7 @@ function init_chart2(){
 	}
 
 	// Object Spline Chart
-	function spline_chart(id_val, color_val, colorPoint_val, legend_val, y_title, x_title, data_val, title_val, show_title_val){
+	function spline_chart(id_val, color_val, colorPoint_val, legend_val, y_title, x_title, data_val, title_val, show_title_val, animate_val){
 		$(id_val).highcharts('StockChart',{
 			rangeSelector: {
 				selected: 5,
@@ -466,6 +471,12 @@ function init_chart2(){
 			legend:{
 				enabled: legend_val
 			},
+			plotOptions: {
+				series: {
+					animation: animate_val
+				},
+				
+			},
 			colors: color_val,
 			series: data_val
 		});
@@ -482,12 +493,13 @@ function init_chart2(){
 		var xAxis_chart = $(id_chart).data("xaxis");
 		var colorPoint_bool = $(id_chart).data("colorpoint");
 		var legend_bool = $(id_chart).data("legend");
+		var animate_bool = $(id_chart).data("animate");
 		var title_chart = $(id_chart).attr('data-title');
 		var show_title_chart = $(id_chart).attr('data-show-title');
 
 		selected_color = colorChart[color_chart];
 
-		spline_chart(id_chart, selected_color, colorPoint_bool, legend_bool, yAxis_chart, xAxis_chart, data_chart, title_chart, show_title_chart);
+		spline_chart(id_chart, selected_color, colorPoint_bool, legend_bool, yAxis_chart, xAxis_chart, data_chart, title_chart, show_title_chart, animate_bool);
 
 	});
 
@@ -499,33 +511,27 @@ function init_chart2(){
 		var xAxis_chart = $(id_chart).data("xaxis");
 		var colorPoint_bool = $(id_chart).data("colorpoint");
 		var legend_bool = $(id_chart).data("legend");
+		var animate_bool = $(id_chart).data("animate");
 		var title_chart = $(id_chart).attr('data-title');
 		var show_title_chart = $(id_chart).attr('data-show-title');
 
 		selected_color = colorChart[color_chart];
 
-		bar_chart(id_chart, selected_color, colorPoint_bool, legend_bool, yAxis_chart, xAxis_chart, data_chart, title_chart, show_title_chart);
+		bar_chart(id_chart, selected_color, colorPoint_bool, legend_bool, yAxis_chart, xAxis_chart, data_chart, title_chart, show_title_chart, animate_bool);
 
 	});
 
 	$('.donut-chart').each(function(){
-		// console.log(this.id);
 		var id_chart = '#' + this.id;
 		color_chart = $(id_chart).attr('data-color'); 
-		// var color_chart = $(id_chart).data("color");
 		var data_chart = $(id_chart).data("val");
-		// id_chart.attr('data-chart');
+		var animate_bool = $(id_chart).data("animate");
 		var title_chart = $(id_chart).attr('data-title');
 		var show_title_chart = $(id_chart).attr('data-show-title');
 
 		selected_color = colorChart[color_chart];
 
-		// console.log(id_chart);
-		// console.log(color_chart);
-		// console.log(data_chart);
-		// console.log(selected_color);
-
-		donut_chart(id_chart, selected_color, data_chart, title_chart, show_title_chart);
+		donut_chart(id_chart, selected_color, data_chart, title_chart, show_title_chart, animate_bool);
 
 	});
 
@@ -534,6 +540,7 @@ function init_chart2(){
 		color_chart = $(id_chart).attr('data-color'); 
 		var data_chart = $(id_chart).data("val");
 		var xAxis_chart = $(id_chart).data("xaxis");
+		var animate_bool = $(id_chart).data("animate");
 
 		selected_color = colorChart[color_chart];
 
@@ -556,7 +563,7 @@ function init_chart2(){
 
 			isi_fix.push(isi);
 		}
-		polar_chart(id_chart, selected_color, xAxis_chart, isi_fix);
+		polar_chart(id_chart, selected_color, xAxis_chart, isi_fix, animate_bool);
 
 	});
 }

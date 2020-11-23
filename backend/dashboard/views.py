@@ -142,7 +142,8 @@ def Dashboard(request):
             'screen-height': 1024,  # resolution when loading the page
             'paperWidth': 8.27,
             'paperHeight': 11.69,
-            'marginTop': 0.78,
+            # 'marginTop': 0.78,
+            'marginTop': 0.90,
             'marginBottom': 0.45,
             'marginLeft': 0.3,
             'marginRight': 0.3,

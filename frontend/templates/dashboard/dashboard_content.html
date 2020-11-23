@@ -79,17 +79,26 @@
         {% endfor %}
         
         {% for chart_item in chart.donut_chart_casualty_subtype %}
+            {% if 'print' in request.path %}
+                {% if chart_item.key == 'number_of_im_casualties' %}
+                    <div class="w-100" style="margin-top: 125px;"></div>
+                {% endif %} 
+            {% endif %}
             <div class="col-12 col-sm-12 col-xl-3 {% if 'print' in request.path %}col-md-4 d-block {% else %}col-md-6 col-lg-6{% endif %} grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">{% trans chart_item.title %}</h4>
-                        <div id="{{chart_item.key}}" class="ch-size donut-chart" data-color=colorDefault data-val='{{chart_item.values | jsonify | safe}}' data-title='{% trans chart_item.title %}' data-show-title='none'></div>
+                        <div id="{{chart_item.key}}" class="ch-size donut-chart" data-color=colorDefault data-val='{{chart_item.values | jsonify | safe}}' data-title='{% trans chart_item.title %}' data-show-title='none' data-animate={% if 'print' in request.path %}"false"{% else %}"true"{% endif %}></div>
                     </div>
                 </div>
             </div>
-            {% if chart_item.key == 'number_of_im_casualties' %}
-            <div class="col-12"></div>
-            {% endif %} 
+
+            {% if 'print' in request.path %}
+                {% if chart_item.key == 'number_of_im_casualties' %}
+                <!-- Force next columns to break to new line at md breakpoint and up -->
+                <div class="w-100 d-none d-md-block"></div>
+                {% endif %} 
+            {% endif %}
         {% endfor %}
 
         {% comment %}
@@ -193,7 +202,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans chart.polar_incident_type.title %}</h4>
-                    <div id="{{ chart.polar_incident_type.key }}" class="ch-size polar-chart" data-color="colorPolar" data-xaxis='{{ chart.polar_incident_type.labels | jsonify | safe }}' data-val='{{ chart.polar_incident_type.data_val | jsonify | safe }}'></div>
+                    <div id="{{ chart.polar_incident_type.key }}" class="ch-size polar-chart" data-color="colorPolar" data-xaxis='{{ chart.polar_incident_type.labels | jsonify | safe }}' data-val='{{ chart.polar_incident_type.data_val | jsonify | safe }}' data-animate={% if 'print' in request.path %}"false"{% else %}"true"{% endif %}></div>
                 </div>
             </div>
         </div>
@@ -202,10 +211,10 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Select Incident Type" %}</h4>
-                    <p class="card-description">
+                    <p class="card-description {% if 'print' in request.path %}d-none{% endif %}">
                         {% trans "Please pick only 1 Incident Type to show Incident Subtype options." %}
                     </p>
-                    <div class="form-group row">
+                    <div class="form-group row {% if 'print' in request.path %}d-none{% endif %}">
                         <div class="col">
                             <p class="mb-2" style="position: absolute;left: 75px;">{% trans "Select All" %}</p>
                             <label class="toggle-switch parents-checkbox">
@@ -330,11 +339,15 @@
             </div>
         </div>
 
+        {% if 'print' in request.path %}
+            <div class="w-100" style="margin-top: 315px;"></div>
+        {% endif %}
+
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{{ chart.bar_chart_incident.title }}</h4>
-                    <div id="{{ chart.bar_chart_incident.key }}" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='{{ chart.bar_chart_incident.labels | jsonify | safe }}' data-val='{{ chart.bar_chart_incident.data_val | jsonify | safe }}' ></div>
+                    <div id="{{ chart.bar_chart_incident.key }}" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='{{ chart.bar_chart_incident.labels | jsonify | safe }}' data-val='{{ chart.bar_chart_incident.data_val | jsonify | safe }}' data-animate={% if 'print' in request.path %}"false"{% else %}"true"{% endif %}></div>
                 </div>
             </div>
         </div>
@@ -343,7 +356,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Graph of Incident and Casualties Trend by Target Type" %}</h4>
-                    <div id="{{ chart.polar_target_type.key }}_id" class="ch-size polar-chart" data-color="colorPolar" data-xaxis='{{ chart.polar_target_type.labels | jsonify | safe }}' data-val='{{ chart.polar_target_type.data_val | jsonify | safe }}'></div>
+                    <div id="{{ chart.polar_target_type.key }}_id" class="ch-size polar-chart" data-color="colorPolar" data-xaxis='{{ chart.polar_target_type.labels | jsonify | safe }}' data-val='{{ chart.polar_target_type.data_val | jsonify | safe }}' data-animate={% if 'print' in request.path %}"false"{% else %}"true"{% endif %}></div>
                 </div>
             </div>
         </div>
@@ -352,7 +365,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Select Target Type" %}</h4>
-                        <div class="form-group row">
+                        <div class="form-group row {% if 'print' in request.path %}d-none{% endif %}">
                             <div class="col">
                                 <p class="mb-2" style="position: absolute;left: 75px;">{% trans "Select All" %}</p>
                                 <label class="toggle-switch parents-checkbox">
@@ -381,11 +394,15 @@
             </div>
         </div>
 
+        {% if 'print' in request.path %}
+            <div class="w-100" style="margin-top: 50px;"></div>
+        {% endif %}
+
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{{ chart.bar_chart_target.title }}</h4>
-                    <div id="{{ chart.bar_chart_target.key }}_id" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='{{ chart.bar_chart_target.labels | jsonify | safe }}' data-val='{{ chart.bar_chart_target.data_val | jsonify | safe }}' ></div>
+                    <div id="{{ chart.bar_chart_target.key }}_id" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='{{ chart.bar_chart_target.labels | jsonify | safe }}' data-val='{{ chart.bar_chart_target.data_val | jsonify | safe }}' data-animate={% if 'print' in request.path %}"false"{% else %}"true"{% endif %}></div>
                 </div>
             </div>
         </div>
@@ -394,7 +411,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{% trans "Historical Date of Incidents and Casualties by Incident Type" %}</h4>
-                    <div id="spline_{{ chart.spline.key }}" class="ch-size spline-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='' data-val='{{ chart.spline.data_val | jsonify | safe }}' ></div>
+                    <div id="spline_{{ chart.spline.key }}" class="ch-size spline-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='' data-val='{{ chart.spline.data_val | jsonify | safe }}' data-animate={% if 'print' in request.path %}"false"{% else %}"true"{% endif %}></div>
                 </div>
             </div>
         </div>
