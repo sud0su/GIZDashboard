@@ -46,7 +46,7 @@ class UndssForm(forms.ModelForm):
         )
     )
     Incident_Subtype = forms.ModelChoiceField(
-        # required=False,
+        required=False,
         queryset=IncidentSubtype.objects.none(),
         widget=Select2Widget(
             attrs={'data-placeholder':'Select Incident Subtype'}
