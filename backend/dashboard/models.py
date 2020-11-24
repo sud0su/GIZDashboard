@@ -82,5 +82,5 @@ class Undss(models.Model):
         return reverse("detail", kwargs={"pk": self.pk})
     
     class Meta:
+        verbose_name = "Incident"
         # ordering = ('-created_at',)
-        pass
