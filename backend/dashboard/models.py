@@ -32,7 +32,7 @@ def default_start_time():
 mediaPath = PathAndRename("shape/")
 class Undss(models.Model):
     # Shape = models.FileField(_("Shape"), upload_to=mediaPath, null=True, blank=True)
-    Single_ID = models.CharField(_("Single ID"), max_length=50, null=True, blank=False)
+    Single_ID = models.CharField(_("Single ID"), max_length=50, null=True, blank=False, unique=True)
     Date = models.DateField(_("Date"), auto_now=False, auto_now_add=False, null=True, blank=False)
     Time_of_Incident = models.TimeField(_("Time Of Incident"), default=time(), null=False, blank=False)
     # Time_of_Incident = models.TimeField(_("Time Of Incident"), default=default_start_time, null=True, blank=True)
