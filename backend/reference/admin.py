@@ -19,6 +19,7 @@ class DistrictAdmin(ImportExportModelAdmin):
     list_filter = ('province',)
     model = District
     resource_class = DistrictResource
+    search_fields = ['name']
 
 @admin.register(IncidentType)
 class IncidentTypeAdmin(ImportExportModelAdmin):
