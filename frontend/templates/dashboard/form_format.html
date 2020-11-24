@@ -11,8 +11,7 @@
     </div>
     {% endcomment %}
 
-    <br>
-    <p class="card-description font-weight-bold display-5">{% trans 'Identification' %}</p>
+    <h4 class="card-title font-weight-bold display-5">{% trans 'Identification' %}</h4>
     <div class="form-row">
         <div class="form-group col-12 col-md-4 col-lg-3">
             {{ form.Incident_Source.label_tag }}
@@ -61,7 +60,7 @@
     </div>
 
     <br>
-    <p class="card-description font-weight-bold display-5">{% trans 'Area' %}</p>
+    <h4 class="card-title font-weight-bold display-5">{% trans 'Area' %}</h4>
     <div class="form-row">
         <div class="form-group col-12 col-md">
             {{ form.Province.label_tag }}
@@ -140,7 +139,7 @@
     </div>
 
     <br>
-    <p class="card-description font-weight-bold display-5">{% trans 'Details Incident' %}</p>
+    <h4 class="card-title font-weight-bold display-5">{% trans 'Details Incident' %}</h4>
     <div class="form-row">
         <div class="form-group col-12 col-md">
             {{ form.Incident_Type.label_tag }}
@@ -212,7 +211,218 @@
     </div>
 
     <br>
-    <p class="card-description font-weight-bold display-5">{% trans 'Casualties' %}</p>
+    <h4 class="card-title font-weight-bold display-5">{% trans 'Casualties' %}</h4>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>{% trans 'Group' %}</th>
+                    <th>{% trans 'Killed' %}</th>
+                    <th>{% trans 'Injured' %}</th>
+                    <th>{% trans 'Abducted' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row">{% trans 'National' %}</td>
+                    <td>
+                        {{ form.Kill_Natl|add_class:"form-control" }}
+                        {% for error in form.Kill_Natl.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Kill_Natl.help_text %}
+                            <small class="form-text text-muted">{{ form.Kill_Natl.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Inj_Natl|add_class:"form-control" }}
+                        {% for error in form.Inj_Natl.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Inj_Natl.help_text %}
+                            <small class="form-text text-muted">{{ form.Inj_Natl.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Abd_Natl|add_class:"form-control" }}
+                        {% for error in form.Abd_Natl.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Abd_Natl.help_text %}
+                            <small class="form-text text-muted">{{ form.Abd_Natl.help_text }}</small>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td scope="row">{% trans 'International' %}</td>
+                    <td>
+                        {{ form.Kill_Intl|add_class:"form-control" }}
+                        {% for error in form.Kill_Intl.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Kill_Intl.help_text %}
+                            <small class="form-text text-muted">{{ form.Kill_Intl.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Inj_Intl|add_class:"form-control" }}
+                        {% for error in form.Inj_Intl.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Inj_Intl.help_text %}
+                            <small class="form-text text-muted">{{ form.Inj_Intl.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Abd_Intl|add_class:"form-control" }}
+                        {% for error in form.Abd_Intl.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Abd_Intl.help_text %}
+                            <small class="form-text text-muted">{{ form.Abd_Intl.help_text }}</small>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td scope="row">{% trans 'ANSF' %}</td>
+                    <td>
+                        {{ form.Kill_ANSF|add_class:"form-control" }}
+                        {% for error in form.Kill_ANSF.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Kill_ANSF.help_text %}
+                            <small class="form-text text-muted">{{ form.Kill_ANSF.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Inj_ANSF|add_class:"form-control" }}
+                        {% for error in form.Inj_ANSF.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Inj_ANSF.help_text %}
+                            <small class="form-text text-muted">{{ form.Inj_ANSF.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Abd_ANSF|add_class:"form-control" }}
+                        {% for error in form.Abd_ANSF.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Abd_ANSF.help_text %}
+                            <small class="form-text text-muted">{{ form.Abd_ANSF.help_text }}</small>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td scope="row">{% trans 'IM' %}</td>
+                    <td>
+                        {{ form.Kill_IM|add_class:"form-control" }}
+                        {% for error in form.Kill_IM.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Kill_IM.help_text %}
+                            <small class="form-text text-muted">{{ form.Kill_IM.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Inj_IM|add_class:"form-control" }}
+                        {% for error in form.Inj_IM.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Inj_IM.help_text %}
+                            <small class="form-text text-muted">{{ form.Inj_IM.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Abd_IM|add_class:"form-control" }}
+                        {% for error in form.Abd_IM.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Abd_IM.help_text %}
+                            <small class="form-text text-muted">{{ form.Abd_IM.help_text }}</small>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td scope="row">{% trans 'ALP PGM' %}</td>
+                    <td>
+                        {{ form.Kill_ALP_PGM|add_class:"form-control" }}
+                        {% for error in form.Kill_ALP_PGM.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Kill_ALP_PGM.help_text %}
+                            <small class="form-text text-muted">{{ form.Kill_ALP_PGM.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Inj_ALP_PGM|add_class:"form-control" }}
+                        {% for error in form.Inj_ALP_PGM.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Inj_ALP_PGM.help_text %}
+                            <small class="form-text text-muted">{{ form.Inj_ALP_PGM.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Abd_ALP_PGM|add_class:"form-control" }}
+                        {% for error in form.Abd_ALP_PGM.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Abd_ALP_PGM.help_text %}
+                            <small class="form-text text-muted">{{ form.Abd_ALP_PGM.help_text }}</small>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td scope="row">{% trans 'AOG' %}</td>
+                    <td>
+                        {{ form.Kill_AOG|add_class:"form-control" }}
+                        {% for error in form.Kill_AOG.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Kill_AOG.help_text %}
+                            <small class="form-text text-muted">{{ form.Kill_AOG.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Inj_AOG|add_class:"form-control" }}
+                        {% for error in form.Inj_AOG.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Inj_AOG.help_text %}
+                            <small class="form-text text-muted">{{ form.Inj_AOG.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td class="bg-light"></td>
+                </tr>
+                <tr>
+                    <td scope="row">{% trans 'ISKP' %}</td>
+                    <td>
+                        {{ form.Kill_ISKP|add_class:"form-control" }}
+                        {% for error in form.Kill_ISKP.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Kill_ISKP.help_text %}
+                            <small class="form-text text-muted">{{ form.Kill_ISKP.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.Inj_ISKP|add_class:"form-control" }}
+                        {% for error in form.Inj_ISKP.errors %}
+                            <small class="form-text text-muted">{{ error }}</small>
+                        {% endfor %}
+                        {% if form.Inj_ISKP.help_text %}
+                            <small class="form-text text-muted">{{ form.Inj_ISKP.help_text }}</small>
+                        {% endif %}
+                    </td>
+                    <td class="bg-light"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+
+    {% comment %}
     <div class="form-row">
         <div class="form-group col-6 col-md-3 col-xl">
             {{ form.Kill_Natl.label_tag }}
@@ -411,6 +621,7 @@
             {% endif %}
         </div>
     </div>
+    {% endcomment %}
 
     <div class="form-row">
         

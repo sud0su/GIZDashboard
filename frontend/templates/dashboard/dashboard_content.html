@@ -410,7 +410,7 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">{% trans "Historical Date of Incidents and Casualties by Incident Type" %}</h4>
+                    <h4 class="card-title">{% trans "Historical Date of Casualties" %}</h4>
                     <div id="spline_{{ chart.spline.key }}" class="ch-size spline-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='' data-val='{{ chart.spline.data_val | jsonify | safe }}' data-animate={% if 'print' in request.path %}"false"{% else %}"true"{% endif %}></div>
                 </div>
             </div>

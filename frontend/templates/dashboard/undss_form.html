@@ -21,8 +21,8 @@
                     </p>
                     <form class="forms-sample form-undss" method="POST" enctype="multipart/form-data" >
                         {% csrf_token %}
-                        <!-- {#% include 'dashboard/form_format.html' with form=form %} -->
-                        {% include 'dashboard/form_format_vertical.html' with form=form %}
+                        {% include 'dashboard/form_format.html' with form=form %}
+                        <!-- {#% include 'dashboard/form_format_vertical.html' with form=form %} -->
 
                         <button type="submit" class="btn btn-primary mr-2">{% trans "Submit" %}</button>
                         <a href="{% url 'inputdashboard' %}" class="btn btn-light">{% trans "Cancel" %}</a>
