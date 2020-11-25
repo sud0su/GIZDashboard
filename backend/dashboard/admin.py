@@ -40,5 +40,6 @@ class UndssAdmin(ImportExportModelAdmin):
     ordering = ('-created_at',)
     list_filter = ('created_at', 'Incident_Source', 'Province', 'Target', )
     resource_class = UndssResource
+    search_fields = ['Single_ID']
 
 # admin.site.register(Undss)
