@@ -36,6 +36,7 @@ class UndssAdmin(ImportExportModelAdmin):
         'created_at'
         ]
     model = Undss
+    form = UndssAdminForm
     ordering = ('-created_at',)
     list_filter = ('created_at', 'Incident_Source', 'Province', 'Target', )
     resource_class = UndssResource
