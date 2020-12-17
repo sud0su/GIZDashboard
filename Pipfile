@@ -19,6 +19,8 @@ paver = "*"
 pychrome = "*"
 lxml = "*"
 pypdf2 = "*"
+django-import-export = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"
