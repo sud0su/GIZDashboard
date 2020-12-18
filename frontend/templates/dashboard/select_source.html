@@ -7,10 +7,10 @@
     {% endfor %}
 </select>
 
-{% comment %}
+
     <div class="row">
-        <label for="source" class="col-12 col-sm-2 col-xl-2 {% if 'print' in request.path %}col-md-3{% else %}col-md-2{% endif %} mb-0 mt-2">Source:</label>
-        <div class="col-12 col-sm-10 col-xl-10 {% if 'print' in request.path %}col-md-9{% else %}col-md-10{% endif %}">
+        <label for="source" class="col-12 col-sm-2 col-xl-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-2{% endif %} mb-0 mt-2">Source:</label>
+        <div class="col-12 col-sm-10 col-xl-9 {% if 'print' in request.path %}col-md-9{% else %}col-md-10{% endif %}">
             <select class="source-multiple" name="source[]" multiple="multiple">
                 <option value="prmo" {% if filters.source_type.prmo.selected %}selected{% endif %}>PRMO</option>
                 <option value="undss" {% if filters.source_type.undss.selected %}selected{% endif %}>UNDSS</option>
@@ -18,7 +18,8 @@
             </select>
         </div>
     </div>
-    
+
+    {% comment %}
     <label for="filter-source_type">Incident Source:</label>
     <select id="filter-source_type" class="custom-select">
         <option value="all" {% if filters.source_type.selected == 'all' %}selected{% endif %}>-</option>
@@ -27,6 +28,7 @@
         {% endfor %}
     </select>
 
+    
 <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-6{% else %}col-md-6{% endif %}">
     <div class="">
         <label class="">Sources:</label>
@@ -116,14 +118,14 @@
             var url = $(location).attr("href");
             url = updateUrlParameter(url, e.val, 'true');
 
-            window.document.location = url
+            // window.document.location = url
         });
 
         $('.source-multiple').on('select2-removing', function (e) {
             var url = $(location).attr("href");
             url = removeParam(e.val, url)
 
-            window.document.location = url
+            // window.document.location = url
         });
 
         // // event handler for filters undss, prmo, inso
