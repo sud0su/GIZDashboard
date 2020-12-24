@@ -1,0 +1,36 @@
+
+
+<label for="impact">Impact:</label>
+<select id="impact" class="impact-dropdown" data-placeholder="Select Impact">
+    <option value="all" {% if filters.impact.selected == 'all' %}selected{% endif %}>-</option>
+    {% for option in filters.impact.options %}
+    <option value="{{ option }}" {% if filters.impact.selected == option %}selected{% endif %}>{{ option|title }}</option>
+    {% endfor %}
+</select>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+
+        $('.impact-dropdown').select2({
+            dropdownAutoWidth: true,
+            placeholder: "Select Impact"
+        });
+        $('.impact-dropdown').on('select2-selecting', function (e) {
+            var url = $(location).attr("href");
+            
+            if (getParameterByName("impact") == null){
+                url += '&impact='+e.val;
+            }
+            else {
+                url = updateUrlParameter(url, 'impact', e.val)
+            }
+
+            if (e.val == 'all') {
+                url = removeParam('impact', url)
+            }
+
+            window.document.location = url
+        });
+
+    });
+</script>

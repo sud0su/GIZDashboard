@@ -50,12 +50,22 @@
             {% include "dashboard/select_source.html" %}
         </div>
 
+        <!-- {#% if prmo %} -->
+        <div class="col-12 col-sm-12 col-xl-2 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
+            {% include "dashboard/select_prmo_loc.html" %}
+        </div>
+        <!-- {#% endif %} -->
+
         <div class="col-12 col-sm-12 col-xl-2 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
             {% include "dashboard/select_initiator.html" %}
         </div>
 
         <div class="col-12 col-sm-12 col-xl-2 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
             {% include "dashboard/select_hpa.html" %}
+        </div>
+
+        <div class="col-12 col-sm-12 col-xl-2 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
+            {% include "dashboard/select_impact.html" %}
         </div>
 
         {% if region.province.selected_name == 'Kabul' %}
@@ -78,6 +88,7 @@
         </div>
         {% endfor %}
         
+        {% comment %}
         {% for chart_item in chart.donut_chart_casualty_subtype %}
             {% if 'print' in request.path %}
                 {% if chart_item.key == 'number_of_im_casualties' %}
@@ -101,7 +112,6 @@
             {% endif %}
         {% endfor %}
 
-        {% comment %}
         <div class="col-12 col-sm-12 col-xl-12 {% if 'print' in request.path %}col-md-8 d-block{% else %}col-md-12 col-lg-12  grid-margin stretch-card{% endif %}">
             <div class="card">
                 <div class="card-body">

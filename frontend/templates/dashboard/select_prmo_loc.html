@@ -1,0 +1,27 @@
+<label for="prmo_loc">PRMO Location:</label>
+<select id="prmo_loc" class="prmo-dropdown" data-placeholder="Select PRMO Office">
+    {% for option in filters.source_type.options %}
+        <option value="{{ option.id }}" {% if filters.source_type.selected == option.id %}selected{% endif %}>{{ option.name }}</option>
+    {% endfor %}
+</select>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        
+        // Event handler for single prmo_loc
+        $('.prmo-dropdown').select2({
+            dropdownAutoWidth: true,
+            placeholder: "Select PRMO Office"
+        });
+        $('.prmo-dropdown').on('select2-selecting', function (e) {
+            var url = $(location).attr("href");
+            
+            if (getParameterByName("prmo_loc") != null){
+                url = removeParam('prmo_loc', url)
+            }
+            url += '&prmo_loc='+e.val;
+
+            window.document.location = url
+        });
+    });
+</script>
