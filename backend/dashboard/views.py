@@ -17,8 +17,7 @@ from .pychromeprint import print_from_urls
 from .forms import UndssForm
 from .json_serializable import Common, csv_response
 from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype, IncidentSource
-from organization.models import Organization
-from .models import Undss
+from .models import Undss, MasterIncident
 from giz.utils import replace_query_param
 from .utils import Echo
 
@@ -28,14 +27,33 @@ from django.views.generic import CreateView, DetailView
 from import_export.formats import base_formats
 from django.urls import reverse_lazy
 from giz.import_export_views import ImportView
-from .resources import UndssResource
+from .resources import UndssResource, MasterIncidentResource
 
+@method_decorator(staff_member_required, name='dispatch')
 class UndssImportView(ImportView):
     model = Undss
     template_name = 'dashboard/import/reference_import_undss.html'
     formats = (base_formats.XLSX,)
     resource_class = UndssResource
     success_url = reverse_lazy('importdataundss')
+
+    def create_dataset(self, *args, **kwargs):
+        """ Insert an extra 'source_user' field into the data.
+        """
+        dataset = super().create_dataset(*args, **kwargs)
+        length = len(dataset._data)
+        dataset.append_col([self.request.user.id] * length,
+                           header="source_user")
+        return dataset
+
+
+@method_decorator(staff_member_required, name='dispatch')
+class MasterIncidentsImportView(ImportView):
+    model = MasterIncident
+    template_name = 'dashboard/import/reference_import_masterincident.html'
+    formats = (base_formats.XLSX,)
+    resource_class = MasterIncidentResource
+    success_url = reverse_lazy('importmasterdataundss')
 
     def create_dataset(self, *args, **kwargs):
         """ Insert an extra 'source_user' field into the data.

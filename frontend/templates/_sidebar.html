@@ -19,7 +19,13 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'importdataundss' %}">
                     <i class="mdi mdi-file-import menu-icon"></i>
-                    <span class="menu-title">{% trans "Import Data" %}</span>
+                    <span class="menu-title">{% trans "Import Incidents (PRMO, UNDSS, INSO)" %}</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'importmasterdataundss' %}">
+                    <i class="mdi mdi-file-import menu-icon"></i>
+                    <span class="menu-title">{% trans "Import Master Incidents" %}</span>
                 </a>
             </li>
             {% comment %}
