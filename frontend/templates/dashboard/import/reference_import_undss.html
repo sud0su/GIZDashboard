@@ -167,6 +167,19 @@
                                 </div>
                             </div>
 
+                            <!-- Buat pilihan master/bukan -->
+                            <div class="form-group">
+                                {{ form.input_format.label_tag }}
+                                {{ form.input_format |attr:"class:form-control form-control-lg" }}
+
+                                {% for error in form.input_format.errors %}
+                                    <small class="form-text text-muted">{{ error }}</small>
+                                {% endfor %}
+                                {% if form.input_format.help_text %}
+                                    <small class="form-text text-muted">{{ form.input_format.help_text }}</small>
+                                {% endif %}
+                            </div>
+
                             <div class="form-group">
                                 {{ form.input_format.label_tag }}
                                 {{ form.input_format |attr:"class:form-control form-control-lg" }}
