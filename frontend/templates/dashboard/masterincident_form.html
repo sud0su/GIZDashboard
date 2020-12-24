@@ -1,0 +1,117 @@
+{% extends "dashboard/dashboard_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block extra_head %}
+    {{ form.media.css }}
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2.min.css"> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css">
+
+{% endblock extra_head %}
+
+{% block content_dashboard %}
+    <div class="row">
+        <div class="col-12 col-xl-10 offset-xl-1 stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title d-none">{% trans "Input New Data" %}</h4>
+                    <p class="card-description d-none">
+                        Input your data
+                    </p>
+                    <form class="forms-sample form-undss" method="POST" enctype="multipart/form-data" >
+                        {% csrf_token %}
+                        {% include 'dashboard/masterincident_format.html' with form=form %}
+                        <!-- {#% include 'dashboard/form_format_vertical.html' with form=form %} -->
+
+                        <button type="submit" class="btn btn-primary mr-2">{% trans "Submit" %}</button>
+                        <a href="{% url 'inputmasterincident' %}" class="btn btn-light">{% trans "Cancel" %}</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content_dashboard %}
+
+{% block dashboard_script %}
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="{% static 'js/file-upload.js' %}"></script>
+    
+    {{ form.media.js }}
+
+    <script>
+        $("#id_Province").change(function () {
+            var url = '/get/district/';  
+            var provinceId = $(this).val();  
+
+            $.ajax({                       
+                url: url,                    
+                data: {
+                    'province': provinceId       
+                },
+                success: function (data) { 
+                    $("#id_District").prop('selectedIndex',0);
+                    $("#id_District").html(data); 
+                }
+            });
+
+        });
+
+        $("#id_Incident_Type").change(function () {
+            var url = '/get/subtype/';  
+            var incidenttypeId = $(this).val();  
+
+            $.ajax({                       
+                url: url,                    
+                data: {
+                    'incidenttype': incidenttypeId       
+                },
+                beforeSend: function() {
+                    $("#id_Incident_Subtype").html(''); 
+                },
+                success: function (data) {   
+                    $("#id_Incident_Subtype").html(data); 
+                }
+            });
+
+        });
+
+        $("#id_District").change(function () {
+            var urlArea = '/get/area/';  
+            var urlVillage = '/get/cityvlillage/';  
+            var provinceId = $('#id_Province').children('option:selected').val() 
+            var districtId = $('#id_District').children('option:selected').val() 
+            $.ajax({                          
+                url: urlArea,                    
+                data: {
+                    'province': provinceId,
+                    'district': districtId        
+                },
+                // beforeSend: function() {
+                //     $("#id_Area").html(''); 
+                // },
+                // success: function (data) {   
+                //     $("#id_Area").html(data); 
+                // }
+            });
+            $.ajax({                          
+                url: urlVillage,                    
+                data: {
+                    'province': provinceId,
+                    'district': districtId        
+                },
+                // beforeSend: function() {
+                //     $("#id_City_Village").html(''); 
+                // },
+                // success: function (data) {   
+                //     $("#id_City_Village").html(data); 
+                // }
+            });
+
+        });
+    </script>
+{% endblock dashboard_script %}

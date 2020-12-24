@@ -5,6 +5,7 @@ from .views import (
     DashboardPrint,
     # InputUndss,
     InputUndssView,
+    InputMasterIncidentView,
     # ImportDataView,
     UndssDetailView,
     get_district,
@@ -25,6 +26,7 @@ urlpatterns = [
     # path('input/', InputUndss, name='inputdashboard'),
     re_path(r'^print$', DashboardPrint, name='dashboard_print'),
     path('input/', InputUndssView.as_view(), name='inputdashboard'),
+    path('inputmaster/', InputMasterIncidentView.as_view(), name='inputmasterincident'),
     path('undssdetail/<int:pk>/', UndssDetailView.as_view(), name='detail'),
     
     # path('import/', ImportDataView.as_view(), name='importdata'),

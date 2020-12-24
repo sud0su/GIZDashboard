@@ -3,7 +3,7 @@
 
     <h4 class="card-title font-weight-bold display-5">{% trans 'Identification' %}</h4>
     <div class="form-row">
-        <div class="form-group col-12 col-md-4 col-lg-3">
+        {% comment %} <div class="form-group col-12 col-md-4 col-lg-3">
             {{ form.Incident_Source.label_tag }}
             {{ form.Incident_Source|add_class:"form-control" }}
             {% for error in form.Incident_Source.errors %}
@@ -12,21 +12,9 @@
             {% if form.Incident_Source.help_text %}
                 <small class="form-text text-muted">{{ form.Incident_Source.help_text }}</small>
             {% endif %}
-        </div>
-        <!-- Buat pilihan PRMO Office nya -->
-        <!-- Dibuat js nya, klu prmo baru muncul-->
-        <div class="form-group col-12 col-md-4 col-lg-3">
-            {{ form.Incident_Source_Office.label_tag }}
-            {{ form.Incident_Source_Office|add_class:"form-control" }}
-            {% for error in form.Incident_Source_Office.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-            {% if form.Incident_Source_Office.help_text %}
-                <small class="form-text text-muted">{{ form.Incident_Source_Office.help_text }}</small>
-            {% endif %}
-        </div>
-
-        <div class="form-group col">
+        </div> {% endcomment %}
+        
+        <div class="form-group col-12 col-md">
             {{ form.Single_ID.label_tag }}
             {{ form.Single_ID|add_class:"form-control" }}
             {% for error in form.Single_ID.errors %}
@@ -34,6 +22,40 @@
             {% endfor %}
             {% if form.Single_ID.help_text %}
                 <small class="form-text text-muted">{{ form.Single_ID.help_text }}</small>
+            {% endif %}
+        </div>
+
+
+        <div class="form-group col-12 col-md">
+            {{ form.PRMO.label_tag }}
+            {{ form.PRMO|add_class:"form-control" }}
+            {% for error in form.PRMO.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+            {% if form.PRMO.help_text %}
+                <small class="form-text text-muted">{{ form.PRMO.help_text }}</small>
+            {% endif %}
+        </div>
+
+        <div class="form-group col-12 col-md">
+            {{ form.UNDSS.label_tag }}
+            {{ form.UNDSS|add_class:"form-control" }}
+            {% for error in form.UNDSS.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+            {% if form.UNDSS.help_text %}
+                <small class="form-text text-muted">{{ form.UNDSS.help_text }}</small>
+            {% endif %}
+        </div>
+
+        <div class="form-group col-12 col-md">
+            {{ form.INSO.label_tag }}
+            {{ form.INSO|add_class:"form-control" }}
+            {% for error in form.INSO.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+            {% if form.INSO.help_text %}
+                <small class="form-text text-muted">{{ form.INSO.help_text }}</small>
             {% endif %}
         </div>
     </div>

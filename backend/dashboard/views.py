@@ -14,7 +14,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from urllib.parse import urlencode
 from .pychromeprint import print_from_urls
 
-from .forms import UndssForm
+from .forms import UndssForm, MasterIncidentForm
 from .json_serializable import Common, csv_response
 from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype, IncidentSource
 from .models import Undss, MasterIncident
@@ -64,33 +64,6 @@ class MasterIncidentsImportView(ImportView):
                            header="source_user")
         return dataset
 
-
-# @login_required
-# def InputUndss(request):
-#     template = "dashboard/undss_form.html"
-#     form = UndssForm()
-#     if request.method == 'POST':
-#         print('Printing POST:', request.POST)
-#         form = UndssForm(request.POST, request.FILES,
-#                          initial={
-#                              'Province': Province.pk,
-#                              'District': District.pk,
-#                              'Area': Area.pk,
-#                              'City_Village': CityVillage.pk,
-#                              'Incident_Type': IncidentType.pk,
-#                              'Incident_Subtype': IncidentSubtype.pk,
-#                              'Initiator': Organization.pk,
-#                              'Target': Organization.pk,
-#                          }
-#                          )
-#         if form.is_valid():
-#             form.save()
-#             form = UndssForm()
-
-#     context = {'form': form}
-#     return render(request, template, context)
-
-
 @method_decorator(login_required, name='dispatch')
 class UndssDetailView(DetailView):
     template_name = "dashboard/undss_detail.html"
@@ -113,14 +86,19 @@ class InputUndssView(CreateView):
         print(form.cleaned_data)
         return super().form_valid(form)
 
-# 	model = Undss
-# 	form_class = UndssForm
-# 	template_name = "dashboard/undss_form.html"
-
 
 @method_decorator(staff_member_required, name='dispatch')
-class ImportDataView(CreateView):
-    pass
+class InputMasterIncidentView(CreateView):
+    template_name = "dashboard/masterincident_form.html"
+    form_class = MasterIncidentForm
+    queryset = MasterIncident.objects.all()
+
+    def form_valid(self, form):
+        # print(self.request.Province)
+        # form.instance.Province = self.request.Province
+        print(form.cleaned_data)
+        return super().form_valid(form)
+
 
 @login_required
 def Dashboard(request):

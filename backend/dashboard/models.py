@@ -56,6 +56,9 @@ class Undss(models.Model):
     HPA = models.CharField(max_length=255, null=True, blank=True)
     Initiator = models.ForeignKey(Organization, related_name="Organization_initiator_name", on_delete=models.CASCADE, null=True, blank=False)
     Target = models.ForeignKey(Organization, related_name="Organization_target_name", on_delete=models.CASCADE, null=True, blank=False)
+
+    IGHO = models.BooleanField(verbose_name=_('Impact on GC and Humanitarian Organizations'), default=False)
+    
     Kill_Natl = models.PositiveIntegerField(verbose_name='Killed - National', default=0, null=True, blank=True)
     Kill_Intl = models.PositiveIntegerField(verbose_name='Killed - International', default=0, null=True, blank=True)
     Kill_ANSF = models.PositiveIntegerField(verbose_name='Killed - ANSF', default=0, null=True, blank=True)
@@ -115,6 +118,9 @@ class MasterIncident(models.Model):
     HPA = models.CharField(max_length=255, null=True, blank=True)
     Initiator = models.ForeignKey(Organization, related_name="Organization_initiator_master_name", on_delete=models.CASCADE, null=True, blank=False)
     Target = models.ForeignKey(Organization, related_name="Organization_target_master_name", on_delete=models.CASCADE, null=True, blank=False)
+
+    IGHO = models.BooleanField(verbose_name=_('Impact on GC and Humanitarian Organizations'), default=False)
+
     Kill_Natl = models.PositiveIntegerField(verbose_name='Killed - National', default=0, null=True, blank=True)
     Kill_Intl = models.PositiveIntegerField(verbose_name='Killed - International', default=0, null=True, blank=True)
     Kill_ANSF = models.PositiveIntegerField(verbose_name='Killed - ANSF', default=0, null=True, blank=True)
