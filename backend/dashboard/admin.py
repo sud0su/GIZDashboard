@@ -4,8 +4,8 @@ from import_export.admin import ImportExportModelAdmin
 from reference.models import Province, District, IncidentType, IncidentSubtype
 
 # Register your models here.
-from .models import Undss
-from .resources import UndssResource
+from .models import Undss, MasterIncident
+from .resources import UndssResource, MasterIncidentResource
 
 class UndssAdminForm(forms.ModelForm):
 
@@ -42,4 +42,37 @@ class UndssAdmin(ImportExportModelAdmin):
     resource_class = UndssResource
     search_fields = ['Single_ID']
 
-# admin.site.register(Undss)
+
+class MasterIncidentAdminForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        province_id = self.data.get('Province') or self.instance.Province_id
+        if province_id:
+            self.fields['District'].queryset = District.objects.filter(province_id=province_id).order_by('name')
+
+        incidenttype_id = self.data.get('Incident_Type') or self.instance.Incident_Type_id
+        if incidenttype_id:
+            self.fields['Incident_Subtype'].queryset = IncidentSubtype.objects.filter(incidenttype_id=incidenttype_id).order_by('name')
+
+    class Media:
+        js = ('js/admin-undss.js',)
+
+@admin.register(MasterIncident)
+class MasterIncidentAdmin(ImportExportModelAdmin):
+    list_display = [
+        'Single_ID',
+        'Province',
+        'District',
+        'Initiator',
+        'Target',
+        'Date',
+        'created_at'
+        ]
+    model = MasterIncident
+    form = MasterIncidentAdminForm
+    ordering = ('-created_at',)
+    list_filter = ('created_at', 'Province', 'Target', )
+    resource_class = MasterIncidentResource
+    search_fields = ['Single_ID']
