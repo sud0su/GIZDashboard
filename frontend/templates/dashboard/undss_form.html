@@ -113,5 +113,13 @@
             });
 
         });
+
+        $("#id_Incident_Source").change(function () {
+            if ($(this).val() == 'PRMO') {
+                $(".hide-office").show();
+            } else {
+                $(".hide-office").hide();
+            }
+        })
     </script>
 {% endblock dashboard_script %}

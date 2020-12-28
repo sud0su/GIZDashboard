@@ -43,7 +43,7 @@
                         <p><span style="font-size: large;">&#x22C6;</span><small>{% trans "Difference in order will not affect the import capabilities." %}</small></p>
                         
                         <li>
-                            <span class="badge badge-pill badge-primary">{{ fields.12 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.13 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.0 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.2 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.3 }}</span>
@@ -52,6 +52,11 @@
                             <span class="badge badge-pill badge-primary">{{ fields.9 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.10 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.11 }}</span>
+                            {% trans "can not be leave blanks" %}
+                        </li>
+                        <li>
+                            {% trans "When importing PRMO data, " %}
+                            <span class="badge badge-pill badge-primary">{{ fields.12 }}</span>
                             {% trans "can not be leave blanks" %}
                         </li>
                         <li>
@@ -82,6 +87,7 @@
                             <span class="badge badge-pill badge-primary">{{ fields.9 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.10 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.11 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.12 }}</span>
 
                             {% blocktrans %}
                                 column
@@ -92,7 +98,8 @@
                             {% endblocktrans %}
                         </li>
                         <li>
-                            <span class="badge badge-pill badge-primary">{{ fields.14 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.15 }}</span> and 
+                            <span class="badge badge-pill badge-primary">{{ fields.15 }}</span>
                             {% blocktrans %}
                                 column can only accept 
                                 <mark class="bg-warning">yes</mark> 
@@ -103,11 +110,11 @@
                         </li>
                         <li>
                             {% trans "If there are any duplication of " %}
-                            <span class="badge badge-pill badge-primary">{{ fields.12 }}</span> 
+                            <span class="badge badge-pill badge-primary">{{ fields.13 }}</span> 
                             {% trans "in one sheet, it will only save the data at the most bottom row." %}
                             <br>
                             {% trans "This also applies when the same" %} 
-                            {{ fields.12 }}
+                            {{ fields.13 }}
                             {% trans "has been stored previously in the database. The data will be updated using the imported data. This marked by 'Update' word." %}
                         </li>
                         <li>{% trans "This tool will not import any data when validation fails" %}</li>
@@ -165,19 +172,6 @@
                                     {{ form.import_file|add_class:"custom-file-input" }}
                                     <label class="custom-file-label" for="{{ form.import_file.id_for_label }}">Choose file</label>
                                 </div>
-                            </div>
-
-                            <!-- Buat pilihan master/bukan -->
-                            <div class="form-group">
-                                {{ form.input_format.label_tag }}
-                                {{ form.input_format |attr:"class:form-control form-control-lg" }}
-
-                                {% for error in form.input_format.errors %}
-                                    <small class="form-text text-muted">{{ error }}</small>
-                                {% endfor %}
-                                {% if form.input_format.help_text %}
-                                    <small class="form-text text-muted">{{ form.input_format.help_text }}</small>
-                                {% endif %}
                             </div>
 
                             <div class="form-group">

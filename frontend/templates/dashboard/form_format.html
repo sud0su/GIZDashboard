@@ -13,9 +13,8 @@
                 <small class="form-text text-muted">{{ form.Incident_Source.help_text }}</small>
             {% endif %}
         </div>
-        <!-- Buat pilihan PRMO Office nya -->
         <!-- Dibuat js nya, klu prmo baru muncul-->
-        <div class="form-group col-12 col-md-4 col-lg-3">
+        <div class="form-group col-12 col-md-4 col-lg-3 hide-office" style="display: none;">
             {{ form.Incident_Source_Office.label_tag }}
             {{ form.Incident_Source_Office|add_class:"form-control" }}
             {% for error in form.Incident_Source_Office.errors %}
@@ -166,18 +165,6 @@
             {% endif %}
         </div>
 
-        <!-- Buat pilihan impact on GC nya -->
-        <div class="form-group col-12 col-md-2">
-            {{ form.IGHO.label_tag }}
-            {{ form.IGHO|add_class:"form-control" }}
-            {% for error in form.IGHO.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-            {% if form.IGHO.help_text %}
-                <small class="form-text text-muted">{{ form.IGHO.help_text }}</small>
-            {% endif %}
-        </div>
-
         <div class="form-group col-12 col-md-2">
             {{ form.HPA.label_tag }}
             {{ form.HPA|add_class:"form-control" }}
@@ -186,6 +173,17 @@
             {% endfor %}
             {% if form.HPA.help_text %}
                 <small class="form-text text-muted">{{ form.HPA.help_text }}</small>
+            {% endif %}
+        </div>
+
+        <div class="form-group col-12 col-md-2">
+            {{ form.IGHO.label_tag }}
+            {{ form.IGHO|add_class:"form-control" }}
+            {% for error in form.IGHO.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+            {% if form.IGHO.help_text %}
+                <small class="form-text text-muted">{{ form.IGHO.help_text }}</small>
             {% endif %}
         </div>
     </div>

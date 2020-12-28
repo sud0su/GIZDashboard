@@ -38,17 +38,6 @@
         </div>
 
         <div class="form-group col-12 col-md">
-            {{ form.UNDSS.label_tag }}
-            {{ form.UNDSS|add_class:"form-control" }}
-            {% for error in form.UNDSS.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-            {% if form.UNDSS.help_text %}
-                <small class="form-text text-muted">{{ form.UNDSS.help_text }}</small>
-            {% endif %}
-        </div>
-
-        <div class="form-group col-12 col-md">
             {{ form.INSO.label_tag }}
             {{ form.INSO|add_class:"form-control" }}
             {% for error in form.INSO.errors %}
@@ -56,6 +45,17 @@
             {% endfor %}
             {% if form.INSO.help_text %}
                 <small class="form-text text-muted">{{ form.INSO.help_text }}</small>
+            {% endif %}
+        </div>
+
+        <div class="form-group col-12 col-md">
+            {{ form.UNDSS.label_tag }}
+            {{ form.UNDSS|add_class:"form-control" }}
+            {% for error in form.UNDSS.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+            {% if form.UNDSS.help_text %}
+                <small class="form-text text-muted">{{ form.UNDSS.help_text }}</small>
             {% endif %}
         </div>
     </div>
@@ -188,18 +188,6 @@
             {% endif %}
         </div>
 
-        <!-- Buat pilihan impact on GC nya -->
-        <div class="form-group col-12 col-md-2">
-            {{ form.IGHO.label_tag }}
-            {{ form.IGHO|add_class:"form-control" }}
-            {% for error in form.IGHO.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-            {% if form.IGHO.help_text %}
-                <small class="form-text text-muted">{{ form.IGHO.help_text }}</small>
-            {% endif %}
-        </div>
-
         <div class="form-group col-12 col-md-2">
             {{ form.HPA.label_tag }}
             {{ form.HPA|add_class:"form-control" }}
@@ -208,6 +196,17 @@
             {% endfor %}
             {% if form.HPA.help_text %}
                 <small class="form-text text-muted">{{ form.HPA.help_text }}</small>
+            {% endif %}
+        </div>
+
+        <div class="form-group col-12 col-md-2">
+            {{ form.IGHO.label_tag }}
+            {{ form.IGHO|add_class:"form-control" }}
+            {% for error in form.IGHO.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+            {% if form.IGHO.help_text %}
+                <small class="form-text text-muted">{{ form.IGHO.help_text }}</small>
             {% endif %}
         </div>
     </div>

@@ -11,28 +11,35 @@
         </li>
         {% if user.is_staff %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'inputdashboard' %}">
+                <a class="nav-link" data-toggle="collapse" href="#input_data" aria-expanded="false" aria-controls="input_data">
                     <i class="mdi mdi-pencil menu-icon"></i>
-                    <span class="menu-title">{% trans "Input Incidents (PRMO, UNDSS, INSO)" %}</span>
+                    <span class="menu-title">{% trans "Input Incidents Data" %}</span>
+                    <i class="menu-arrow"></i>
                 </a>
+                <div class="collapse" id="input_data">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> 
+                            <a class="nav-link" href="{% url 'inputdashboard' %}">{% trans "By Source" %}</a>
+                        </li>
+                        <li class="nav-item"> 
+                            <a class="nav-link" href="{% url 'inputmasterincident' %}">{% trans "Master" %}</a>
+                        </li>
+                    </ul>
+                </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'inputmasterincident' %}">
-                    <i class="mdi mdi-pencil menu-icon"></i>
-                    <span class="menu-title">{% trans "Input  Master Incidents" %}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'importdataundss' %}">
+                <a class="nav-link" data-toggle="collapse" href="#import_data" aria-expanded="false" aria-controls="import_data">
                     <i class="mdi mdi-file-import menu-icon"></i>
-                    <span class="menu-title">{% trans "Import Incidents (PRMO, UNDSS, INSO)" %}</span>
+                    <span class="menu-title">{% trans "Import Incidents File" %}</span>
+                    <i class="menu-arrow"></i>
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'importmasterdataundss' %}">
-                    <i class="mdi mdi-file-import menu-icon"></i>
-                    <span class="menu-title">{% trans "Import Master Incidents" %}</span>
-                </a>
+                <div class="collapse" id="import_data">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link" href="{% url 'importdataundss' %}">{% trans "By Source" %}</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="{% url 'importmasterdataundss' %}">{% trans "Master" %}</a>
+                        </li>
+                    </ul>
+                </div>
             </li>
             {% comment %}
             <li class="nav-item">
