@@ -5,13 +5,21 @@ from django.db.models import Sum, Q, Count, F, Case, CharField, Value, When
 from django.db.models.functions import Coalesce, Trim, Lower, TruncHour, TruncDate
 from itertools import chain
 
-from .models import Undss
+from .models import Undss, MasterIncident, Bool2YesNo
 from reference.models import IncidentType, IncidentSubtype, Province, District, IncidentSource
 from organization.models import Organization
 from giz.utils import JSONEncoderCustom
 from .utils import NoneStr2Obj
 
-source_type_dbfield = {'prmo':'PRMO', 'undss':'UNDSS', 'inso':'INSO'}
+source_type_dbfield = {'prmo':'PRMO', 'inso':'INSO', 'undss':'UNDSS'}
+source_types = [
+    {'id':'master', 'name': 'Master'},
+    {'id':'prmo', 'name':'PRMO'},
+    {'id':'inso', 'name':'INSO'},
+    {'id':'undss', 'name':'UNDSS'},
+]
+source_type_rename = {'PRMO': 'PRMO_yesno', 'INSO': 'INSO_yesno', 'UNDSS': 'UNDSS_yesno'}
+yesno2truefalse = {'yes':True, 'no': False}
 
 def MainData(request, filters={}):
     main = {}
@@ -53,7 +61,8 @@ def MainData(request, filters={}):
 
     main['filters'] = {
         'source_type': {
-            'options': IncidentSource.objects.values('id','name').order_by('id'),
+            'options': source_types,
+            # 'options': IncidentSource.objects.values('id','name').order_by('id'),
         },
         'target_type': {
             'name': Organization.objects.values('id','code','name').order_by('-id'),
@@ -73,31 +82,47 @@ def MainData(request, filters={}):
         'incident_subtype': {
             'options': IncidentSubtype.objects.values('incidenttype','incidenttype__name','id','name').order_by('-incidenttype','-id'),
         },
+        'prmo_loc': {
+            'options': Undss.objects.annotate(name=Lower(Trim('Incident_Source_Office'))).\
+                values('name').distinct().order_by('name'),
+        },
     }
 
     main["filters"]['police_district']['selected'] = filters['police_district']
     main["filters"]['hpa']['selected'] = filters['hpa']
     main["filters"]['incident_type']['checked'] = filters['incident_type'] or [i['id'] for i in main["filters"]['incident_type']['options']]
     main["filters"]['incident_subtype']['checked'] = filters['incident_subtype'] or [i['id'] for i in main["filters"]['incident_subtype']['options']]
-    main['filters']["source_type"]['selected'] = json.loads(filters.get('source_type') or 'null')
+    # main['filters']["source_type"]['selected'] = json.loads(filters.get('source_type') or 'null')
+    main['filters']["source_type"]['selected'] = filters.get('source_type')
+    main['filters']["prmo_loc"]['selected'] = filters.get('prmo_loc')
     main['filters']["initiator"]['selected'] = json.loads(filters.get('initiator') or 'null')
     main['filters']["target_type"]["checked"] = filters['target_type'] or [i['id'] for i in main['filters']["target_type"]["name"]]
 
     main['is_subtype'] = bool(filters.get('incident_subtype'))
     main['type_key'] = 'incident_subtype' if main['is_subtype'] else "incident_type"
     main['filters']["target_type"]["labels"] = [i['code'] for i in main['filters']['target_type']['name'] if i['id'] in main['filters']['target_type']['checked']]
-    
+
     filter_incident = main['filters'][main['type_key']]
     filter_incident_options_dict = {i['id']:i['name'] for i in filter_incident['options']}
     filter_incident["labels"] = [filter_incident_options_dict.get(i) for i in filter_incident['checked']]
+
+    main["model"] = MasterIncident if filters['source_type'] == 'master' else Undss
+    main["qs"] = main["model"].objects.all()
+    main["qs_filtered"] = ApplyFilters(main["qs"], filters, main=main)
+
+    main['filters']['impact'] = {
+        'options': main["qs"].annotate(IGHO_yesno=Bool2YesNo('IGHO')).values_list('IGHO_yesno', flat=True).distinct().order_by('-IGHO_yesno'),
+        'selected': filters['impact'],
+    }
 
     return main
 
 def Chart(request, filters={}, main={}):
     chart = {}
 
-    undssQueryset = Undss.objects.all()
-    undssQueryset = ApplyFilters(undssQueryset, filters, main=main)
+    # undssQueryset = Undss.objects.all()
+    # undssQueryset = ApplyFilters(undssQueryset, filters, main=main)
+    undssQueryset = main["qs_filtered"]
 
     filter_incident = main['filters'][main['type_key']]
 
@@ -169,9 +194,39 @@ def Chart(request, filters={}, main={}):
     all_fields = list(chain.from_iterable([i['fields'] for i in chart['donut_chart_casualty_subtype']]))
     sum_queries = {i:Coalesce(Sum(i), 0) for i in all_fields}
     bar_chart_casualty_subtype_qs = undssQueryset.aggregate(**sum_queries)
-    field2label = lambda x: {'Kill':'Killed', 'Inj':'Injured', 'Abd':'Abducted'}.get(x.split('_')[0])
+    prefix2label = {'Kill':'Killed', 'Inj':'Injured', 'Abd':'Abducted'}
+    field2label = lambda x: prefix2label.get(x.split('_')[0])
     for c in chart['donut_chart_casualty_subtype']:
         c['values'] = [[field2label(field), bar_chart_casualty_subtype_qs[field]] for field in c['fields']]
+
+    ## Bar Chart by casualtiy type and subtype
+    chart['bar_chart_casualty_subtype'] = {
+        'data_val': [],
+        'title': "Number of Casualties",
+        'key': "number_of_casualties_by_type_and_subtype",
+        'labels': [i['title'].split()[0] for i in chart['donut_chart_casualty_subtype']],
+    }
+    for prefix in prefix2label:
+        data = []
+        label = field2label(prefix)
+        for item in chart['donut_chart_casualty_subtype']:
+            field = next((f for f in item['fields'] if f.split('_')[0] == prefix), None)
+            data += [bar_chart_casualty_subtype_qs.get(field, 0)] 
+        chart['bar_chart_casualty_subtype']['data_val'].append({'name':label, 'data': data})
+
+    # data = {prefix:[] for prefix in prefix2label}
+    # for item in chart['donut_chart_casualty_subtype']:
+    #     for prefix in prefix2label:
+    #         field = next((f for f in item['fields'] if f.split('_')[0] == prefix), None)
+    #         data[prefix] += [bar_chart_casualty_subtype_qs.get(field, 0)] 
+    # chart['bar_chart_casualty_subtype']['data_val'] = [{'name':prefix2label[prefix], 'data': data[prefix]} for prefix in data]
+
+    # for pc in main["category"]:
+    #     # qs_bar_chart_target = undssQueryset.values_list('Target').annotate(total = Coalesce(Sum(pc), 0))
+    #     qs_bar_chart_target = undssQueryset.values_list('Target').annotate(total = main['sum_by_casualty_type'][pc.lower()])
+    #     qs_bar_chart_target_dict = dict(qs_bar_chart_target)
+    #     total_result = [qs_bar_chart_target_dict.get(id,0) for id in main['filters']["target_type"]['checked']]
+    #     chart['bar_chart_casualty_subtype']['data_val'].append({'name':pc, 'data': total_result})
 
     ## Spline Chart
     chart['spline'] = {}
@@ -243,11 +298,20 @@ def Chart(request, filters={}, main={}):
 def Table(request, filters={}, main={}):
     table = {}
 
-    undssQueryset = Undss.objects.all()
-    undssQueryset= ApplyFilters(undssQueryset, filters, main=main)
+    # undssQueryset = Undss.objects.all()
+    # undssQueryset= ApplyFilters(undssQueryset, filters, main=main)
+    undssQueryset = main["qs_filtered"]
 
     # list_of_latest_incidents
-    table['list_of_latest_incidents'] = undssQueryset.values('id','Date', 'Time_of_Incident','Description_of_Incident').order_by('-Date')
+    list_of_latest_incidents_qs = undssQueryset
+    db_fields = ('id','Date', 'Time_of_Incident','Description_of_Incident')
+    table['list_of_latest_incidents'] = {'column_names': db_fields, 'url_name': 'incident_detail'}
+    if main['model'] == MasterIncident:
+        list_of_latest_incidents_qs = bool2yesno_annotate(undssQueryset)
+        table['list_of_latest_incidents']['column_names'] = db_fields + tuple(source_type_rename.keys())
+        table['list_of_latest_incidents']['url_name'] = 'master_incident_detail'
+        db_fields += tuple(source_type_rename.values())
+    table['list_of_latest_incidents']['rows'] = list_of_latest_incidents_qs.values(*db_fields).order_by('-Date','-Time_of_Incident')
 
     # table incidents_and_casualties_by_incident_type 
     id_field = 'Incident_Subtype' if main['is_subtype'] else 'Incident_Type'
@@ -371,8 +435,9 @@ def Region(request, filters):
 def Total(request, filters={}, main={}):
     total = {}
 
-    undssQueryset = Undss.objects.all()    
-    undssQueryset= ApplyFilters(undssQueryset, filters, main=main)
+    # undssQueryset = Undss.objects.all()    
+    # undssQueryset= ApplyFilters(undssQueryset, filters, main=main)
+    undssQueryset = main["qs_filtered"]
 
     # countryData = []
     # totalCountry = []
@@ -455,6 +520,7 @@ def csv_response(request):
         ('HPA', 'HPA'),
         ('Initiator__code', 'Initiator'),
         ('Target__code', 'Target'),
+        ('IGHO_yesno', 'IGHO'),
         ('Kill_Natl', 'Kill_Natl'),
         ('Kill_Intl', 'Kill_Intl'),
         ('Kill_ANSF', 'Kill_ANSF'),
@@ -476,16 +542,31 @@ def csv_response(request):
         ('Abd_ALP_PGM', 'Abd_ALP_PGM'),
         ('Latitude', 'Latitude'),
         ('Longitude', 'Longitude'),
-        ('Incident_Source__name', 'Source'),
+        # ('Incident_Source__name', 'Source'),
         # ('created_at', 'created_at'),
         # ('updated_at', 'updated_at'),
     )
-    field_names = [i[0] for i in field_rename_pairs]
-    field_renames = [i[1] for i in field_rename_pairs]
     filters = make_filters(request)
     main = MainData(request, filters=filters)
-    undssQueryset = Undss.objects.all()
-    undssQueryset = ApplyFilters(undssQueryset, filters, main=main)
+    undssQueryset = main["qs_filtered"]
+    if filters['source_type'] == 'prmo':
+        field_rename_pairs += (
+            ('Incident_Source_Office', 'Source'),
+        )
+    elif filters['source_type'] == 'master':
+        # field_rename_pairs += (
+        #     ('PRMO', 'PRMO'),
+        #     ('INSO', 'INSO'),
+        #     ('UNDSS', 'UNDSS'),
+        # )
+        field_rename_pairs += tuple((f2, f) for f, f2 in source_type_rename.items())
+        undssQueryset = bool2yesno_annotate(undssQueryset)
+    field_names = [i[0] for i in field_rename_pairs]
+    field_renames = [i[1] for i in field_rename_pairs]
+    # undssQueryset = Undss.objects.all()
+    # undssQueryset = ApplyFilters(undssQueryset, filters, main=main)
+    # undssQueryset = bool2yesno_annotate(undssQueryset, field_rename_dict={'IGHO':'iGHO_yesno'})
+    undssQueryset = undssQueryset.annotate(IGHO_yesno=Bool2YesNo('IGHO'))
     undssQueryset = undssQueryset.values_list(*field_names).order_by('Date', 'Time_of_Incident')
     return chain([field_renames], undssQueryset)
 
@@ -509,11 +590,13 @@ def make_filters(request):
         request.GET._mutable = mutable
 
     filters = {
-        'source_type': request.GET.get('source_type'),
+        'source_type': str(request.GET.get('source_type') or '').strip().lower(),
+        'prmo_loc': str(request.GET.get('prmo_loc') or '').strip().lower(),
         'target_type': [int(i) for i in list(filter(None, (request.GET.get('target_type','').split(','))))],
         'police_district': request.GET.get('police_district'),
         'hpa': str(request.GET.get('hpa') or '').strip().lower(),
         'initiator': request.GET.get('initiator'),
+        'impact': str(request.GET.get('impact') or '').strip().lower(),
         'incident_type': [int(i) for i in list(filter(None, (request.GET.get('incident_type','').split(','))))],
         'incident_subtype': [int(i) for i in list(filter(None, (request.GET.get('incident_subtype','').split(','))))],
         'code': request.GET.get('code'),
@@ -546,7 +629,14 @@ def ApplyFilters(queryset, filters, main={}):
         queryset = queryset.filter(Incident_Type__in=filters.get('incident_type'))
 
     if filters.get('source_type'):
-        queryset = queryset.filter(Incident_Source=filters.get('source_type'))
+        if main['model'] == Undss:
+            queryset = queryset.annotate(source_type_lowered=Lower(Trim('Incident_Source'))).\
+                filter(source_type_lowered=filters.get('source_type'))
+
+    if filters.get('source_type') == 'prmo' and filters.get('prmo_loc'):
+        if main['model'] == Undss:
+            queryset = queryset.annotate(prmo_loc_lowered=Lower(Trim('Incident_Source_Office'))).\
+                filter(prmo_loc_lowered=filters.get('prmo_loc'))
 
     if filters.get('incident_subtype'):
         queryset = queryset.filter(Incident_Subtype__in=filters.get('incident_subtype'))
@@ -560,10 +650,18 @@ def ApplyFilters(queryset, filters, main={}):
     if filters.get('police_district'):
         queryset = queryset.filter(Police_District=filters.get('police_district'))
 
-    if filters.get('hpa') in ['yes', 'no']:
+    if filters.get('hpa') in yesno2truefalse:
         queryset = yesno_annotate(queryset, 'HPA').filter(**{'yesno': filters.get('hpa')})
 
+    # if filters.get('impact'):
+    if filters.get('impact') in yesno2truefalse:
+        queryset = queryset.filter(IGHO=yesno2truefalse[filters['impact']])
+
     return queryset
+
+def bool2yesno_annotate(queryset, field_rename_dict=source_type_rename):
+    annotations = {f2: Bool2YesNo(f) for f, f2 in field_rename_dict.items()}
+    return queryset.annotate(**annotations)
 
 def yesno_annotate(queryset, field):
     return queryset.annotate(lowered=Lower(Trim(field))).annotate(

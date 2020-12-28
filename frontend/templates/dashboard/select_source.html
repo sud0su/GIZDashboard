@@ -5,7 +5,6 @@
     {% for option in filters.source_type.options %}
         <option value="{{ option.id }}" {% if filters.source_type.selected == option.id %}selected{% endif %}>{{ option.name }}</option>
     {% endfor %}
-    <option value="master">Master</option>
 </select>
 
 {% comment %}

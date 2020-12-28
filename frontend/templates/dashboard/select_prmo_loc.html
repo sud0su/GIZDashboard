@@ -1,7 +1,8 @@
 <label for="prmo_loc">PRMO Location:</label>
 <select id="prmo_loc" class="prmo-dropdown" data-placeholder="Select PRMO Office">
-    {% for option in filters.source_type.options %}
-        <option value="{{ option.id }}" {% if filters.source_type.selected == option.id %}selected{% endif %}>{{ option.name }}</option>
+    <option value="all" {% if filters.prmo_loc.selected == 'all' %}selected{% endif %}>-</option>
+    {% for option in filters.prmo_loc.options %}
+        <option value="{{ option.name }}" {% if filters.prmo_loc.selected == option.name %}selected{% endif %}>{{ option.name|upper }}</option>
     {% endfor %}
 </select>
 
@@ -20,6 +21,10 @@
                 url = removeParam('prmo_loc', url)
             }
             url += '&prmo_loc='+e.val;
+
+            if (e.val == 'all') {
+                url = removeParam('prmo_loc', url)
+            }
 
             window.document.location = url
         });

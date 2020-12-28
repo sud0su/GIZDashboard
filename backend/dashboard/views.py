@@ -67,12 +67,17 @@ class MasterIncidentsImportView(ImportView):
 @method_decorator(login_required, name='dispatch')
 class UndssDetailView(DetailView):
     template_name = "dashboard/undss_detail.html"
-    queryset = Undss.objects.all()
+    model = Undss
+    # queryset = Undss.objects.all()
 
-    def get_object(self):
-        id_ = self.kwargs.get('pk')
-        return get_object_or_404(Undss, id=id_)
+    # def get_object(self):
+    #     id_ = self.kwargs.get('pk')
+    #     return get_object_or_404(self.model, id=id_)
 
+@method_decorator(login_required, name='dispatch')
+class MasterIncidentDetailView(UndssDetailView):
+    model = MasterIncident
+    # queryset = MasterIncident.objects.all()
 
 @method_decorator(staff_member_required, name='dispatch')
 class InputUndssView(CreateView):
@@ -122,10 +127,11 @@ def Dashboard(request):
 
     # if no source_type in url then redirect with added source_type=DEFAULT_SOURCE_ID
     if not request.GET.get('source_type'):
-        DEFAULT_SOURCE_NAME = 'UNDSS'
-        source_row = IncidentSource.objects.filter(name=DEFAULT_SOURCE_NAME).first() or IncidentSource.objects.first()
-        if source_row:
-            return redirect(replace_query_param(currenturl, 'source_type', source_row.id))
+        DEFAULT_SOURCE_NAME = 'master'
+        return redirect(replace_query_param(currenturl, 'source_type', DEFAULT_SOURCE_NAME))
+        # source_row = IncidentSource.objects.filter(name=DEFAULT_SOURCE_NAME).first() or IncidentSource.objects.first()
+        # if source_row:
+        #     return redirect(replace_query_param(currenturl, 'source_type', source_row.id))
 
     if 'pdf' in request.GET:
         options = {
@@ -171,8 +177,8 @@ def Dashboard(request):
         pseudo_buffer = Echo()
         writer = csv.writer(pseudo_buffer)
         response = HttpResponse((writer.writerow(row) for row in rows), content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="' + \
-            request.GET['page']+'_'+date_string+'.csv"'
+        filename = '_'.join([request.GET['page'], request.GET.get('source_type'), date_string])+'.csv'
+        response['Content-Disposition'] = 'attachment; filename="%s"'%(filename)
         return response
     
     else:

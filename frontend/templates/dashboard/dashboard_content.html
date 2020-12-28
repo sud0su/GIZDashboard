@@ -131,9 +131,9 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <!-- <h4 class="card-title">{% trans chart.bar_chart_incident.title %}</h4>
-                    <div id="{{ chart.bar_chart_incident.key }}" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='{{ chart.bar_chart_incident.labels | jsonify | safe }}' data-val='{{ chart.bar_chart_incident.data_val | jsonify | safe }}' data-animate={% if 'print' in request.path %}"false"{% else %}"true"{% endif %}></div> -->
-                    <h4 class="card-title">Casualties</h4>
+                    <h4 class="card-title">{% trans chart.bar_chart_casualty_subtype.title %}</h4>
+                    <div id="{{ chart.bar_chart_casualty_subtype.key }}" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='{{ chart.bar_chart_casualty_subtype.labels | jsonify | safe }}' data-val='{{ chart.bar_chart_casualty_subtype.data_val | jsonify | safe }}' data-animate={% if 'print' in request.path %}"false"{% else %}"true"{% endif %}></div>
+                    <!-- <h4 class="card-title">Casualties</h4>
                     <div id="bar_casualties" class="ch-size bar-chart" data-color="colorDefault" data-colorpoint="false" data-legend="true" data-yaxis='["National", "International", "ANSF", "ALP-PGM", "AOG", "ISKP", "IM"]' data-val='[{
                         "name": "Killed",
                         "data": [2, 0, 7, 164, 10, 42, 13]
@@ -143,7 +143,7 @@
                       }, {
                         "name": "Abducted",
                         "data": [70, 30, 80, 22, 86, 35, 93]
-                      }]' data-animate={% if 'print' in request.path %}"false"{% else %}"true"{% endif %}></div>
+                      }]' data-animate={% if 'print' in request.path %}"false"{% else %}"true"{% endif %}></div> -->
                 </div>
             </div>
         </div>
@@ -590,20 +590,25 @@
                                     <th>{% trans "Incident Date" %}</th>
                                     <th>{% trans "Time of Incident" %}</th>
                                     <th>{% trans "Description" %}</th>
+                                    {% if tables.list_of_latest_incidents.url_name == 'master_incident_detail' %}
                                     <th>{% trans "UNDSS" %}</th>
                                     <th>{% trans "INSO" %}</th>
                                     <th>{% trans "PRMO" %}</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in tables.list_of_latest_incidents %}
-                                    <tr onclick="window.document.location ='/undssdetail/{{item.id}}' ">
+                                {% for item in tables.list_of_latest_incidents.rows %}
+                                    <tr onclick="window.document.location ='{% url tables.list_of_latest_incidents.url_name item.id %}' ">
+                                    <!-- <tr onclick="window.document.location ='/master_incident_detail/{{item.id}}' "> -->
                                         <td>{{ item.Date |date:'M j, Y' }}</td>
                                         <td>{{ item.Time_of_Incident |time:'H:i' }}</td>
                                         <td>{{ item.Description_of_Incident }}</td>
-                                        <td>yes</td>
-                                        <td>no</td>
-                                        <td>yes</td>
+                                        {% if tables.list_of_latest_incidents.url_name == 'master_incident_detail' %}
+                                        <td>{{ item.UNDSS_yesno }}</td>
+                                        <td>{{ item.INSO_yesno }}</td>
+                                        <td>{{ item.PRMO_yesno }}</td>
+                                        {% endif %}
                                     </tr>
                                 {% endfor %}
                             </tbody>

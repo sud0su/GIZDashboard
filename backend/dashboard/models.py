@@ -3,6 +3,7 @@ import time
 # from uuid import uuid4
 # from django.utils.deconstruct import deconstructible
 from django.db import models
+from django.db.models.expressions import Func, Value
 from datetime import datetime, timedelta, time
 from django.utils.translation import gettext as _
 from reference.models import Province, District, IncidentType, IncidentSubtype, IncidentSource
@@ -22,6 +23,10 @@ from django.urls import reverse
 #         # return the whole path to the file
 #         fullpath = self.path+'{}'.format(time.strftime("%Y/%m/%d"))
 #         return os.path.join(fullpath , filename)
+
+class Bool2YesNo(Func):
+    template = '''CASE WHEN %(field)s = true THEN 'yes' ELSE 'no' END'''
+    output_field = models.fields.CharField()
 
 def default_start_time():
     now = datetime.now()

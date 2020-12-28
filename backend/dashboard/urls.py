@@ -8,6 +8,7 @@ from .views import (
     InputMasterIncidentView,
     # ImportDataView,
     UndssDetailView,
+    MasterIncidentDetailView,
     get_district,
     get_area_city,
     get_incident_subtype,
@@ -27,7 +28,8 @@ urlpatterns = [
     re_path(r'^print$', DashboardPrint, name='dashboard_print'),
     path('input/', InputUndssView.as_view(), name='inputdashboard'),
     path('inputmaster/', InputMasterIncidentView.as_view(), name='inputmasterincident'),
-    path('undssdetail/<int:pk>/', UndssDetailView.as_view(), name='detail'),
+    path('master_incident_detail/<int:pk>/', MasterIncidentDetailView.as_view(), name='master_incident_detail'),
+    path('incident_detail/<int:pk>/', UndssDetailView.as_view(), name='incident_detail'),
     
     # path('import/', ImportDataView.as_view(), name='importdata'),
     path('import_undss/', UndssImportView.as_view(), name='importdataundss'),
