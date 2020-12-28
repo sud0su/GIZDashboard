@@ -96,7 +96,7 @@ class Undss(models.Model):
         return self.Single_ID
     
     def get_absolute_url(self):
-        return reverse("detail", kwargs={"pk": self.pk})
+        return reverse("incident_detail", kwargs={"pk": self.pk})
     
     class Meta:
         verbose_name = "Incident"
@@ -159,7 +159,7 @@ class MasterIncident(models.Model):
         return self.Single_ID
     
     def get_absolute_url(self):
-        return reverse("detail", kwargs={"pk": self.pk})
+        return reverse("master_incident_detail", kwargs={"pk": self.pk})
     
     class Meta:
         verbose_name = "Master Incident"
