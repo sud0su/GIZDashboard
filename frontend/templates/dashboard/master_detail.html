@@ -23,8 +23,24 @@
                         <dt class="col-sm-3 text-right">{% trans "Single ID" %}</dt>
                         <dd class="col-sm-9">{{ object.Single_ID }}</dd>
 
-                        <dt class="col-sm-3 text-right">{% trans "Source" %}</dt>
-                        <dd class="col-sm-9">{{ object.Date }}</dd>
+                        <dt class="col-sm-3 text-right">{% trans "PRMO" %}</dt>
+                        {% if object.PRMO %}
+                        <dd class="col-sm-9">Yes</dd>
+                        {% else %}
+                        <dd class="col-sm-9">No</dd>
+                        {% endif %}
+                        <dt class="col-sm-3 text-right">{% trans "UNDSS" %}</dt>
+                        {% if object.UNDSS %}
+                        <dd class="col-sm-9">Yes</dd>
+                        {% else %}
+                        <dd class="col-sm-9">No</dd>
+                        {% endif %}
+                        <dt class="col-sm-3 text-right">{% trans "INSO" %}</dt>
+                        {% if object.INSO %}
+                        <dd class="col-sm-9">Yes</dd>
+                        {% else %}
+                        <dd class="col-sm-9">No</dd>
+                        {% endif %}
 
                         <dt class="col-sm-3 text-right">{% trans "Date" %}</dt>
                         <dd class="col-sm-9">{{ object.Date }}</dd>

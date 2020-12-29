@@ -75,7 +75,8 @@ class UndssDetailView(DetailView):
     #     return get_object_or_404(self.model, id=id_)
 
 @method_decorator(login_required, name='dispatch')
-class MasterIncidentDetailView(UndssDetailView):
+class MasterIncidentDetailView(DetailView):
+    template_name = "dashboard/master_detail.html"
     model = MasterIncident
     # queryset = MasterIncident.objects.all()
 
