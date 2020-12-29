@@ -62,6 +62,13 @@ class UndssResource(resources.ModelResource):
         # incident_source = row.get('Source')
         timeofincident = row.get('Time_Inc')
         hpa = row.get('HPA')
+        igho = str.lower('no' if row.get('IGHO') is None else row.get('IGHO'))
+
+
+        if igho == 'yes':
+            row['IGHO'] = 1
+        else:
+            row['IGHO'] = 0
 
         if single_id == 'null' or single_id == None:
             raise ValidationError("Single ID cannot be null")
@@ -182,6 +189,7 @@ class MasterIncidentResource(resources.ModelResource):
         prmo = str.lower('no' if row.get('PRMO') is None else row.get('PRMO'))
         undss = str.lower('no' if row.get('UNDSS') is None else row.get('UNDSS'))
         inso = str.lower('no' if row.get('INSO') is None else row.get('INSO'))
+        igho = str.lower('no' if row.get('IGHO') is None else row.get('IGHO'))
 
         if prmo == 'yes':
             row['PRMO'] = 1
@@ -197,6 +205,11 @@ class MasterIncidentResource(resources.ModelResource):
             row['INSO'] = 1
         else:
             row['INSO'] = 0
+        
+        if igho == 'yes':
+            row['IGHO'] = 1
+        else:
+            row['IGHO'] = 0
 
         if single_id == 'null' or single_id == None:
             raise ValidationError("Single ID cannot be null")
