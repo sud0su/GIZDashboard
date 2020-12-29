@@ -260,15 +260,15 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>{% trans 'Group' %}</th>
-                    <th>{% trans 'Killed' %}</th>
-                    <th>{% trans 'Injured' %}</th>
-                    <th>{% trans 'Abducted' %}</th>
+                    <th style="text-transform: uppercase">{% trans 'Group' %}</th>
+                    <th style="text-transform: uppercase">{% trans 'Killed' %}</th>
+                    <th style="text-transform: uppercase">{% trans 'Injured' %}</th>
+                    <th style="text-transform: uppercase">{% trans 'Abducted' %}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td scope="row">{% trans 'National' %}</td>
+                    <td scope="row" style="text-transform: uppercase">{% trans 'National' %}</td>
                     <td>
                         {{ form.Kill_Natl|add_class:"form-control" }}
                         {% for error in form.Kill_Natl.errors %}
@@ -298,7 +298,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td scope="row">{% trans 'International' %}</td>
+                    <td scope="row" style="text-transform: uppercase">{% trans 'International' %}</td>
                     <td>
                         {{ form.Kill_Intl|add_class:"form-control" }}
                         {% for error in form.Kill_Intl.errors %}
@@ -328,7 +328,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td scope="row">{% trans 'ANSF' %}</td>
+                    <td scope="row" style="text-transform: uppercase">{% trans 'ANSF' %}</td>
                     <td>
                         {{ form.Kill_ANSF|add_class:"form-control" }}
                         {% for error in form.Kill_ANSF.errors %}
@@ -358,7 +358,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td scope="row">{% trans 'IM' %}</td>
+                    <td scope="row" style="text-transform: uppercase">{% trans 'IM' %}</td>
                     <td>
                         {{ form.Kill_IM|add_class:"form-control" }}
                         {% for error in form.Kill_IM.errors %}
@@ -388,7 +388,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td scope="row">{% trans 'ALP PGM' %}</td>
+                    <td scope="row" style="text-transform: uppercase">{% trans 'ALP PGM' %}</td>
                     <td>
                         {{ form.Kill_ALP_PGM|add_class:"form-control" }}
                         {% for error in form.Kill_ALP_PGM.errors %}
@@ -418,7 +418,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td scope="row">{% trans 'AOG' %}</td>
+                    <td scope="row" style="text-transform: uppercase">{% trans 'AOG' %}</td>
                     <td>
                         {{ form.Kill_AOG|add_class:"form-control" }}
                         {% for error in form.Kill_AOG.errors %}
@@ -440,7 +440,7 @@
                     <td class="bg-light"></td>
                 </tr>
                 <tr>
-                    <td scope="row">{% trans 'ISKP' %}</td>
+                    <td scope="row" style="text-transform: uppercase">{% trans 'ISKP' %}</td>
                     <td>
                         {{ form.Kill_ISKP|add_class:"form-control" }}
                         {% for error in form.Kill_ISKP.errors %}
