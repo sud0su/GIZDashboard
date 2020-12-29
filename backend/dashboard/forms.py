@@ -50,9 +50,9 @@ class UndssForm(forms.ModelForm):
         )
     )
     # Incident_Source_Choice = (
-    #     ('UNDSS', 'UNDSS'),
-    #     ('INSO', 'INSO'),
     #     ('PRMO', 'PRMO'),
+    #     ('INSO', 'INSO'),
+    #     ('UNDSS', 'UNDSS'),
     # )
     Incident_Source = forms.ModelChoiceField(
         # queryset=IncidentSource.objects.none(),
