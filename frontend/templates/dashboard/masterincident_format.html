@@ -207,13 +207,13 @@
         </div>
 
         <div class="form-group col-12 col-md-2">
-            {{ form.IGHO.label_tag }}
-            {{ form.IGHO|add_class:"form-control" }}
-            {% for error in form.IGHO.errors %}
+            {{ form.IGCHO.label_tag }}
+            {{ form.IGCHO|add_class:"form-control" }}
+            {% for error in form.IGCHO.errors %}
                 <small class="form-text text-danger">{{ error }}</small>
             {% endfor %}
-            {% if form.IGHO.help_text %}
-                <small class="form-text text-muted">{{ form.IGHO.help_text }}</small>
+            {% if form.IGCHO.help_text %}
+                <small class="form-text text-muted">{{ form.IGCHO.help_text }}</small>
             {% endif %}
         </div>
     </div>

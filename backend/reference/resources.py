@@ -1,6 +1,6 @@
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget
-from .models import Province, District, IncidentType, IncidentSubtype, IncidentSource
+from .models import Province, District, IncidentType, IncidentSubtype, IncidentSource, PrmoOffice
 from django.core.exceptions import ValidationError
 
 class ProvinceResource(resources.ModelResource):
@@ -13,6 +13,13 @@ class ProvinceResource(resources.ModelResource):
 class IncidentSourceResource(resources.ModelResource):
     class Meta:
         model = IncidentSource
+        exclude = ('id',)
+        import_id_fields = ('name',)
+
+
+class PrmoOfficeResource(resources.ModelResource):
+    class Meta:
+        model = PrmoOffice
         exclude = ('id',)
         import_id_fields = ('name',)
 

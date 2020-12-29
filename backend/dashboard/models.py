@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models.expressions import Func, Value
 from datetime import datetime, timedelta, time
 from django.utils.translation import gettext as _
-from reference.models import Province, District, IncidentType, IncidentSubtype, IncidentSource
+from reference.models import Province, District, IncidentType, IncidentSubtype, IncidentSource, PrmoOffice
 from organization.models import Organization
 from django.urls import reverse
 
@@ -36,11 +36,11 @@ def default_start_time():
 # Create your models here.
 # mediaPath = PathAndRename("shape/")
 class Undss(models.Model):
-    Incident_Source_Choice = (
-        ('UNDSS', 'UNDSS'),
-        ('INSO', 'INSO'),
-        ('PRMO', 'PRMO'),
-    )
+    # Incident_Source_Choice = (
+    #     ('UNDSS', 'UNDSS'),
+    #     ('INSO', 'INSO'),
+    #     ('PRMO', 'PRMO'),
+    # )
 
     # Shape = models.FileField(_("Shape"), upload_to=mediaPath, null=True, blank=True)
     Single_ID = models.CharField(_("Single ID"), max_length=50, null=True, blank=False, unique=True)
@@ -62,7 +62,7 @@ class Undss(models.Model):
     Initiator = models.ForeignKey(Organization, related_name="Organization_initiator_name", on_delete=models.CASCADE, null=True, blank=False)
     Target = models.ForeignKey(Organization, related_name="Organization_target_name", on_delete=models.CASCADE, null=True, blank=False)
 
-    IGHO = models.BooleanField(verbose_name=_('Impact on GC and Humanitarian Organizations'), default=False)
+    IGCHO = models.BooleanField(verbose_name=_('Impact on GC and Humanitarian Organizations'), default=False)
     
     Kill_Natl = models.PositiveIntegerField(verbose_name='Killed - National', default=0, null=True, blank=True)
     Kill_Intl = models.PositiveIntegerField(verbose_name='Killed - International', default=0, null=True, blank=True)
@@ -86,8 +86,8 @@ class Undss(models.Model):
     Latitude = models.FloatField(null=True, blank=True)
     Longitude = models.FloatField(null=True, blank=True)
 
-    Incident_Source = models.CharField(choices=Incident_Source_Choice, default='UNDSS', max_length=50)
-    Incident_Source_Office = models.CharField(max_length=100, null=True, blank=True)
+    Incident_Source = models.ForeignKey(IncidentSource, on_delete=models.CASCADE, null=True, blank=False)
+    Incident_Source_Office = models.ForeignKey(PrmoOffice, verbose_name='PRMO Office', on_delete=models.CASCADE, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
@@ -124,7 +124,7 @@ class MasterIncident(models.Model):
     Initiator = models.ForeignKey(Organization, related_name="Organization_initiator_master_name", on_delete=models.CASCADE, null=True, blank=False)
     Target = models.ForeignKey(Organization, related_name="Organization_target_master_name", on_delete=models.CASCADE, null=True, blank=False)
 
-    IGHO = models.BooleanField(verbose_name=_('Impact on GC and Humanitarian Organizations'), default=False)
+    IGCHO = models.BooleanField(verbose_name=_('Impact on GC and Humanitarian Organizations'), default=False)
 
     Kill_Natl = models.PositiveIntegerField(verbose_name='Killed - National', default=0, null=True, blank=True)
     Kill_Intl = models.PositiveIntegerField(verbose_name='Killed - International', default=0, null=True, blank=True)

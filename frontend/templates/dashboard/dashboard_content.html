@@ -50,7 +50,7 @@
             {% include "dashboard/select_source.html" %}
         </div>
 
-        {% if filters.source_type.selected == 'prmo' %}
+        {% if filters.source_type.selected == filters.source_type.prmo_id %}
         <div class="col-12 col-sm-12 col-xl-3 mb-3 {% if 'print' in request.path %}col-md-3{% else %}col-md-4{% endif %}">
             {% include "dashboard/select_prmo_loc.html" %}
         </div>

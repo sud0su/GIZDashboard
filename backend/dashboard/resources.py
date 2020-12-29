@@ -1,5 +1,5 @@
 from organization.models import Organization
-from reference.models import District, IncidentSource, IncidentSubtype, IncidentType, Province
+from reference.models import District, IncidentSource, IncidentSubtype, IncidentType, Province, PrmoOffice
 from django.core.exceptions import ValidationError
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget, DateWidget
@@ -39,12 +39,12 @@ class UndssResource(resources.ModelResource):
                              widget=ForeignKeyWidget(Organization, 'code'))
     target = fields.Field(column_name='Target', attribute='Target',
                           widget=ForeignKeyWidget(Organization, 'code'))
-    incident_source = fields.Field(column_name='Source', attribute='Incident_Source')
-    Incident_Source_Office = fields.Field(column_name='Source Office', attribute='Incident_Source_Office')
+    incident_source = fields.Field(column_name='Source', attribute='Incident_Source', widget=ForeignKeyWidget(IncidentSource, 'name'))
+    Incident_Source_Office = fields.Field(column_name='Source Office', attribute='Incident_Source_Office', widget=ForeignKeyWidget(PrmoOffice, 'name'))
     
     class Meta:
         model = Undss
-        fields = ('Single_ID', 'Date', 'Time_of_Incident', 'province', 'district', 'City_Village', 'Area', 'Police_District', 'incident_type', 'incident_subtype', 'Description_of_Incident', 'HPA', 'initiator', 'target','IGHO', 'Kill_Natl', 'Kill_Intl', 'Kill_ANSF',
+        fields = ('Single_ID', 'Date', 'Time_of_Incident', 'province', 'district', 'City_Village', 'Area', 'Police_District', 'incident_type', 'incident_subtype', 'Description_of_Incident', 'HPA', 'initiator', 'target','IGCHO', 'Kill_Natl', 'Kill_Intl', 'Kill_ANSF',
                   'Kill_IM', 'Kill_ALP_PGM', 'Kill_AOG', 'Kill_ISKP', 'Inj_Natl', 'Inj_Intl', 'Inj_ANSF', 'Inj_IM', 'Inj_ALP_PGM', 'Inj_AOG', 'Inj_ISKP', 'Abd_Natl', 'Abd_Intl', 'Abd_ANSF', 'Abd_IM', 'Abd_ALP_PGM', 'Latitude', 'Longitude', 'incident_source','Incident_Source_Office',)
         exclude = ('id', 'created_at', 'updated_at',)
         clean_model_instances = True
@@ -62,13 +62,13 @@ class UndssResource(resources.ModelResource):
         # incident_source = row.get('Source')
         timeofincident = row.get('Time_Inc')
         hpa = row.get('HPA')
-        igho = str.lower('no' if row.get('IGHO') is None else row.get('IGHO'))
+        igcho = str.lower('no' if row.get('IGCHO') is None else row.get('IGCHO'))
 
 
-        if igho == 'yes':
-            row['IGHO'] = 1
+        if igcho == 'yes':
+            row['IGCHO'] = 1
         else:
-            row['IGHO'] = 0
+            row['IGCHO'] = 0
 
         if single_id == 'null' or single_id == None:
             raise ValidationError("Single ID cannot be null")
@@ -132,10 +132,10 @@ class UndssResource(resources.ModelResource):
 
         init = Organization.objects.filter(code=initiator)
         if not bool(init):
-            raise ValidationError('Initiator name %s cannot be found' % init)
+            raise ValidationError('Initiator name %s cannot be found' % initiator)
 
-        target = Organization.objects.filter(code=target)
-        if not bool(target):
+        target_qs = Organization.objects.filter(code=target)
+        if not bool(target_qs):
             raise ValidationError('Target name %s cannot be found' % target)
 
         # incsource = IncidentSource.objects.filter(name=incident_source)
@@ -169,7 +169,7 @@ class MasterIncidentResource(resources.ModelResource):
 
     class Meta:
         model = MasterIncident
-        fields = ('Single_ID', 'Date', 'Time_of_Incident', 'province', 'district', 'City_Village', 'Area', 'Police_District', 'incident_type', 'incident_subtype', 'Description_of_Incident', 'HPA', 'initiator', 'target','IGHO', 'Kill_Natl', 'Kill_Intl', 'Kill_ANSF',
+        fields = ('Single_ID', 'Date', 'Time_of_Incident', 'province', 'district', 'City_Village', 'Area', 'Police_District', 'incident_type', 'incident_subtype', 'Description_of_Incident', 'HPA', 'initiator', 'target','IGCHO', 'Kill_Natl', 'Kill_Intl', 'Kill_ANSF',
                   'Kill_IM', 'Kill_ALP_PGM', 'Kill_AOG', 'Kill_ISKP', 'Inj_Natl', 'Inj_Intl', 'Inj_ANSF', 'Inj_IM', 'Inj_ALP_PGM', 'Inj_AOG', 'Inj_ISKP', 'Abd_Natl', 'Abd_Intl', 'Abd_ANSF', 'Abd_IM', 'Abd_ALP_PGM', 'Latitude', 'Longitude','PRMO','UNDSS','INSO',)
         exclude = ('id', 'created_at', 'updated_at',)
         clean_model_instances = True
@@ -189,7 +189,7 @@ class MasterIncidentResource(resources.ModelResource):
         prmo = str.lower('no' if row.get('PRMO') is None else row.get('PRMO'))
         undss = str.lower('no' if row.get('UNDSS') is None else row.get('UNDSS'))
         inso = str.lower('no' if row.get('INSO') is None else row.get('INSO'))
-        igho = str.lower('no' if row.get('IGHO') is None else row.get('IGHO'))
+        igcho = str.lower('no' if row.get('IGCHO') is None else row.get('IGCHO'))
 
         if prmo == 'yes':
             row['PRMO'] = 1
@@ -206,10 +206,10 @@ class MasterIncidentResource(resources.ModelResource):
         else:
             row['INSO'] = 0
         
-        if igho == 'yes':
-            row['IGHO'] = 1
+        if igcho == 'yes':
+            row['IGCHO'] = 1
         else:
-            row['IGHO'] = 0
+            row['IGCHO'] = 0
 
         if single_id == 'null' or single_id == None:
             raise ValidationError("Single ID cannot be null")
@@ -278,3 +278,28 @@ class MasterIncidentResource(resources.ModelResource):
         target = Organization.objects.filter(code=target)
         if not bool(target):
             raise ValidationError('Target name %s cannot be found' % target)
+                # 'Incident Source name %s cannot be found' % incident_source)
+
+    # def import_row(self, row, instance_loader, **kwargs):
+    #     # overriding import_row to ignore errors and skip rows that fail to import
+    #     # without failing the entire import
+    #     import_result = super(UndssResource, self).import_row(
+    #         row, instance_loader, **kwargs
+    #     )
+
+    #     if import_result.import_type == RowResult.IMPORT_TYPE_ERROR:
+    #         # import_result.diff = [
+    #         #     row.get(name, '') for name in self.get_field_names()
+    #         # ]
+
+    #         # # Add a column with the error message
+    #         # import_result.diff.append(
+    #         #     "Errors: {}".format(
+    #         #         [err.error for err in import_result.errors]
+    #         #     )
+    #         # )
+    #         # # clear errors and mark the record to skip
+    #         import_result.errors = []
+    #         import_result.import_type = RowResult.IMPORT_TYPE_SKIP
+
+    #     return import_result

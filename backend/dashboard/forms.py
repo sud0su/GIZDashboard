@@ -2,7 +2,7 @@ from django import forms
 from .models import Undss, MasterIncident
 from django_select2.forms import Select2Widget
 from bootstrap_datepicker_plus import DatePickerInput, TimePickerInput
-from reference.models import Province, District, Area, CityVillage, IncidentType, IncidentSubtype, IncidentSource
+from reference.models import Province, District, Area, CityVillage, IncidentType, IncidentSubtype, IncidentSource, PrmoOffice
 from organization.models import Organization
 
 
@@ -49,16 +49,23 @@ class UndssForm(forms.ModelForm):
             attrs={'data-placeholder': 'Select Target'}
         )
     )
-    Incident_Source_Choice = (
-        ('UNDSS', 'UNDSS'),
-        ('INSO', 'INSO'),
-        ('PRMO', 'PRMO'),
-    )
-    Incident_Source = forms.ChoiceField(
+    # Incident_Source_Choice = (
+    #     ('UNDSS', 'UNDSS'),
+    #     ('INSO', 'INSO'),
+    #     ('PRMO', 'PRMO'),
+    # )
+    Incident_Source = forms.ModelChoiceField(
         # queryset=IncidentSource.objects.none(),
-        choices=Incident_Source_Choice,
+        queryset=IncidentSource.objects.all(),
         widget=Select2Widget(
             attrs={'data-placeholder': 'Select Incident Source'}
+        )
+    )
+    Prmo_Office = forms.ModelChoiceField(
+        required=False,
+        queryset=PrmoOffice.objects.all(),
+        widget=Select2Widget(
+            attrs={'data-placeholder': 'Select PRMO Office Location'}
         )
     )
     HPA = forms.ChoiceField(
@@ -67,7 +74,7 @@ class UndssForm(forms.ModelForm):
             attrs={'data-placeholder': 'Select HPA'}
         )
     )
-    IGHO = forms.TypedChoiceField(coerce=lambda x: x == 'True', choices=((False, 'No'), (True, 'Yes')),
+    IGCHO = forms.TypedChoiceField(coerce=lambda x: x == 'True', choices=((False, 'No'), (True, 'Yes')),
                                   widget=Select2Widget(
         attrs={'data-placeholder': 'Select HPA'}
     ))
@@ -89,7 +96,7 @@ class UndssForm(forms.ModelForm):
             'HPA',
             'Initiator',
             'Target',
-            'IGHO',
+            'IGCHO',
             'Kill_Natl',
             'Kill_Intl',
             'Kill_ANSF',
@@ -232,7 +239,7 @@ class MasterIncidentForm(forms.ModelForm):
         )
     )
 
-    IGHO = forms.TypedChoiceField(coerce=lambda x: x == 'True', choices=((False, 'No'), (True, 'Yes')),
+    IGCHO = forms.TypedChoiceField(coerce=lambda x: x == 'True', choices=((False, 'No'), (True, 'Yes')),
                                   widget=Select2Widget(
         attrs={'data-placeholder': 'Select HPA'}
     ))
@@ -270,7 +277,7 @@ class MasterIncidentForm(forms.ModelForm):
             'HPA',
             'Initiator',
             'Target',
-            'IGHO',
+            'IGCHO',
             'Kill_Natl',
             'Kill_Intl',
             'Kill_ANSF',

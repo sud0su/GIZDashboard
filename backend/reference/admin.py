@@ -1,8 +1,8 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 # Register your models here.
-from .models import Province, District, IncidentType, IncidentSubtype, IncidentSource
-from .resources import DistrictResource, ProvinceResource, IncidentTypeResource, IncidentSubTypeResource, IncidentSourceResource
+from .models import Province, District, IncidentType, IncidentSubtype, IncidentSource, PrmoOffice
+from .resources import DistrictResource, ProvinceResource, IncidentTypeResource, IncidentSubTypeResource, IncidentSourceResource, PrmoOfficeResource
 
 @admin.register(Province)
 class ProvinceAdmin(ImportExportModelAdmin):
@@ -40,3 +40,8 @@ class IncidentSubtypeAdmin(ImportExportModelAdmin):
 class IncidentSourceAdmin(ImportExportModelAdmin):
     model = IncidentSource
     resource_class = IncidentSourceResource
+
+@admin.register(PrmoOffice)
+class PrmoOfficeAdmin(ImportExportModelAdmin):
+    model = PrmoOffice
+    resource_class = PrmoOfficeResource

@@ -1,6 +1,8 @@
 from django.db import models
+from django.db.models import Min
 from django.utils.translation import gettext as _
 
+from dashboard.enumerations import MASTER_NAME
 
 # Create your models here.
 class Province(models.Model):
@@ -45,8 +47,28 @@ class IncidentSubtype(models.Model):
     def __str__(self):
         return self.name
 
+class IncidentSourceManager(models.Manager):
+
+    def min_id(self):
+        return self.annotate(min_id=Min('id')).values_list('min_id', flat=True).first()
+
+    def before_min_id(self):
+        return (self.min_id() or 1) - 1
+
+    def get_name(self, source_id):
+        if source_id == str(self.before_min_id()):
+            return MASTER_NAME
+        return self.filter(id=source_id).values_list('name', flat=True).first()
+    
 class IncidentSource(models.Model):
+    objects = IncidentSourceManager()
     name = models.CharField(_("Incident Source"), max_length=50)
+
+    def __str__(self):
+        return self.name
+
+class PrmoOffice(models.Model):
+    name = models.CharField(_("PRMO Office Location"), max_length=50)
     
     def __str__(self):
         return self.name

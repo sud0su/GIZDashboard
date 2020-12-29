@@ -2,7 +2,7 @@
 <select id="prmo_loc" class="prmo-dropdown" data-placeholder="Select PRMO Office">
     <option value="all" {% if filters.prmo_loc.selected == 'all' %}selected{% endif %}>-</option>
     {% for option in filters.prmo_loc.options %}
-        <option value="{{ option.name }}" {% if filters.prmo_loc.selected == option.name %}selected{% endif %}>{{ option.name|upper }}</option>
+        <option value="{{ option.id }}" {% if filters.prmo_loc.selected == option.id %}selected{% endif %}>{{ option.name }}</option>
     {% endfor %}
 </select>
 

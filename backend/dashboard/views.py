@@ -16,7 +16,7 @@ from .pychromeprint import print_from_urls
 
 from .forms import UndssForm, MasterIncidentForm
 from .json_serializable import Common, csv_response
-from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype, IncidentSource
+from reference.models import Province, District, CityVillage, Area, IncidentType, IncidentSubtype, IncidentSource, PrmoOffice
 from .models import Undss, MasterIncident
 from giz.utils import replace_query_param
 from .utils import Echo
@@ -128,8 +128,10 @@ def Dashboard(request):
 
     # if no source_type in url then redirect with added source_type=DEFAULT_SOURCE_ID
     if not request.GET.get('source_type'):
-        DEFAULT_SOURCE_NAME = 'master'
-        return redirect(replace_query_param(currenturl, 'source_type', DEFAULT_SOURCE_NAME))
+        # DEFAULT_SOURCE_NAME = 'master'
+        # return redirect(replace_query_param(currenturl, 'source_type', DEFAULT_SOURCE_NAME))
+        master_id = IncidentSource.objects.before_min_id() 
+        return redirect(replace_query_param(currenturl, 'source_type', master_id))
         # source_row = IncidentSource.objects.filter(name=DEFAULT_SOURCE_NAME).first() or IncidentSource.objects.first()
         # if source_row:
         #     return redirect(replace_query_param(currenturl, 'source_type', source_row.id))
@@ -178,7 +180,8 @@ def Dashboard(request):
         pseudo_buffer = Echo()
         writer = csv.writer(pseudo_buffer)
         response = HttpResponse((writer.writerow(row) for row in rows), content_type='text/csv')
-        filename = '_'.join([request.GET['page'], request.GET.get('source_type'), date_string])+'.csv'
+        name_parts = [(str(request.GET.get('page')) or '').title(), IncidentSource.objects.get_name(request.GET.get('source_type')), date_string]
+        filename = '_'.join(list(filter(None, name_parts)))+'.csv'
         response['Content-Disposition'] = 'attachment; filename="%s"'%(filename)
         return response
     
