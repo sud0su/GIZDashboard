@@ -253,7 +253,7 @@ class MasterIncidentForm(forms.ModelForm):
     ))
 
     class Meta:
-        model = Undss
+        model = MasterIncident
         fields = [
             # 'Shape',
             'Single_ID',
