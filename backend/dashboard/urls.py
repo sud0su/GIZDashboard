@@ -32,11 +32,11 @@ urlpatterns = [
     path('incident_detail/<int:pk>/', UndssDetailView.as_view(), name='incident_detail'),
     
     # path('import/', ImportDataView.as_view(), name='importdata'),
-    path('import_undss/', UndssImportView.as_view(), name='importdataundss'),
-    path('confirm_import_undss/', UndssImportView.as_view(confirm=True), name='confirmimportdataundss'),
+    path('import_bysource/', UndssImportView.as_view(), name='importdataundss'),
+    path('confirm_import_bysource/', UndssImportView.as_view(confirm=True), name='confirmimportdataundss'),
 
-    path('import_master_undss/', MasterIncidentsImportView.as_view(), name='importmasterdataundss'),
-    path('confirm_import_master_undss/', MasterIncidentsImportView.as_view(confirm=True), name='confirmimportmasterdataundss'),
+    path('import_master/', MasterIncidentsImportView.as_view(), name='importmasterdataundss'),
+    path('confirm_import_master/', MasterIncidentsImportView.as_view(confirm=True), name='confirmimportmasterdataundss'),
 
     # chained_dropdown_url
     path('get_district/<int:province_id>/', get_district, name='get_district'),
