@@ -1,6 +1,13 @@
 {% load i18n %}
 {% load widget_tweaks %}
 
+{% block extra_head %}
+    <style>
+    label {
+        text-transform: uppercase
+    }
+    </style>
+{% endblock %}
     <h4 class="card-title font-weight-bold display-5">{% trans 'Identification' %}</h4>
     <div class="form-row">
         <div class="form-group col-12 col-md-4 col-lg-3">
