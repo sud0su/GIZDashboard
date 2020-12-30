@@ -115,7 +115,7 @@
         });
 
         $("#id_Incident_Source").change(function () {
-            if ($(this).find("option:selected").text() == 'PRMO') {
+            if ($(this).val() == '{{ prmo_id }}') {
                 $(".hide-office").show();
             } else {
                 $(".hide-office").hide();

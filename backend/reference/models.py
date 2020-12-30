@@ -59,7 +59,10 @@ class IncidentSourceManager(models.Manager):
         if source_id == str(self.before_min_id()):
             return MASTER_NAME
         return self.filter(id=source_id).values_list('name', flat=True).first()
-    
+
+    def get_prmo_id(self, prmo_name='PRMO'):
+        return self.filter(name__iexact=prmo_name).values_list('id', flat=True).first()    
+
 class IncidentSource(models.Model):
     objects = IncidentSourceManager()
     name = models.CharField(_("Incident Source"), max_length=50)

@@ -92,6 +92,10 @@ class InputUndssView(CreateView):
         print(form.cleaned_data)
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        kwargs['prmo_id'] = IncidentSource.objects.get_prmo_id()
+        return super().get_context_data(**kwargs)
+
 
 @method_decorator(staff_member_required, name='dispatch')
 class InputMasterIncidentView(CreateView):

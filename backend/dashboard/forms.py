@@ -61,7 +61,7 @@ class UndssForm(forms.ModelForm):
             attrs={'data-placeholder': 'Select Incident Source'}
         )
     )
-    Prmo_Office = forms.ModelChoiceField(
+    Incident_Source_Office = forms.ModelChoiceField(
         required=False,
         queryset=PrmoOffice.objects.all(),
         widget=Select2Widget(

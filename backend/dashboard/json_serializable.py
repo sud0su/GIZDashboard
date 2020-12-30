@@ -95,7 +95,7 @@ def MainData(request, filters={}):
     main['is_subtype'] = bool(filters.get('incident_subtype'))
     main['type_key'] = 'incident_subtype' if main['is_subtype'] else "incident_type"
     main['filters']["target_type"]["labels"] = [i['code'] for i in main['filters']['target_type']['name'] if i['id'] in main['filters']['target_type']['checked']]
-    main['filters']["source_type"]['prmo_id'] = IncidentSource.objects.filter(name__iexact='PRMO').values_list('id', flat=True).first() 
+    main['filters']["source_type"]['prmo_id'] = IncidentSource.objects.get_prmo_id()
     main['is_prmo'] = main['filters']["source_type"]['selected'] == main['filters']["source_type"]['prmo_id']
 
     filter_incident = main['filters'][main['type_key']]
