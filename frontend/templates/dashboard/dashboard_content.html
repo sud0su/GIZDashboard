@@ -290,7 +290,7 @@
         </div>
 
         {% if 'print' in request.path %}
-            <div class="w-100" style="margin-top: 65px;"></div>
+            <div class="w-100" style="{% if filters.source_type.selected == filters.source_type.prmo_id %}margin-top: 35px;{% else %}margin-top: 80px;{% endif %}"></div>
         {% endif %}
 
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grid-margin stretch-card">
