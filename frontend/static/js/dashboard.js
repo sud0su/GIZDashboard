@@ -215,10 +215,10 @@ function init_datatable(){
 				extend: "copy",
 				className: "btn btn-default btn-sm"
 			},
-			// {
-			// 	extend: "csv",
-			// 	className: "btn btn-default btn-sm"
-			// },
+			{
+				extend: "csv",
+				className: "btn btn-default btn-sm"
+			},
 			{
 				extend: "excel",
 				className: "btn btn-default btn-sm"

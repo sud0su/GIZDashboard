@@ -646,6 +646,7 @@
     <!-- Highcharts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/7.1.0/highstock.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/7.1.0/highcharts-more.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/7.1.0/modules/exporting.js" integrity="sha512-TqEFfGGU+/D+j9jJQ2v4LbuTZqRU246I+EcSjUEJcGwwKuyWGm/7nC6FuURIfPAJ3/AyYzR+d/ASnAQ1nSvPeg==" crossorigin="anonymous"></script>
     <script>
         var jsondata = {% if jsondata %}{{ jsondata|safe }}{% else %}{}{% endif %};
         {% if 'print' in request.path %}

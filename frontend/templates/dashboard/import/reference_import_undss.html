@@ -25,7 +25,11 @@
                             {% endblocktrans %}
                         </li>
                         <li>{% trans "This tool can not import multiple sheets at once" %}</li>
-                        <li>{% trans "This tool will only import the top row of your column that has the name as listed below (scroll right the table) :" %}</li>
+                        <li>
+                            {% blocktrans %}
+                                This tool will only import the top row of your column that <b>match the name</b> listed below (scroll right the table) :
+                            {% endblocktrans %}
+                        </li>
                         <br>
                         <div class="table-responsive">
                             <table class="table table-sm table-bordered">
