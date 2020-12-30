@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <div class="float-right">
                         <a href="{% url 'dashboard' %}?page=dashboard" class="btn btn-outline-primary" role="button">{% trans "Back to Dashboard" %}</a>
-                        <a href="{% url 'inputdashboard' %}" class="btn btn-primary" role="button">{% trans "Add Another Data" %}</a>
+                        <a href="{% url 'importdataundss' %}" class="btn btn-primary" role="button">{% trans "Add Another Data" %}</a>
                     </div>
                     <h4 class="card-title">{% trans "Data Saved - Incident Detail" %}</h4>
 
@@ -24,7 +24,12 @@
                         <dd class="col-sm-9">{{ object.Single_ID }}</dd>
 
                         <dt class="col-sm-3 text-right">{% trans "Source" %}</dt>
-                        <dd class="col-sm-9">{{ object.Date }}</dd>
+                        <dd class="col-sm-9">{{ object.Incident_Source }}</dd>
+
+                        {% if object.Incident_Source == "PRMO" %}
+                        <dt class="col-sm-3 text-right">{% trans "Source Office" %}</dt>
+                        <dd class="col-sm-9">{{ object.Incident_Source_Office }}</dd>
+                        {% endif %}
 
                         <dt class="col-sm-3 text-right">{% trans "Date" %}</dt>
                         <dd class="col-sm-9">{{ object.Date }}</dd>
