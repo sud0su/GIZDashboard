@@ -53,7 +53,9 @@ class IncidentSourceManager(models.Manager):
         return self.annotate(min_id=Min('id')).values_list('min_id', flat=True).first()
 
     def before_min_id(self):
-        return (self.min_id() or 1) - 1
+        min_id = self.min_id()
+        min_id = min_id if min_id == 0 else (min_id or 1)
+        return min_id - 1
 
     def get_name(self, source_id):
         if source_id == str(self.before_min_id()):
