@@ -27,8 +27,8 @@ def start_chrome_devtool():
 		app_path = '"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"'
 		# app_path = '/Applications/Chromium.app/Contents/MacOS/Chromium'
 		cmd_list += [
-			'--disk-cache-dir=/tmp',
-			'--user-data-dir=/tmp',
+			# '--disk-cache-dir=/tmp',
+			# '--user-data-dir=/tmp',
 			'--crash-dumps-dir=/tmp',
 		]
 	elif system == 'Windows':
