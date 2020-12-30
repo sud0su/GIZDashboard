@@ -26,7 +26,7 @@
                         <dt class="col-sm-3 text-right">{% trans "Source" %}</dt>
                         <dd class="col-sm-9">{{ object.Incident_Source }}</dd>
 
-                        {% if object.Incident_Source == "PRMO" %}
+                        {% if object.Incident_Source.name == "PRMO" %}
                         <dt class="col-sm-3 text-right">{% trans "Source Office" %}</dt>
                         <dd class="col-sm-9">{{ object.Incident_Source_Office }}</dd>
                         {% endif %}
