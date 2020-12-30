@@ -96,7 +96,7 @@ def MainData(request, filters={}):
     main['type_key'] = 'incident_subtype' if main['is_subtype'] else "incident_type"
     main['filters']["target_type"]["labels"] = [i['code'] for i in main['filters']['target_type']['name'] if i['id'] in main['filters']['target_type']['checked']]
     main['filters']["source_type"]['prmo_id'] = IncidentSource.objects.get_prmo_id()
-    main['is_prmo'] = main['filters']["source_type"]['selected'] == main['filters']["source_type"]['prmo_id']
+    main['is_prmo'] = main['filters']["source_type"]['prmo_id'] and main['filters']["source_type"]['selected'] == main['filters']["source_type"]['prmo_id']
 
     filter_incident = main['filters'][main['type_key']]
     filter_incident_options_dict = {i['id']:i['name'] for i in filter_incident['options']}
@@ -560,7 +560,7 @@ def csv_response(request):
         )
         if main['is_prmo']:
             field_rename_pairs += (
-                ('Incident_Source_Office__name', 'Source Office'),
+                ('Incident_Source_Office__name', 'Source_Office'),
             )
     field_names = [i[0] for i in field_rename_pairs]
     field_renames = [i[1] for i in field_rename_pairs]
@@ -637,7 +637,7 @@ def ApplyFilters(queryset, filters, main={}):
             #     filter(source_type_lowered=filters.get('source_type'))
             queryset = queryset.filter(Incident_Source=filters.get('source_type'))
 
-            if main['filters']["source_type"]['prmo_id'] and main['filters']["source_type"]['selected'] == main['filters']["source_type"]['prmo_id'] and filters.get('prmo_loc'):
+            if main['is_prmo'] and filters.get('prmo_loc'):
                 # queryset = queryset.annotate(prmo_loc_lowered=Lower(Trim('Incident_Source_Office'))).\
                 #     filter(prmo_loc_lowered=filters.get('prmo_loc'))
                 queryset = queryset.filter(Incident_Source_Office=filters.get('prmo_loc'))
