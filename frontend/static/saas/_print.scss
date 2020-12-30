@@ -29,6 +29,7 @@
     &.area-dropdown,
     &.source-multiple,
     &.source-dropdown,
+    &.impact-dropdown,
     &.initiator-dropdown,
     &.hpa-dropdown,
     &.police-dropdown{
@@ -39,6 +40,7 @@
 .select2-container{
     &.area-dropdown,
     &.source-dropdown,
+    &.impact-dropdown,
     &.initiator-dropdown,
     &.hpa-dropdown,
     &.police-dropdown{
@@ -104,3 +106,8 @@
 //     float: none;
 //     overflow: initial !important;
 // }
+
+/* Highcharts */
+.highcharts-exporting-group{
+    display: none;
+}
