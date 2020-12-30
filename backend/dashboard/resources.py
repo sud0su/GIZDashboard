@@ -40,7 +40,7 @@ class UndssResource(resources.ModelResource):
     target = fields.Field(column_name='Target', attribute='Target',
                           widget=ForeignKeyWidget(Organization, 'code'))
     incident_source = fields.Field(column_name='Source', attribute='Incident_Source', widget=ForeignKeyWidget(IncidentSource, 'name'))
-    Incident_Source_Office = fields.Field(column_name='Source Office', attribute='Incident_Source_Office', widget=ForeignKeyWidget(PrmoOffice, 'name'))
+    Incident_Source_Office = fields.Field(column_name='Source_Office', attribute='Incident_Source_Office', widget=ForeignKeyWidget(PrmoOffice, 'name'))
     
     class Meta:
         model = Undss
