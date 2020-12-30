@@ -43,7 +43,7 @@ def stop_chrome_devtool():
 	"""
 	Stop Chrome Devtool process.
 	"""
-	system = platform.system():
+	system = platform.system()
 	if system == 'Windows':
 		sh('''for /f "tokens=5" %a in ('netstat -aon ^| find "9222"') do taskkill /f /pid %a''')
 	else:
