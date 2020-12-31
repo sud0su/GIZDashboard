@@ -33,6 +33,10 @@ def start_chrome_devtool():
 		]
 	elif system == 'Windows':
 		app_path = "start chrome"
+		cmd_list += [
+			'--enable-logging',
+			'--no-sandbox',
+		]
 	cmd_list = [app_path] + cmd_list
 	cmd_str = ' '.join(cmd_list)
 	print(cmd_str)
