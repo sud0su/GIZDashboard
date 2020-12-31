@@ -35,7 +35,7 @@ def start_chrome_devtool():
 		app_path = "start chrome"
 		cmd_list += [
 			'--enable-logging',
-			'--no-sandbox',
+			# '--no-sandbox',
 		]
 	cmd_list = [app_path] + cmd_list
 	cmd_str = ' '.join(cmd_list)
