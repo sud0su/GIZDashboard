@@ -142,11 +142,11 @@ function init_datatable(){
 				extend: "copy",
 				className: "btn btn-default btn-sm"
 			},
-			// {
-			// 	extend: "csv",
-			// 	filename: 'GIZ Data',
-			// 	className: "btn btn-default btn-sm"
-			// },
+			{
+				extend: "csv",
+				filename: 'GIZ Data',
+				className: "btn btn-default btn-sm"
+			},
 			{
 				extend: "excel",
 				filename: 'GIZ Data',
