@@ -1,5 +1,5 @@
 from organization.models import Organization
-from reference.models import District, IncidentSource, IncidentSubtype, IncidentType, Province, PrmoOffice
+from reference.models import District, IncidentSource, IncidentSubtype, IncidentType, Province, IncidentSource, PrmoOffice
 from django.core.exceptions import ValidationError
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget, DateWidget
@@ -59,7 +59,7 @@ class UndssResource(resources.ModelResource):
         incident_subtype = row.get('Inc_Subtype')
         initiator = row.get('Initiator')
         target = row.get('Target')
-        # incident_source = row.get('Source')
+        incident_source = row.get('Source')
         timeofincident = row.get('Time_Inc')
         hpa = row.get('HPA')
         igcho = str.lower('no' if row.get('IGCHO') is None else row.get('IGCHO'))
@@ -138,10 +138,16 @@ class UndssResource(resources.ModelResource):
         if not bool(target_qs):
             raise ValidationError('Target name %s cannot be found' % target)
 
-        # incsource = IncidentSource.objects.filter(name=incident_source)
-        # if not bool(incsource):
-        #     raise ValidationError(
-        #         'Incident Source name %s cannot be found' % incident_source)
+        incsource = IncidentSource.objects.filter(name=incident_source)
+        if not bool(incsource):
+            raise ValidationError(
+                'Incident Source name %s cannot be found' % incident_source)
+
+        if row.get('Source_Office'):
+            Source_Office_qs = IncidentSource.objects.filter(name=row.get('Source_Office'))
+            if not bool(Source_Office_qs):
+                raise ValidationError(
+                    'Incident Source name %s cannot be found' % row.get('Source_Office'))
 
 class MasterIncidentResource(resources.ModelResource):
     Date = fields.Field(column_name='Date', attribute='Date',
