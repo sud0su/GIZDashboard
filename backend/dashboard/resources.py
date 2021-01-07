@@ -144,10 +144,10 @@ class UndssResource(resources.ModelResource):
                 'Incident Source name %s cannot be found' % incident_source)
 
         if row.get('Source_Office'):
-            Source_Office_qs = IncidentSource.objects.filter(name=row.get('Source_Office'))
+            Source_Office_qs = PrmoOffice.objects.filter(name=row.get('Source_Office'))
             if not bool(Source_Office_qs):
                 raise ValidationError(
-                    'Incident Source name %s cannot be found' % row.get('Source_Office'))
+                    'Incident Source Office name %s cannot be found' % row.get('Source_Office'))
 
 class MasterIncidentResource(resources.ModelResource):
     Date = fields.Field(column_name='Date', attribute='Date',
