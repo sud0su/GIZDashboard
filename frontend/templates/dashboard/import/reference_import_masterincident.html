@@ -34,13 +34,14 @@
                         <div class="table-responsive">
                             <table class="table table-sm table-bordered">
                                 <thead>
-                                    {% comment %} <tr>
+                                    <tr>
                                         {% for f in fields  %}
                                         <th>
                                             {{ f }}
                                         </th>
                                         {% endfor %}
-                                    </tr> {% endcomment %}
+                                    </tr>
+                                    {% comment %} 
                                     <tr>
                                         <th>
                                             Single_ID
@@ -160,33 +161,34 @@
                                             INSO
                                         </th>
                                     </tr>
+                                    {% endcomment %}
                                 </thead>
                             </table>
                         </div>
                         <p><span style="font-size: large;">&#x22C6;</span><small>{% trans "Difference in order will not affect the import capabilities." %}</small></p>
                         
                         <li>
-                            <span class="badge badge-pill badge-primary">{{ fields.11 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.0 }}</span>
-                            <span class="badge badge-pill badge-primary">{{ fields.2 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.1 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.3 }}</span>
-                            <span class="badge badge-pill badge-primary">{{ fields.6 }}</span>
-                            <span class="badge badge-pill badge-primary">{{ fields.7 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.4 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.8 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.9 }}</span>
-                            <span class="badge badge-pill badge-primary">{{ fields.10 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.12 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.13 }}</span>
                             {% trans "can not be leave blanks" %}
                         </li>
                         <li>
-                            <span class="badge badge-pill badge-primary">{{ fields.1 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.2 }}</span>
                             {% trans "will automatically input 00:00:00 when leave blanks" %}
                         </li>
                         <li>
-                            <span class="badge badge-pill badge-primary">{{ fields.0 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.1 }}</span>
                             {% trans "column should be formatted as " %}
                             <mark class="bg-warning">MM-DD-YYYY</mark>
                         </li>
                         <li>
-                            <span class="badge badge-pill badge-primary">{{ fields.1 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.2 }}</span>
                             {% blocktrans %}
                                 should be formatted in 24-hour formats as 
                                 <mark class="bg-warning">hh:mm:ss</mark>. 
@@ -197,12 +199,12 @@
                             {% blocktrans %}
                                 This importing tool is case sensitive. So, please make sure data in
                             {% endblocktrans %}
-                            <span class="badge badge-pill badge-primary">{{ fields.2 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.3 }}</span>
-                            <span class="badge badge-pill badge-primary">{{ fields.6 }}</span>
-                            <span class="badge badge-pill badge-primary">{{ fields.7 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.4 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.8 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.9 }}</span>
-                            <span class="badge badge-pill badge-primary">{{ fields.10 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.12 }}</span>
+                            <span class="badge badge-pill badge-primary">{{ fields.13 }}</span>
 
                             {% blocktrans %}
                                 column
@@ -213,7 +215,7 @@
                             {% endblocktrans %}
                         </li>
                         <li>
-                            <span class="badge badge-pill badge-primary">{{ fields.13 }}</span> 
+                            <span class="badge badge-pill badge-primary">{{ fields.11 }}</span> 
                             <span class="badge badge-pill badge-primary">{{ fields.14 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.36 }}</span>
                             <span class="badge badge-pill badge-primary">{{ fields.37 }}</span>
@@ -228,11 +230,11 @@
                         </li>
                         <li>
                             {% trans "If there are any duplication of " %}
-                            <span class="badge badge-pill badge-primary">{{ fields.11 }}</span> 
+                            <span class="badge badge-pill badge-primary">{{ fields.0 }}</span> 
                             {% trans "in one sheet, it will only save the data at the most bottom row." %}
                             <br>
                             {% trans "This also applies when the same" %} 
-                            {{ fields.11 }}
+                            {{ fields.0 }}
                             {% trans "has been stored previously in the database. The data will be updated using the imported data. This marked by 'Update' word." %}
                         </li>
                         <li>{% trans "This tool will not import any data when validation fails" %}</li>
@@ -352,7 +354,7 @@
                                             <th>{% trans "Row" %}</th>
                                             <th>{% trans "Errors" %}</th>
                                             {% for field in result.diff_headers %}
-                                            <th data-sortable="true">{{ field }}</th>
+                                            <th data-sortable="true" {% if forloop.counter == 11 %}class="desc-width"{% endif %}>{{ field }}</th>
                                             {% endfor %}
                                         </tr>
                                     </thead>
@@ -389,7 +391,7 @@
                                                 </div>
                                             </td>
                                             {% for field in row.values %}
-                                            <td>{{ field }}</td>
+                                            <td {% if forloop.counter == 11 %}class="desc-width"{% endif %}>{{ field }}</td>
                                             {% endfor %}
                                         </tr>
                                         {% endfor %}
@@ -408,7 +410,7 @@
                                         <tr>
                                             <th></th>
                                             {% for field in result.diff_headers %}
-                                                <th>{{ field }}</th>
+                                                <th {% if forloop.counter == 11 %}class="desc-width"{% endif %}>{{ field }}</th>
                                             {% endfor %}
                                         </tr>
                                     </thead>
@@ -427,7 +429,7 @@
                                                     {% endif %}
                                                 </td>
                                                 {% for field in row.diff %}
-                                                    <td>{{ field }}</td>
+                                                    <td {% if forloop.counter == 11 %}class="desc-width"{% endif %}>{{ field }}</td>
                                                 {% endfor %}
                                             </tr>
                                         {% endfor %}

@@ -19360,6 +19360,10 @@ code {
   background-color: #e6ffe6;
 }
 
+.desc-width {
+  min-width: 300px;
+}
+
 .bootstrap-table .fixed-table-container .table.table-sm .th-inner {
   padding: 0.775rem 0.675rem;
 }
