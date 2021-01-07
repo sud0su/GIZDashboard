@@ -19356,6 +19356,9 @@ code {
 .preview tr.new {
   background-color: #e6ffe6;
 }
+.preview tr.update td.field-update {
+  background-color: #e6ffe6;
+}
 
 .bootstrap-table .fixed-table-container .table.table-sm .th-inner {
   padding: 0.775rem 0.675rem;

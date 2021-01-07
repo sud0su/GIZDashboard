@@ -15,6 +15,15 @@
             // background-color: theme-color(success);
             background-color: #e6ffe6;
         }
+        &.update{
+            td{
+                &.field-update{
+                    background-color: #e6ffe6;
+                    // background-color: #ffe6e6;
+                    // background-color: theme-color(warning);
+                }
+            }
+        }
     }
 }
 
