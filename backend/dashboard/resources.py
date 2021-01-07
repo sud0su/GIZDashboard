@@ -90,7 +90,7 @@ class UndssResource(resources.ModelResource):
 
         if timeofincident is not None or timeofincident != 'null':
             try:
-                if isinstance(timeofincident, datetime):
+                if isinstance(timeofincident, (datetime, time,)):
                     row['Time_Inc'] = timeofincident.strftime('%H:%M:%S')
                 else:
                     row['Time_Inc'] = timeofincident
@@ -237,7 +237,7 @@ class MasterIncidentResource(resources.ModelResource):
 
         if timeofincident is not None or timeofincident != 'null':
             try:
-                if isinstance(timeofincident, datetime):
+                if isinstance(timeofincident, (datetime, time,)):
                     row['Time_Inc'] = timeofincident.strftime('%H:%M:%S')
                 else:
                     row['Time_Inc'] = timeofincident
