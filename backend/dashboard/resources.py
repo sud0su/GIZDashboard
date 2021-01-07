@@ -44,7 +44,7 @@ class UndssResource(resources.ModelResource):
     
     class Meta:
         model = Undss
-        fields = ('Single_ID', 'Date', 'Time_of_Incident', 'province', 'district', 'City_Village', 'Area', 'Police_District', 'incident_type', 'incident_subtype', 'Description_of_Incident', 'HPA', 'initiator', 'target','IGCHO', 'Kill_Natl', 'Kill_Intl', 'Kill_ANSF',
+        export_order = fields = ('Single_ID', 'Date', 'Time_of_Incident', 'province', 'district', 'City_Village', 'Area', 'Police_District', 'incident_type', 'incident_subtype', 'Description_of_Incident', 'HPA', 'initiator', 'target','IGCHO', 'Kill_Natl', 'Kill_Intl', 'Kill_ANSF',
                   'Kill_IM', 'Kill_ALP_PGM', 'Kill_AOG', 'Kill_ISKP', 'Inj_Natl', 'Inj_Intl', 'Inj_ANSF', 'Inj_IM', 'Inj_ALP_PGM', 'Inj_AOG', 'Inj_ISKP', 'Abd_Natl', 'Abd_Intl', 'Abd_ANSF', 'Abd_IM', 'Abd_ALP_PGM', 'Latitude', 'Longitude', 'incident_source','Incident_Source_Office',)
         exclude = ('id', 'created_at', 'updated_at',)
         clean_model_instances = True
@@ -175,7 +175,7 @@ class MasterIncidentResource(resources.ModelResource):
 
     class Meta:
         model = MasterIncident
-        fields = ('Single_ID', 'Date', 'Time_of_Incident', 'province', 'district', 'City_Village', 'Area', 'Police_District', 'incident_type', 'incident_subtype', 'Description_of_Incident', 'HPA', 'initiator', 'target','IGCHO', 'Kill_Natl', 'Kill_Intl', 'Kill_ANSF',
+        export_order = fields = ('Single_ID', 'Date', 'Time_of_Incident', 'province', 'district', 'City_Village', 'Area', 'Police_District', 'incident_type', 'incident_subtype', 'Description_of_Incident', 'HPA', 'initiator', 'target','IGCHO', 'Kill_Natl', 'Kill_Intl', 'Kill_ANSF',
                   'Kill_IM', 'Kill_ALP_PGM', 'Kill_AOG', 'Kill_ISKP', 'Inj_Natl', 'Inj_Intl', 'Inj_ANSF', 'Inj_IM', 'Inj_ALP_PGM', 'Inj_AOG', 'Inj_ISKP', 'Abd_Natl', 'Abd_Intl', 'Abd_ANSF', 'Abd_IM', 'Abd_ALP_PGM', 'Latitude', 'Longitude','PRMO','UNDSS','INSO',)
         exclude = ('id', 'created_at', 'updated_at',)
         clean_model_instances = True
