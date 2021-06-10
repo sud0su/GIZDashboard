@@ -9,7 +9,7 @@ pandas = "*"
 xlrd = "*"
 
 [packages]
-django = "==2.2.10"
+django = "==2.2.24"
 django-allauth = "*"
 django-inlinecss = "*"
 django-widget-tweaks = "*"
